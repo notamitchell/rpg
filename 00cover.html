@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>To the Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+.page.cover {
+  --night: #0b1620; --water: #08121a; --cream: #f2ece4;
+  position: relative; overflow: hidden; padding: 0;
+  
+  background: linear-gradient(to bottom, #0f2030 0, #12273a 55%, #0b1822 100%);
+}
+.cover .scene {
+  position: absolute; left: 0; right: 0; top: 0; height: 297mm;
+  perspective: 170mm; perspective-origin: 140mm 214mm;
+  filter: opacity(.999);   
+}
+.cover .water {
+  
+  position: absolute; left: 23mm; top: 97mm;
+  width: 234mm; height: 234mm; border-radius: 50%;
+  transform: rotateX(-30deg) rotateY(22deg) rotateX(90deg);
+  background: radial-gradient(closest-side, #1d3a50 0, #183247 50%, rgba(20,42,60,.75) 72%, rgba(20,42,60,0) 100%);
+}
+.cover .ring { position: absolute; left: 140mm; top: 214mm; transform-style: preserve-3d;
+  transform: rotateX(-30deg) rotateY(22deg); }
+.cover .strip {
+  position: absolute; left: -4.06mm; top: -101.41mm;
+  width: 8.13mm; height: 157.37mm; overflow: hidden;
+  
+  border: 0.4mm solid transparent;
+}
+.cover .strip i {
+  display: block; height: 101.01mm;
+  background: url(images/FL15987031.jpg) var(--bx) -6.69mm / 198.30mm auto no-repeat;
+}
+
+.cover .strip i.refl {
+  transform: scaleY(-1); position: relative;
+  filter: blur(0.22mm) brightness(.72) saturate(.85);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,.75) 0, rgba(0,0,0,.35) 18%, rgba(0,0,0,.1) 34%, transparent 48%);
+          mask-image: linear-gradient(to top, rgba(0,0,0,.75) 0, rgba(0,0,0,.35) 18%, rgba(0,0,0,.1) 34%, transparent 48%);
+}
+.cover .strip i.refl::after {   
+  content: ''; position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(to top, rgba(8,18,26,0) 0 1.3mm, rgba(8,18,26,.22) 1.3mm 1.6mm),
+    repeating-linear-gradient(to top, rgba(120,150,170,0) 0 2.3mm, rgba(120,150,170,.07) 2.3mm 2.5mm);
+}
+
+.cover .cover-title {
+  position: absolute; left: 0; right: 0; top: 24mm; text-align: center; color: var(--cream);
+}
+.cover h1.investigation-title.opener {
+  color: var(--cream); font-size: calc(var(--fs-display) * 1.8); line-height: 1;
+  letter-spacing: 0.06em; margin: 0;
+}
+.cover h1.investigation-title.opener::after { display: none; }
+.cover .opener-rule { display: flex; align-items: center; gap: 0.3cm; color: var(--cream); margin: 4mm 30mm 3.5mm; }
+.cover .opener-rule::before, .cover .opener-rule::after { content: ''; flex: 1; border-top: 1px solid rgba(242,236,228,.7); }
+.cover .opener-rule span { font-size: var(--fs-small); line-height: 1; }
+.cover .cover-sub {
+  margin: 0; text-align: center; font-family: 'Cinzel', Georgia, serif; font-weight: 400;
+  font-size: var(--fs-subhead); letter-spacing: 0.32em; text-transform: uppercase; color: rgba(242,236,228,.85);
+}
+</style>
+</head>
+<body>
+
+<div class="page cover">
+
+  <div class="scene" aria-hidden="true">
+   <div class="water"></div>
+   <div class="ring">
+    <div class="strip" style="transform: rotateY(56.667deg) translateZ(-90mm); --bx: -6.53mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(50.000deg) translateZ(-90mm); --bx: -16.99mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(43.333deg) translateZ(-90mm); --bx: -27.46mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(36.667deg) translateZ(-90mm); --bx: -37.93mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(30.000deg) translateZ(-90mm); --bx: -48.39mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(23.333deg) translateZ(-90mm); --bx: -58.86mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(16.667deg) translateZ(-90mm); --bx: -69.32mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(10.000deg) translateZ(-90mm); --bx: -79.79mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(3.333deg) translateZ(-90mm); --bx: -90.26mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(-3.333deg) translateZ(-90mm); --bx: -100.72mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(-10.000deg) translateZ(-90mm); --bx: -111.19mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(-16.667deg) translateZ(-90mm); --bx: -121.65mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(-23.333deg) translateZ(-90mm); --bx: -132.12mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(-30.000deg) translateZ(-90mm); --bx: -142.59mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(-36.667deg) translateZ(-90mm); --bx: -153.05mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(-43.333deg) translateZ(-90mm); --bx: -163.52mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(-50.000deg) translateZ(-90mm); --bx: -173.98mm"><i></i><i class="refl"></i></div>
+    <div class="strip" style="transform: rotateY(-56.667deg) translateZ(-90mm); --bx: -184.45mm"><i></i><i class="refl"></i></div>
+   </div>
+  </div>
+
+  <div class="cover-title">
+    <h1 class="investigation-title opener">To the Cyclorama</h1>
+    <div class="opener-rule"><span>&#10022;</span></div>
+    <p class="cover-sub">Melbourne &middot; 1926</p>
+  </div>
+
+</div>
+
+</body>
+</html>
