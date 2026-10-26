@@ -1,0 +1,65 @@
+:root {
+  --ink:        #111;
+  --ink-soft:   #2a2a2a;
+  --ink-faint:  rgba(0,0,0,.55);
+  --text:       #1a1a1a;
+  --text-muted: #444;
+  --hazard:     #1a1a1a;
+  --hazard-bg:  #f7f7f7;   
+  --fill-tan:      #e6dccb;
+  --fill-tan-soft: #f3efe8;
+}
+
+
+.page.dark { color: #1a1a1a; }
+.page.dark .horror-bg { display: none !important; }
+.page.dark :is(h1, h2, h3, h4, p, li, td, th, span, strong, em, b, i, a,
+               .lede, .gate, .roll-inline, .image-caption, .folio, .gm-title):not(.act-band *, .stereo *) {
+  color: #1a1a1a !important;
+  text-shadow: none !important;
+}
+.page.dark .describe { border-left-color: #1a1a1a !important; }
+.page.dark .describe::before { color: #1a1a1a !important; }
+.page.dark .gm-note,
+.page.dark .rules-key {
+  background: var(--hazard-bg) !important;
+  border-left-color: #1a1a1a !important;
+}
+
+.page.dark .act-band .act-rooms { color: #444 !important; }
+
+.page.dark p.bleed-cap:not(.x){
+  background: rgba(255,255,255,.88); padding: 0.4mm 2mm; border-radius: 0.6mm;
+}
+
+.page.cover { background: #fff !important; }
+.page.cover .water { display: none; }
+.page.cover .strip i.refl { filter: blur(0.22mm); }
+.page.cover .strip i.refl::after { display: none; }
+.page.cover .cover-title,
+.page.cover h1.investigation-title.opener,
+.page.cover .opener-rule { color: #1a1a1a; }
+.page.cover .opener-rule::before,
+.page.cover .opener-rule::after { border-top-color: rgba(0,0,0,.6); }
+.page.cover .cover-sub { color: #333; }
+
+
+:root { --card: #fff; --guide: #fff; }
+.guide, .trail { background: #fff; }
+.guide .gm-note, .trail .gm-note { background: var(--hazard-bg); }
+.box { background: #fff; }
+.newspaper-clip { --newsprint: #fff; }
+.cyb { --c-leaf: #fff; }
+.cyb--eureka, .cyb--paris { --c-stock: #fff; }
+
+
+html .page.dark .gm-note p.gm-title::before { filter: brightness(0.32); }
+.sr-tile { filter: brightness(1.3) contrast(1.08); }
+.plaque { --brass-hi: #fffaf0; --brass: #eee6d2; --brass-lo: #cfc2a2; filter: brightness(1.15); }
+
+
+.is-crop img { filter: grayscale(1) brightness(1.12) contrast(1.35); }
+
+
+.is-print::after { box-shadow: inset 0 0 0 0.3mm rgba(40,30,20,.6); }
+.mk-print::after { box-shadow: none; }

@@ -1,0 +1,13 @@
+
+:root {
+  --paper:       #fff;
+  --paper-light: #fff;
+  --star-fill:   #fff;
+}
+body, .page { background-color: #fff; }
+
+
+.page .box.brief { background: #fff; }
+
+
+.dy-slip { background: #fff; }
