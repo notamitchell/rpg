@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+.airspy { position: absolute; left: 0; top: 114.0mm; width: 210mm; height: 183mm; }
+.airspy > * { position: absolute; }
+.airspy-photo { left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.airspy svg { left: 0; top: 0; overflow: visible; pointer-events: none; z-index: 2; }
+.mf-loupe { border-radius: 50%; background: #ddd center / cover no-repeat; border: 0.8mm solid var(--paper-warm); outline: 0.35mm solid var(--ink); z-index: 1; }
+
+.meeting-place { position: absolute; left: 124mm; right: 18mm; top: 47mm; margin: 0; }
+.meeting-place img { display: block; width: 100%; filter: grayscale(1) sepia(1) contrast(.65) brightness(.9); }
+.meeting-place .image-caption { margin: 0.1cm 0 0; text-align: left; }
+.meet-ring { position:absolute; left:0; top:0; width:210mm; height:297mm; z-index:3; pointer-events:none; overflow:visible; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <h2 class="section-heading">Melbourne from the Air</h2>
+
+  <p>The investigation centres on the State Library, Museum and National Gallery: the block bounded by Swanston, Little Lonsdale, Russell and Latrobe Streets. You might show this photo to your players to dispel the notion this is some kind of outback adventure!</p>
+  <p class="image-caption" style="position:absolute;left:124mm;right:18mm;bottom:186.0mm;margin:0;text-align:left">The State Library (domed roof) and the Exhibition Building, Airspy, c. 1927.</p>
+
+  <figure class="meeting-place">
+    <img src="images/frontSteps_meetingPlace.jpg" alt="The library portico: sandstone piers and a barred window above a black and white chequered marble floor, the colonnade receding to the right" />
+    <figcaption class="image-caption">Where Charlie is waiting.</figcaption>
+  </figure>
+
+  <div class="airspy">
+    <img class="airspy-photo" src="images/mp003283.jpg" alt="https://handle.slv.vic.gov.au/10381/283064" />
+    <svg width="210mm" height="183mm" viewBox="0 0 210 183">
+<line x1="89.21" y1="99.39" x2="23.54" y2="14.05" stroke="#fff" stroke-width="0.8"/>
+<line x1="89.21" y1="99.39" x2="23.54" y2="14.05" stroke="#003153" stroke-width="0.3"/>
+<line x1="124.54" y1="83.69" x2="105.26" y2="-22.24" stroke="#fff" stroke-width="0.8"/>
+<line x1="124.54" y1="83.69" x2="105.26" y2="-22.24" stroke="#003153" stroke-width="0.3"/>
+<circle cx="104.97" cy="87.26" r="19.89" fill="none" stroke="#fff" stroke-width="0.7"/>
+<circle cx="104.97" cy="87.26" r="19.89" fill="none" stroke="#003153" stroke-width="0.3"/>
+    </svg>
+    <div class="mf-loupe" style="left:14.0mm;top:-60.0mm;width:92mm;height:92mm;background-image:url(images/mp003283_library.jpg)"></div>
+  </div>
+
+  <svg class="meet-ring" viewBox="0 0 210 297">
+  <path d="M57.5 113.7 C 85.5 103.7, 98.4 83.0, 123 80" fill="none" stroke="#fff" stroke-width="0.9"/>
+  <path d="M57.5 113.7 C 85.5 103.7, 98.4 83.0, 123 80" fill="none" stroke="#003153" stroke-width="0.35" stroke-dasharray="1.4 0.9"/>
+  <circle cx="52" cy="116.5" r="6.2" fill="none" stroke="#fff" stroke-width="0.9"/>
+  <circle cx="52" cy="116.5" r="6.2" fill="none" stroke="#003153" stroke-width="0.4"/>
+  <circle cx="123.4" cy="80" r="0.9" fill="#003153" stroke="#fff" stroke-width="0.4"/>
+</svg>
+  <div class="folio folio--plate"><span class="folio-head">Melbourne from the Air</span><span class="folio-sep">·</span>3</div>
+</div>
+
+</body>
+</html>

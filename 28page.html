@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+
+.horror-bg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-86%, -86%);
+  width: 190mm;
+  aspect-ratio: 1 / 1;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 74%, rgba(216,32,46,.42), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(11,77,124,.38) 0%, rgba(0,49,83,.38) 55%, rgba(0,16,29,.4) 100%);
+}
+.horror-bg .cross { opacity: .09; }
+
+
+
+</style>
+<style>
+  
+  .flag-grid { display: grid; grid-template-columns: 1fr 1.4cm 1fr; grid-template-rows: auto 1.4cm auto; margin-top: 0.25cm; position: relative; }
+  .flag-grid > .q { display: flex; flex-direction: column; }
+  .flag-grid > .q > :first-child { margin-top: 0; }
+  .flag-grid > .q p { margin-bottom: 0.25cm; text-align: left; line-height: 1.45; }
+  .flag-grid > .q > :last-child { margin-bottom: 0; }
+  .flag-grid .gm-note p { margin-bottom: 0.12cm; line-height: 1.38; }
+  .q--tl { grid-area: 1 / 1; } .q--tr { grid-area: 1 / 3; }
+  .q--bl { grid-area: 3 / 1; } .q--br { grid-area: 3 / 3; }
+  .flag-grid .form-slip { margin: 0.1cm 0 0.3cm; padding: 0.25cm 0.4cm 0.2cm; }
+  .flag-grid .gm-note { padding-top: 0.2cm; padding-bottom: 0.15cm; }
+  .fbar { position: relative; background: #fbfaf7; box-shadow: inset 0 0 0 0.9px rgba(33,63,119,.85); z-index: 0; }
+  .fbar--v { grid-area: 1 / 2 / 4 / 3; justify-self: center; width: 0.4cm; margin: 0.1cm 0 0.45cm; }
+  .fbar--h { grid-area: 2 / 1 / 3 / 4; align-self: center; height: 0.4cm; margin: 0 0.45cm; }
+  .fstar { position: absolute; width: 1.1cm; height: 1.1cm; z-index: 1; }
+  .fstar--c { width: 1.4cm; height: 1.4cm; left: 50%; top: 50%; transform: translate(-50%,-50%); }
+  .fbar--v .fstar--t { left: 50%; top: 0; transform: translate(-50%,-50%); }
+  .fbar--v .fstar--b { left: 50%; bottom: 0; transform: translate(-50%,50%); }
+  .fbar--h .fstar--l { top: 50%; left: 0; transform: translate(-50%,-50%); }
+  .fbar--h .fstar--r { top: 50%; right: 0; transform: translate(50%,-50%); }
+  
+  .fbar--h::after { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 0.4cm; transform: translateX(-50%); background: #fbfaf7; }
+
+  
+  .flag-grid { grid-template-columns: 1fr 1.5cm 1fr; grid-template-rows: auto 1.4cm auto; }
+  .fpaint { position: relative; z-index: 0; background: #213f77; opacity: 1; pointer-events: none; }
+  .fpaint--v { grid-area: 1 / 2 / 4 / 3; justify-self: center; width: 1.2cm; margin: -0.35cm 0 0; filter: url(#brush-v); border-radius: 50% / 6% 8% 5% 7%; transform: rotate(0.0deg); }
+  .fpaint--h { grid-area: 2 / 1 / 3 / 4; align-self: center; height: 1.2cm; margin: 0 -0.35cm; filter: url(#brush-h); border-radius: 14% 9% 11% 10% / 50%; transform: rotate(0.0deg); }
+  .fbar { z-index: 1; background: #fff; box-shadow: none; }
+  .fbar--h::after { background: #fff; }
+  .fstar { z-index: 2; }
+
+.flag-grid > .q--br p { margin-bottom: 0.2cm; }
+
+.flag-grid > .q--tr, .flag-grid > .q--br { padding-left: 0.3cm; }
+
+.form-slip .comments-first { display: flex; align-items: baseline; gap: 0.15cm; }
+.form-slip .comments-first .rule { flex: 1; height: auto; }
+.form-slip .rule { display: block; height: 0.74cm; border-bottom: 1px dotted var(--ink-faint); }
+.form-slip .comments-first + .rule { height: 0.6cm; }
+</style>
+</head>
+<body>
+
+<!-- shared drawing: the cyclorama rings and the Eureka flag star. The same defs are repeated in each of pages 21 to 28; the rings echo the ones drawn by script on 09page.html -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="cyc-rings" fill="none" stroke="currentColor">
+      <circle r="32" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="64" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="96" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="128" stroke-width="1.3"/>
+      <circle r="160" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="192" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="224" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="256" stroke-width="1.3"/>
+    </g>
+    <polygon id="star8" points="50,0 58.5,31.5 90,10 68.5,41.5 100,50 68.5,58.5 90,90 58.5,68.5 50,100 41.5,68.5 10,90 31.5,58.5 0,50 31.5,41.5 10,10 41.5,31.5"/>
+    <path id="fstar-b" fill="#213f77" d="m499.7 232.4 17.7 49.8 47.7-22.7-22.7 47.7 49.8 17.7-49.8 17.7 22.7 47.8-47.7-22.7-17.7 49.7-17.7-49.7-47.7 22.7 22.6-47.8-49.7-17.7 49.7-17.7-22.6-47.7 47.7 22.7 17.7-49.8z"/>
+    <path id="fstar-w" fill="#fff" d="m499.7 243.7 15.5 43.7 41.9-19.9-19.9 41.9 43.7 15.5-43.7 15.6 19.9 41.9-41.9-19.9-15.5 43.7-15.6-43.7-41.9 19.9 19.9-41.9-43.7-15.6 43.7-15.5-19.9-41.9 41.9 19.9 15.6-43.7z"/>
+<filter id="brush-h" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.2" numOctaves="3" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="12" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.45" numOctaves="2" seed="7" result="s"/>
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="sa"/>
+      <feComposite in="d" in2="sa" operator="in"/>
+    </filter><filter id="brush-v" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.2 0.02" numOctaves="3" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="12" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.45 0.003" numOctaves="2" seed="7" result="s"/>
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="sa"/>
+      <feComposite in="d" in2="sa" operator="in"/>
+    </filter>
+      <filter id="brush-band" x="-10%" y="-25%" width="120%" height="150%" color-interpolation-filters="sRGB"> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.45" numOctaves="2" seed="7" result="s"/> 
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="aMask"/> 
+      <feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%2010%27%20preserveAspectRatio%3D%27none%27%3E%3ClinearGradient%20id%3D%27a%27%3E%3Cstop%20offset%3D%270.1%27%20stop-color%3D%27%23000%27/%3E%3Cstop%20offset%3D%270.27%27%20stop-color%3D%27%23fff%27/%3E%3Cstop%20offset%3D%270.73%27%20stop-color%3D%27%23fff%27/%3E%3Cstop%20offset%3D%270.9%27%20stop-color%3D%27%23000%27/%3E%3C/linearGradient%3E%3Crect%20width%3D%27100%27%20height%3D%2710%27%20fill%3D%27url%28%23a%29%27/%3E%3C/svg%3E" preserveAspectRatio="none" result="g"/> 
+      <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="gA"/> 
+      <feComposite in="aMask" in2="gA" operator="arithmetic" k2="1" k3="1.2" result="mask"/> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.015 0.12" numOctaves="3" seed="3" result="n"/> 
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="d"/> 
+      <feComposite in="d" in2="mask" operator="in" result="p"/><feTurbulence type="fractalNoise" baseFrequency="0.006 0.9" numOctaves="2" seed="13" result="t"/> 
+      <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  2.6 0 0 0 -1.35" result="hl"/> 
+      <feComposite in="hl" in2="p" operator="in" result="hlIn"/> 
+      <feColorMatrix in="hlIn" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.35 0" result="hlA"/> 
+      <feMerge><feMergeNode in="p"/><feMergeNode in="hlA"/></feMerge></filter>
+  </defs>
+</svg>
+
+<div class="page wash">
+
+
+  <div class="horror-bg" aria-hidden="true">
+    <svg class="rings"><use href="#cyc-rings"/></svg>
+    <svg class="cross" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+      <g fill="#fff">
+        <rect x="46.5" y="10" width="7" height="80"/>
+        <rect x="10" y="46.5" width="80" height="7"/>
+      </g>
+      <use href="#star8" fill="#fff" transform="translate(50 12) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(50 88) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(12 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(88 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(50 50) scale(.16) translate(-50 -50)"/>
+    </svg>
+  </div>
+  <div class="act-band"><div class="act-cross"><span class="arm arm--l"><span class="paint"></span><svg class="tip tip--start" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><span class="act-part">Part VI</span></span><svg class="cstar" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><span class="arm arm--r"><span class="paint"></span><span class="act-title">Epilogue</span><svg class="tip tip--end" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg></span></div><p class="act-rooms">Whatever the Outcome &middot; Historical Epilogue</p></div>
+
+
+  <div class="flag-grid">
+    <div class="fpaint fpaint--v" aria-hidden="true"></div>
+    <div class="fpaint fpaint--h" aria-hidden="true"></div>
+    <div class="fbar fbar--v" aria-hidden="true"><svg class="fstar fstar--t" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><svg class="fstar fstar--b" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg></div>
+    <div class="fbar fbar--h" aria-hidden="true"><svg class="fstar fstar--l" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><svg class="fstar fstar--r" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><svg class="fstar fstar--c" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg></div>
+    <div class="q q--tl">
+      <h3 class="subsection-heading">Whatever the Outcome</h3>
+<p>If the busker played earlier, he returns, cap in hand, with one more song (optional). Provide players <span class="handout-ref"><span class="handout-label">Handout <span class="handout-letter">H</span></span> The Busker’s Ballad (Reprise)</span> and have a player perform it.</p>
+
+      <p><strong>Handing in the paperwork.</strong> Even if only one investigator escaped, someone has to fill it in. The CSIR expects Form 7a (<span class="handout-ref"><span class="handout-label">Handout <span class="handout-letter">F</span></span> C.S.I.R. Form 7a</span>), completed in triplicate. What the investigators write decides the canvas’s fate. A &ldquo;No&rdquo; to <em>&ldquo;Can it be patented, bottled or licensed?&rdquo;</em> closes the file. A &ldquo;Yes&rdquo; means the CSIR sends another practical man (see <em>Investigation Failure</em>). The balance of the fee arrives either way; after a &ldquo;Yes&rdquo; it is larger, with a share of the licence pencilled in.</p>
+    </div>
+    <div class="q q--tr">
+      <p>Mr Roe’s absence must be reported separately:</p>
+      <div class="form-slip">
+        <div class="form-head">C.S.I.R. Form 8c: Casualty Report
+          <small>(to be completed in triplicate)</small>
+        </div>
+        <ol>
+          <li>Name of casualty: <span class="field"></span></li>
+          <li>Nature of casualty: <span class="field"></span></li>
+          <li>Was the casualty incurred in the National Interest? <span class="tick">&#9744; Yes &nbsp; &#9744; Very much yes</span></li>
+          <li>Can the casualty be licensed? <span class="tick">&#9744; Yes &nbsp; &#9744; No</span></li>
+          <li class="comments"><span class="comments-first">Comments: <span class="rule"></span></span><span class="rule"></span><span class="rule"></span><span class="rule"></span></li>
+        </ol>
+        <div class="form-foot">Further casualties to be reported on Form 8c (continued).</div>
+      </div>
+      
+    </div>
+    <div class="q q--bl">
+      <h3 class="subsection-heading">Investigation Success</h3>
+      <p>The investigators escape the living canvas and make sure no one ever enters it again: a &ldquo;No&rdquo; on Form 7a with <em>Secure storage</em> ticked, a locked crate, the canvas rolled face-in. The canvas sleeps.</p>
+      <p>If every stolen item went back, so do the dead of the Stockade, and the hauntings fade. The Russell Street card is just a street. 
+        The Eureka memorial just a stereograph. Sir Redmond Barry looks straight ahead, and nowhere else. The Lalor portrait restored. </p>
+      
+      <p><strong>Anything kept.</strong> If anyone pocketed so much as a tooth or a sword, it is a link from 
+        the dead to the living. One day it might be a conduit for something else far more sinister.</p>
+    </div>
+    <div class="q q--br">
+      <h3 class="subsection-heading">Investigation Failure</h3>
+      <p>Investigators who die inside the living painting join it, as does Mr Cy Roe if no one returns what was stolen. Worked like puppets, they re-enact the battle every time someone crosses in.</p>
+      <p>Investigators who escape but leave the canvas where anyone can reach it, or who tell the CSIR it can be licensed, fail more slowly. The canvas becomes a commercial proposition, and every paying visitor wrenches the dead back to fight and fall.</p>
+      <p>The hauntings spread to every stereograph, painting and photograph of Eureka in Melbourne. The dead are still trying to get a message through.</p>
+      <p>Years later, a new stereograph turns up on the library’s returns trolley: the Eureka Cyclorama. In the crowd might be faces the investigators’ friends would recognise.</p>
+    </div>
+  </div>
+
+  <div class="folio"><span class="folio-head">Epilogue</span><span class="folio-sep">·</span>28</div>
+</div>
+
+
+</body>
+</html>

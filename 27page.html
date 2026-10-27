@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+
+
+.horror-bg .cross { opacity: .03; }
+
+
+.ref-cols { margin: 0 0 0.35cm; }
+.ref-cols .two-column-col p { margin-bottom: 0.2cm; }
+.ref-cols .two-column-col p:last-child { margin-bottom: 0; }
+.ref-cols .refs { font-style: italic; }
+
+.stereo-stack { display: flex; flex-direction: column; gap: 0.32cm; position: relative; z-index: 1; flex: 1; justify-content: space-between; }
+.stereo {
+  margin: 0; display: grid; grid-template-columns: 9mm 1fr; gap: 0;
+  padding: 1.6mm 3mm 1.8mm 2.4mm;
+  border-radius: 0.8mm 3mm 3mm 0.8mm;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(120,92,48,.18) 0 1.2mm, transparent 1.6mm),
+    radial-gradient(circle at 34% 94%, rgba(120,92,48,.14) 0 0.9mm, transparent 1.3mm),
+    linear-gradient(178deg, #b9b09c 0%, #a99f8a 100%);
+  position: relative; --shadow: 0 0.6mm 2.4mm rgba(0,0,0,.6);
+}
+.stereo.label-right { grid-template-columns: 1fr 9mm; padding: 1.6mm 2.4mm 1.8mm 3mm; border-radius: 3mm 0.8mm 0.8mm 3mm; }
+.stereo.label-right .label { order: 2; margin: 0 0 0 1.4mm; }
+
+
+.label {
+  margin: 0 1.4mm 0 0;
+  background: linear-gradient(90deg, #e4dcc6, #ece5d1 50%, #e0d7bf);
+  box-shadow: inset 0 0 0 0.2mm rgba(80,60,30,.25);
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0;
+  padding: 0 0.6mm; color: #2b2116; white-space: nowrap; line-height: 1;
+}
+.label .series { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-weight: 500; font-size: var(--fs-caption); letter-spacing: 0.04em; text-transform: uppercase; }
+.label .maker  { font-family: 'Crimson Text', Georgia, serif; font-weight: 600; font-size: var(--fs-caption); letter-spacing: 0.06em; margin-top: 0.6mm; }
+.label .maker b { font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-size: 1.15em; }
+.label .pencil { font-family: 'Caveat', cursive; font-weight: 600; font-size: var(--fs-subhead); color: #3b3a52; margin-top: 0.2mm; transform: rotate(-1.5deg); }
+
+
+.prints { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5mm; background: #2a2016; }
+.print {
+  position: relative; overflow: hidden;
+  padding: 2.4mm 4mm 2.6mm;
+  color: #f1e7d0; font-size: var(--diagram-text); line-height: 1.32;
+  background: radial-gradient(ellipse 75% 70% at 50% 45%, #5e4a33 0%, #45351f 45%, #2a1f13 100%);
+}
+
+.print::before {
+  content: ''; position: absolute; inset: -2mm; z-index: 0;
+  background: url(images/FL15987031.jpg) var(--bx, 40%) var(--by, 45%) / 300% auto;
+  filter: sepia(1) contrast(.9) brightness(.85); opacity: .16;
+}
+.print + .print::before { background-position: calc(var(--bx, 40%) + 1.2%) var(--by, 45%); }
+.print::after { 
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  box-shadow: inset 0 0 6mm rgba(20,12,4,.75); filter: opacity(.999);   
+}
+.print > * { position: relative; z-index: 1; }
+.stereo.no2 .print { --bx: 72%; --by: 30%; }
+.stereo.no3 .print { --bx: 55%; --by: 62%; }
+
+.print h3 {
+  font-family: 'Cinzel', Georgia, serif; font-size: var(--fs-subhead); font-weight: 600; line-height: 1.15;
+  color: #fff7e6; margin: 0 0 1mm; display: flex; justify-content: space-between; align-items: baseline; gap: 2mm;
+}
+.badge { flex: none; white-space: nowrap; font-family: 'Crimson Text', Georgia, serif; font-size: var(--fs-small); font-variant-caps: all-small-caps; letter-spacing: 0.08em; font-weight: 600; }
+.badge.wax   { color: #e9c468; }
+.badge.paint { color: rgba(255,247,230,.7); }
+.print p { margin: 0 0 1mm; text-align: left; }
+.print p:last-child { margin-bottom: 0; }
+.print strong { color: #fff7e6; }
+.print .sp { color: rgba(241,231,208,.86); }
+.ghost-stat-line { font-size: var(--fs-small); border-top: 1px solid rgba(241,231,208,.25); border-bottom: 1px solid rgba(241,231,208,.25); letter-spacing: 0.15px; margin: 0 0 1.2mm; padding: 0.8mm 0; }
+
+
+.stereo-stack { justify-content: center; gap: 0.6cm; }
+.stereo { flex: none; aspect-ratio: 2 / 1; }
+.print { padding: 3.4mm 4.4mm 3mm; }
+.print::before { opacity: .22; }
+.label .series { font-size: var(--fs-caption); line-height: 1.05; text-align: center; }
+.label .maker  { font-size: var(--fs-caption); }
+.label .pencil { font-size: var(--fs-subhead); }
+.stereo { grid-template-columns: 10mm 1fr; }
+.stereo.label-right { grid-template-columns: 1fr 10mm; }
+
+
+.stereo, .stereo.label-right { border-radius: 2.6mm; }
+.prints { background: none; gap: 1.4mm; }
+.print { border-radius: 50% 50% 0 0 / 6.5mm 6.5mm 0 0; box-shadow: 0 0 0 0.3mm rgba(40,30,20,.6); padding-top: 2.6mm; }
+.print::after { border-radius: inherit; }
+
+.print h3 { flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; gap: 0; }
+.print h3 .badge { order: -1; font-size: var(--fs-caption); line-height: 1.1; margin-bottom: 0.2mm; }
+
+
+.print {
+  background: radial-gradient(ellipse 75% 70% at 50% 45%, var(--t-mid) 0%, var(--t-deep) 45%, var(--t-edge) 100%);
+  color: var(--t-ink);
+}
+.print::before { filter: var(--t-filter); }
+.print::after { box-shadow: inset 0 0 6mm var(--t-falloff); }
+.print h3, .print strong { color: var(--t-head); }
+.print .sp { color: var(--t-ink); opacity: .9; }
+.ghost-stat-line { border-color: var(--t-rule); }
+.badge.paint { color: var(--t-ink); opacity: .75; }
+
+.stereo.no1 { --t-mid:#5e4a33; --t-deep:#45351f; --t-edge:#2a1f13; --t-ink:#f1e7d0; --t-head:#fff7e6; --t-rule:rgba(241,231,208,.25);
+              --t-falloff:rgba(20,12,4,.75);  --t-filter: sepia(1) contrast(.9) brightness(.85); }
+.stereo.no2 { --t-mid:#6a2a26; --t-deep:#4a1a18; --t-edge:#2a0d0c; --t-ink:#f6e1da; --t-head:#fff1ec; --t-rule:rgba(246,225,218,.25);
+              --t-falloff:rgba(26,4,4,.75);   --t-filter: sepia(1) hue-rotate(-30deg) saturate(2.2) contrast(.9) brightness(.8); }
+.stereo.no3 { --t-mid:#2c4a66; --t-deep:#1c3550; --t-edge:#0e1d2e; --t-ink:#e2edf6; --t-head:#f4f9fd; --t-rule:rgba(226,237,246,.25);
+              --t-falloff:rgba(3,10,20,.75);  --t-filter: grayscale(1) sepia(1) hue-rotate(170deg) saturate(2) contrast(.9) brightness(.8); }
+
+
+.label { flex-direction: row; justify-content: space-between; align-items: center; padding: 2.4mm 0.6mm; }
+.label .printed { display: flex; flex-direction: column; align-items: center; }
+.label .pencil { margin-top: 0; padding-top: 1.6mm; border-top: 0.25mm dotted rgba(43,33,22,.35); }
+
+.label { contain: size; overflow: hidden; }
+.label .pencil { white-space: normal; max-inline-size: 58%; text-align: center; line-height: 0.95; }
+</style>
+</head>
+<body>
+
+<!-- shared drawing: the cyclorama rings and the Eureka flag star. The same defs are repeated in each of pages 21 to 28; the rings echo the ones drawn by script on 09page.html -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="cyc-rings" fill="none" stroke="currentColor">
+      <circle r="32" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="64" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="96" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="128" stroke-width="1.3"/>
+      <circle r="160" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="192" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="224" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="256" stroke-width="1.3"/>
+    </g>
+    <polygon id="star8" points="50,0 58.5,31.5 90,10 68.5,41.5 100,50 68.5,58.5 90,90 58.5,68.5 50,100 41.5,68.5 10,90 31.5,58.5 0,50 31.5,41.5 10,10 41.5,31.5"/>
+  </defs>
+</svg>
+
+<div class="page wash dark">
+
+  <div class="horror-bg" aria-hidden="true">
+    <svg class="rings"><use href="#cyc-rings"/></svg>
+    <svg class="cross" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+      <g fill="#fff">
+        <rect x="46.5" y="10" width="7" height="80"/>
+        <rect x="10" y="46.5" width="80" height="7"/>
+      </g>
+      <use href="#star8" fill="#fff" transform="translate(50 12) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(50 88) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(12 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(88 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(50 50) scale(.16) translate(-50 -50)"/>
+    </svg>
+  </div>
+
+<h2 class="section-heading" style="color:white">Combat Reference</h2>
+
+  <div class="two-column ref-cols">
+    <div class="two-column-col">
+      <p>The spirits of the Stockade possess every figure in the painting and fight the battle again. Four of them have reason to come for the investigators. Two kinds of body carry them.</p>
+      <p><strong>Wax &amp; straw.</strong> The dummies on the faux terrain, made more real with their possession to the point of having some blood and teeth. Otherwise slow, stiff and creaking.</p>
+      <p><strong>Painted.</strong> Figures peeled off the canvas, flat and wet.</p>
+    </div>
+    <div class="two-column-col">
+      <p><strong>Everyone else.</strong> 150 diggers against nearly 300 soldiers and police. If others join in, use the nearest card.</p>
+      <p><strong>Swords and daggers.</strong> Fallen swords lie all over the faux terrain: Sword, 1D8+1+DM. The daggers from the basement: 1D4+2+DM. Climb with either and it is stolen goods (p.&nbsp;25).</p>
+      <p class="refs">Crossfire, Paint or lead, Stolen items and Dying inside: p.&nbsp;25. The climb: p.&nbsp;26.</p>
+    </div>
+  </div>
+
+  <div class="stereo-stack">
+    <figure class="stereo no1">
+      <div class="label"><span class="printed"><span class="series">Eureka Cyclorama Series.</span><span class="maker"><b>Cyclorama Co.</b>, Melbourne</span></span><span class="pencil">The Dead. 1.</span></div>
+      <div class="prints">
+        <div class="print">
+          <h3>The Trooper by the Wagon<span class="badge wax">Wax &amp; straw</span></h3>
+          <div class="ghost-stat-line">STR&nbsp;12&nbsp; CON&nbsp;13&nbsp; SIZ&nbsp;12&nbsp; DEX&nbsp;7&nbsp; POW&nbsp;6&nbsp; HP&nbsp;13&nbsp; DM&nbsp;none&nbsp; MOV&nbsp;6&nbsp; Dodge&nbsp;17%</div>
+          <p class="atk"><strong>Carbine butt</strong> 40%, 1D6+DM</p>
+          <p class="sp"><strong>Owed:</strong> ten upper right molars.</p>
+        </div>
+        <div class="print">
+          <h3>The Fleeing Digger<span class="badge paint">Painted</span></h3>
+          <div class="ghost-stat-line">STR&nbsp;11&nbsp; CON&nbsp;10&nbsp; SIZ&nbsp;11&nbsp; DEX&nbsp;13&nbsp; POW&nbsp;12&nbsp; HP&nbsp;11&nbsp; DM&nbsp;none&nbsp; MOV&nbsp;10&nbsp; Dodge&nbsp;32%</div>
+          <p class="atk"><strong>Revolver</strong> 30%, 1D8</p>
+          <p class="sp"><strong>Owed:</strong> ten lower left molars.</p>
+        </div>
+      </div>
+    </figure>
+    <figure class="stereo no2 label-right">
+      <div class="label"><span class="printed"><span class="series">Eureka Cyclorama Series.</span><span class="maker"><b>Cyclorama Co.</b>, Melbourne</span></span><span class="pencil">The Dead. 2.</span></div>
+      <div class="prints">
+        <div class="print">
+          <h3>The Redcoat Officer<span class="badge paint">Painted</span></h3>
+          <div class="ghost-stat-line">STR&nbsp;12&nbsp; CON&nbsp;12&nbsp; SIZ&nbsp;12&nbsp; DEX&nbsp;11&nbsp; POW&nbsp;11&nbsp; HP&nbsp;12&nbsp; DM&nbsp;none&nbsp; MOV&nbsp;10&nbsp; Dodge&nbsp;27%</div>
+          <p class="atk"><strong>Sword</strong> 50%, 1D8+1+DM<br><strong>Orders a volley</strong> (rank of 4+) 45%, 1D10+4, then 4 rounds to reload</p>
+          <p class="sp"><strong>Owed:</strong> ten upper left eye-teeth.</p>
+        </div>
+        <div class="print">
+          <h3>The Horseman<span class="badge wax">Wax &amp; straw</span></h3>
+          <div class="ghost-stat-line">STR&nbsp;13&nbsp; CON&nbsp;12&nbsp; SIZ&nbsp;13&nbsp; DEX&nbsp;9&nbsp; POW&nbsp;15&nbsp; HP&nbsp;13&nbsp; DM&nbsp;+1D4&nbsp; MOV&nbsp;6&nbsp; Dodge&nbsp;18%</div>
+          <p class="atk"><strong>Dagger</strong> 50%, 1D4+2+DM<br><strong>Ride down</strong> 40%, 1D8 and knocked prone</p>
+          <p class="sp"><strong>Owed:</strong> two daggers. Drags the carriage at every climb (p.&nbsp;26). Stuffed horse: HP&nbsp;16.</p>
+        </div>
+      </div>
+    </figure>
+  </div>
+
+  <div class="folio folio--light"><span class="folio-head">Inside the Cyclorama</span><span class="folio-sep">·</span>27</div>
+</div>
+
+</body>
+</html>

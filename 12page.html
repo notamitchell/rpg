@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+
+.page > .image-container { width: 150mm; margin: 0 auto 0.1cm; }
+.page > .image-container + .two-column { margin-top: 0.2cm; }
+.page .two-column-col > .character-block:first-child { margin-top: 0; }
+</style>
+</head>
+<body>
+<!-- the Eureka flag star and the dry-brush filter for the act-opener band -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <path id="fstar-b" fill="#213f77" d="m499.7 232.4 17.7 49.8 47.7-22.7-22.7 47.7 49.8 17.7-49.8 17.7 22.7 47.8-47.7-22.7-17.7 49.7-17.7-49.7-47.7 22.7 22.6-47.8-49.7-17.7 49.7-17.7-22.6-47.7 47.7 22.7 17.7-49.8z"/>
+    <path id="fstar-w" fill="#fff" d="m499.7 243.7 15.5 43.7 41.9-19.9-19.9 41.9 43.7 15.5-43.7 15.6 19.9 41.9-41.9-19.9-15.5 43.7-15.6-43.7-41.9 19.9 19.9-41.9-43.7-15.6 43.7-15.5-19.9-41.9 41.9 19.9 15.6-43.7z"/>
+    <filter id="brush-h" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.2" numOctaves="3" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="12" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.45" numOctaves="2" seed="7" result="s"/>
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="sa"/>
+      <feComposite in="d" in2="sa" operator="in"/>
+    </filter>
+      <filter id="brush-band" x="-10%" y="-25%" width="120%" height="150%" color-interpolation-filters="sRGB"> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.45" numOctaves="2" seed="7" result="s"/> 
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="aMask"/> 
+      <feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%2010%27%20preserveAspectRatio%3D%27none%27%3E%3ClinearGradient%20id%3D%27a%27%3E%3Cstop%20offset%3D%270.1%27%20stop-color%3D%27%23000%27/%3E%3Cstop%20offset%3D%270.27%27%20stop-color%3D%27%23fff%27/%3E%3Cstop%20offset%3D%270.73%27%20stop-color%3D%27%23fff%27/%3E%3Cstop%20offset%3D%270.9%27%20stop-color%3D%27%23000%27/%3E%3C/linearGradient%3E%3Crect%20width%3D%27100%27%20height%3D%2710%27%20fill%3D%27url%28%23a%29%27/%3E%3C/svg%3E" preserveAspectRatio="none" result="g"/> 
+      <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="gA"/> 
+      <feComposite in="aMask" in2="gA" operator="arithmetic" k2="1" k3="1.2" result="mask"/> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.015 0.12" numOctaves="3" seed="3" result="n"/> 
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="d"/> 
+      <feComposite in="d" in2="mask" operator="in" result="p"/><feTurbulence type="fractalNoise" baseFrequency="0.006 0.9" numOctaves="2" seed="13" result="t"/> 
+      <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  2.6 0 0 0 -1.35" result="hl"/> 
+      <feComposite in="hl" in2="p" operator="in" result="hlIn"/> 
+      <feColorMatrix in="hlIn" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.35 0" result="hlA"/> 
+      <feMerge><feMergeNode in="p"/><feMergeNode in="hlA"/></feMerge></filter>
+  </defs>
+</svg>
+
+<div class="page">
+  <div class="act-band"><div class="act-cross"><span class="arm arm--l"><span class="paint"></span><svg class="tip tip--start" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><span class="act-part">Part III</span></span><svg class="cstar" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><span class="arm arm--r"><span class="paint"></span><span class="act-title">Gallery & Museum</span><svg class="tip tip--end" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg></span></div><p class="act-rooms">Verdon &middot; Stawell &middot; Latrobe &middot; McArthur &middot; McCoy Hall (Museum)</p></div>
+
+  <h2 class="section-heading">Verdon Gallery</h2>
+
+
+      <!-- PRINT SIZE, DO NOT CHANGE: this stereograph is fixed at 150 mm wide in the page's style block so it works in a stereoscope (see p. 36). Fix layout by moving text, not by resizing it. -->
+      <div class="image-container">
+        <span class="qr-host"><img src="images/FL15934761.jpg" alt="https://handle.slv.vic.gov.au/10381/296600" /></span>
+        <p class="image-caption">Verdon Gallery display cabinet, stereograph by B. C. Boake.</p>
+      </div>
+
+
+  <p>The Verdon Gallery is a long hall filled with glass cabinets, forming something of a minor maze. Some cabinets have mirror backings to aid patrons in viewing the rear angles of assorted artefacts and doodahs.</p>
+
+  <div class="two-column">
+    <div class="two-column-col">
+
+      <div class="character-block">
+        <div class="character-name">River Kelly, Security Guard</div>
+        <div class="character-meta">
+          <span>STR 12</span><span>CON 12</span><span>SIZ 13</span><span>DEX 10</span><span>INT 11</span><br>
+          <span>CHA 10</span><span>POW 11</span><span>HP 13</span><br>
+          <span>DM +1D4</span><span>MOV 10</span><span>Dodge 20%</span>
+        </div>
+        <div class="character-skills">
+          <span class="atk"><strong>Brawl</strong> 45%, 1D3+DM; <strong>Grapple</strong> 40%</span>
+          <strong>Skills</strong> Listen 50%, Spot 55%, Status 20%
+        </div>
+        <div class="character-description">
+          <p>River likes the Verdon Gallery as its maze-like layout provides plenty of opportunity to sit down on the job. Keys hang from the belt, easily lifted while River naps (<span class="roll-inline">Sleight of Hand</span>).</p>
+          <p>River knows the basic story of the Eureka stockade, but is surprised anyone wants their opinion when the library has so many books on the topic.</p>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="two-column-col">
+      <div class="group">
+        <h3 class="subsection-heading">A Passing Glance</h3>
+        <p>Who was the last to look through the stereoscope?</p>
+        <div><p>In a mirror, from the corner of their eye, the hint of a 
+          nondescript personified. An unevent dehumanised. A can’t quite place unlocated.</p>
+        <p>By the time it is observed, nothing.</p></div>
+        <p>No roll. It is over before anyone can be sure it even happened.</p>
+      </div>
+      <div class="gm-note">
+        <p>A mirror is already halfway to an illusion, but doesn’t have enough substance for a spirit to possess for more than a moment. Mention it, then move on.</p>
+        <p>The galleries stay this uneventful until Lalor (p.&nbsp;17). If your table grows restless, cover Stawell and Latrobe Gallery in a few sentences, get to the bust (p.&nbsp;16), and move on.</p>
+      </div>
+  
+    </div>
+  </div><!-- /.two-column -->
+
+  <div class="folio"><span class="folio-head">Verdon Gallery</span><span class="folio-sep">·</span>12</div>
+</div><!-- /.page -->
+
+</body>
+</html>

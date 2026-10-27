@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+.two-column-col > .group:has(+ .book-back) { margin-bottom: 0; }
+.two-column-col > .describe.book-back { margin-top: 0.1cm; }
+
+.book-back .vol-back p:not([class]) { line-height: 1.55; }
+.book-back .vol-back p.vol-open { font-size: var(--fs-small); line-height: 1.55; margin: 1.6mm 0 0; }
+.vol-open .lead { font-variant-caps: all-small-caps; letter-spacing: 0.06em; }
+.book-back .vol-back p.vol-last { font-size: var(--fs-small); line-height: 1.55; margin: 3.4mm 0 1.6mm; }
+
+.book-back .vol-band { margin-bottom: 3.4mm; padding: 2mm 4.6mm 1.8mm; }
+.book-back .vol-head { margin-bottom: 3mm; padding-bottom: 3mm; }
+.book-back .vol-back { padding-bottom: 3.6mm; }
+.book-back .vol-back p.vol-open { line-height: 1.62; }
+.book-back .vol-back p.vol-foot { margin-top: 3.4mm; padding-top: 1.4mm; }
+</style>
+</head>
+<body>
+<!-- the Eureka flag star and the dry-brush filter for the act-opener band -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <path id="fstar-b" fill="#213f77" d="m499.7 232.4 17.7 49.8 47.7-22.7-22.7 47.7 49.8 17.7-49.8 17.7 22.7 47.8-47.7-22.7-17.7 49.7-17.7-49.7-47.7 22.7 22.6-47.8-49.7-17.7 49.7-17.7-22.6-47.7 47.7 22.7 17.7-49.8z"/>
+    <path id="fstar-w" fill="#fff" d="m499.7 243.7 15.5 43.7 41.9-19.9-19.9 41.9 43.7 15.5-43.7 15.6 19.9 41.9-41.9-19.9-15.5 43.7-15.6-43.7-41.9 19.9 19.9-41.9-43.7-15.6 43.7-15.5-19.9-41.9 41.9 19.9 15.6-43.7z"/>
+    <filter id="brush-h" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.2" numOctaves="3" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="12" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.45" numOctaves="2" seed="7" result="s"/>
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="sa"/>
+      <feComposite in="d" in2="sa" operator="in"/>
+    </filter>
+      <filter id="brush-band" x="-10%" y="-25%" width="120%" height="150%" color-interpolation-filters="sRGB"> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.45" numOctaves="2" seed="7" result="s"/> 
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="aMask"/> 
+      <feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%2010%27%20preserveAspectRatio%3D%27none%27%3E%3ClinearGradient%20id%3D%27a%27%3E%3Cstop%20offset%3D%270.1%27%20stop-color%3D%27%23000%27/%3E%3Cstop%20offset%3D%270.27%27%20stop-color%3D%27%23fff%27/%3E%3Cstop%20offset%3D%270.73%27%20stop-color%3D%27%23fff%27/%3E%3Cstop%20offset%3D%270.9%27%20stop-color%3D%27%23000%27/%3E%3C/linearGradient%3E%3Crect%20width%3D%27100%27%20height%3D%2710%27%20fill%3D%27url%28%23a%29%27/%3E%3C/svg%3E" preserveAspectRatio="none" result="g"/> 
+      <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="gA"/> 
+      <feComposite in="aMask" in2="gA" operator="arithmetic" k2="1" k3="1.2" result="mask"/> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.015 0.12" numOctaves="3" seed="3" result="n"/> 
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="d"/> 
+      <feComposite in="d" in2="mask" operator="in" result="p"/><feTurbulence type="fractalNoise" baseFrequency="0.006 0.9" numOctaves="2" seed="13" result="t"/> 
+      <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  2.6 0 0 0 -1.35" result="hl"/> 
+      <feComposite in="hl" in2="p" operator="in" result="hlIn"/> 
+      <feColorMatrix in="hlIn" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.35 0" result="hlA"/> 
+      <feMerge><feMergeNode in="p"/><feMergeNode in="hlA"/></feMerge></filter>
+  </defs>
+</svg>
+
+<div class="page">
+  <div class="act-band"><div class="act-cross"><span class="arm arm--l"><span class="paint"></span><svg class="tip tip--start" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><span class="act-part">Part I</span></span><svg class="cstar" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><span class="arm arm--r"><span class="paint"></span><span class="act-title">Arrival</span><svg class="tip tip--end" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg></span></div><p class="act-rooms">Getting Started &middot; The Barry Stereograph</p></div>
+
+  <h2 class="section-heading">Getting Started</h2>
+
+  <p>Provide players <span class="handout-ref"><span class="handout-label">Handout <span class="handout-letter">A</span></span> Melbourne</span>. Investigators find themselves in the hustle and bustle of Melbourne, outside the Library, Museum & Gallery shown at the top of the handout. The handout also holds the Russell Street photo (a clue on p.&nbsp;9) and Sam’s parcel: three stereographs and a stereoscope.</p>
+
+  <p>Investigators may be CSIR scientists, members of its secret occult branch, or consultants hired for the job.</p>
+  
+  
+
+
+  <div class="gm-note busker-note">
+    <div class="gm-title">The Busker (Optional)</div>
+    <p>This incredibly optional musical number is thematic, entirely free of clues and goes to the character and ultimate fate of Mr Cy Roe. Poetry about Australian Prime Ministers and the founding of the CSIR is very niche, but some tables love it! <span class="handout-ref"><span class="handout-label">Handout <span class="handout-letter">B</span></span> The Busker’s Ballad</span>.</p>
+  </div>
+
+
+
+<div class="two-column">
+  <div class="two-column-col">
+
+    <div class="character-block">
+      <div class="character-name">Sam the Courier, CSIR</div>
+      <div class="character-meta">
+        <span>STR 11</span><span>CON 12</span><span>SIZ 11</span><span>DEX 14</span><span>INT 12</span>
+        <span>CHA 11</span><span>POW 9</span><span>HP 12</span>
+        <span>DM none</span><span>MOV 10</span><span>Dodge 28%</span>
+      </div>
+      <div class="character-skills">
+        <strong>Skills</strong> Drive (Automobile) 40%, Fast Talk 35%, Listen 45%, Navigate 50%, Stealth 30%
+      </div>
+
+
+      <div class="character-description">
+
+        <p>A new CSIR recruit, Sam is delivering three stereographs and a stereoscope to investigators. Sam understands the CSIR was formed because:</p>
+        <p class="say">“Science is too important to be left to scientists. Science must serve the National Interest. It must be guided by businessmen and industry!”</p>
+
+        <p class="say">“Moreover, the occult is too important to be left to the occultists!”</p>
+        <p>A secret CSIR branch has been formed, and its first job is to investigate and commercialise this cursed (or worse) photograph.</p>
+
+      </div>
+    </div>
+
+
+
+
+  </div>
+
+  <div class="two-column-col">
+    <div class="group">
+      <h3 class="subsection-heading">The Stereograph</h3>
+      <p>Sam explains that a stereograph is two photos taken from slightly different angles. Through the stereoscope they become one 3D scene.</p>
+      <p>The strange one (next page) features a marble bust of Sir Redmond Barry, which is located somewhere inside. The other two, of the statues out front, seem ordinary (p.&nbsp;6).</p>
+    </div>
+
+
+            
+
+
+  <div class="describe book-back">
+        <div class="gates"><span class="gate">Knowledge (History)/Idea</span></div>
+        <div class="vol vol--lives" style="--v-paper:#efe5cc; --v-ink:#4a1c1c; --v-cloth:#6a2626;">
+          <div class="vol-top"></div>
+          <div class="vol-back">
+            <div class="vol-band"><span>Lives of Great Victorians</span><span class="vol-no">No.&nbsp;4</span></div>
+            <div class="vol-head">
+              <div class="vol-portrait" style="background-image:url(images/FL16281605.jpg); background-position:-3.85cm -0.95cm; background-size:6.9cm auto;"></div>
+              <div><p class="vol-title">Sir Redmond Barry</p>
+              <p class="vol-tag">Visionary. Jurist. Patron. Formidable.</p></div>
+            </div>
+            <p class="vol-open"><span class="lead">Founder</span> of the University and the Public Library, Sir Redmond Barry sat on the bench for some thirty years. He tried the Eureka rebels, those goldfields diggers who stood behind a ramshackle stockade, protesting exorbitant licences.
+              A Melbourne jury set every one of them free.</p>
+            <p class="vol-last">Ned Kelly he sent to the gallows.</p>
+            <p class="vol-foot"><span>Mitchell Press &middot; Melbourne</span><span>3/6 net</span></p>
+          </div>
+          <div class="vol-spine"><span>Barry</span><span class="vol-spine-no">4</span></div>
+        </div>
+      </div>
+
+
+
+  </div>
+
+</div><!-- /.two-column -->
+
+  <div class="folio"><span class="folio-head">Getting Started</span><span class="folio-sep">·</span>4</div>
+</div><!-- /.page -->
+
+
+</body>
+</html>

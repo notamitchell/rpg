@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+
+
+.verdon-stereo {
+  margin: 0.25cm 0 0.1cm; display: grid; grid-template-columns: 10mm 1fr;
+  padding: 4.5mm 4.5mm 5.5mm 3mm; border-radius: 2.6mm;
+  background: linear-gradient(178deg, #b9b09c 0%, #a99f8a 100%);
+  position: relative; --shadow: 0 0.5mm 1.8mm rgba(51,41,28,.35);
+  width: 174mm; height: 87mm; box-sizing: border-box; margin-left: auto; margin-right: auto;
+}
+.is-label {
+  margin: 0 2.4mm 0 0; background: linear-gradient(90deg, #e4dcc6, #ece5d1 50%, #e0d7bf);
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  display: flex; flex-direction: row; justify-content: space-between; align-items: center;
+  padding: 2.4mm 0.6mm; color: #2b2116; white-space: nowrap; line-height: 1;
+}
+.is-label .printed { display: flex; flex-direction: column; align-items: center; }
+.is-label .series { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-weight: 500; font-size: var(--fs-caption); letter-spacing: 0.04em; text-transform: uppercase; }
+.is-label .maker { font-family: 'Crimson Text', Georgia, serif; font-weight: 600; font-size: var(--fs-caption); margin-top: 0.6mm; }
+.is-label .maker b { font-variant-caps: all-small-caps; letter-spacing: 0.1em; font-size: 1.15em; }
+.is-label .pencil { font-family: 'Caveat', cursive; font-weight: 600; font-size: var(--fs-subhead); color: #3b3a52; padding-top: 1.6mm; border-top: 0.25mm dotted rgba(43,33,22,.35); }
+.is-prints { display: grid; grid-template-columns: 1fr 1fr; gap: 2.2mm; min-height: 0; }
+.is-print {
+  position: relative; height: 100%; overflow: hidden;
+  border-radius: 50% 50% 0.6mm 0.6mm / 9mm 9mm 0.6mm 0.6mm;
+  background: #45351f;
+  --shadow: 0 0 0 0.3mm rgba(40,30,20,.6);
+}
+.is-print img { display: block; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15) brightness(.8) sepia(.9); }
+
+
+
+.is-print::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 0 0 0.3mm rgba(40,30,20,.6), inset 0 0 5mm rgba(42,31,19,.55); filter: opacity(.999); }   
+.verdon-stereo + .image-caption { width: 174mm; margin: 0.1cm auto 0.25cm; }
+.page > .two-column { margin-top: 0.1cm; }
+
+.cards-flow { position: relative; width: 174mm; height: 162mm; margin: 0.3cm 0 0.35cm; }
+.cards-flow > * { position: absolute; margin: 0; }
+.cards-flow .verdon-stereo { margin: 0; --shadow: 0 0.6mm 2.4mm rgba(51,41,28,.45); }   
+.cards-flow svg { left: 0; top: 0; overflow: visible; pointer-events: none; z-index: 9; }
+.cf-sh { left: 0mm; top: 8mm; z-index: 1; } .cf-sh .verdon-stereo { zoom: 0.65; }
+.cf-ba { left: 60.9mm; top: 24mm; z-index: 3; } .cf-ba .verdon-stereo { zoom: 0.65; }
+.cf-sp { left: 60.9mm; top: 93mm; z-index: 4; } .cf-sp .verdon-stereo { zoom: 0.65; }
+
+.cards-flow .cf-note { left: 0; top: 70mm; width: 56mm; z-index: 5; }
+
+
+.is-print img.upside-down { transform: rotate(180deg); }
+.page > .gm-note { margin: 0.15cm 0 0.2cm; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <h2 class="section-heading">The Chief Shusher&rsquo;s Card</h2>
+
+  <div class="gm-note">
+    <p><strong>Eliza&rsquo;s card.</strong> Eliza points investigators to a stereograph of her podium, then hurries off to help an important patron. She sees none of what follows.</p>
+  </div>
+
+  <div class="cards-flow">
+    <div class="cf-sh">
+    <div class="verdon-stereo">
+      <div class="is-label"><span class="printed"><span class="series">Vic. Views Series.</span>
+      <span class="maker"><b>Public Library</b>, Melbourne</span></span><span class="pencil">The Chief Shusher.</span></div>
+      <div class="is-prints">
+        <div class="is-print"><img src="images/chiefShusher_stereo_l.jpg" alt="Left print: glass lamps on the carved timber podium at the centre of the domed reading room, a globe lamp on the balcony behind" /></div>
+        <div class="is-print"><img src="images/chiefShusher_stereo_r.jpg" alt="Right print: glass lamps on the carved timber podium at the centre of the domed reading room, a globe lamp on the balcony behind" /></div>
+      </div>
+    </div>
+    </div>
+    <div class="cf-ba">
+    <div class="verdon-stereo">
+      <div class="is-label"><span class="printed"><span class="series">Vic. Views Series.</span>
+      <span class="maker"><b>Public Library</b>, Melbourne</span></span><span class="pencil">The Chief Shusher.</span></div>
+      <div class="is-prints">
+        <div class="is-print"><img src="images/dome_stereo_l.jpg" alt="Left print: the tiers of curved balconies rising to the dome" /></div>
+        <div class="is-print"><img src="images/dome_stereo_r.jpg" alt="Right print: the tiers of curved balconies rising to the dome" /></div>
+      </div>
+    </div>
+    </div>
+    <div class="cf-sp">
+    <div class="verdon-stereo">
+      <div class="is-label"><span class="printed"><span class="series">Vic. Views Series.</span>
+      <span class="maker"><b>Public Library</b>, Melbourne</span></span><span class="pencil">The Chief Shusher.</span></div>
+      <div class="is-prints">
+        <div class="is-print"><img src="images/spiralStair_stereo_l.jpg" alt="Left print: a cast-iron spiral stair to the upper levels" /></div>
+        <div class="is-print"><img class="upside-down" src="images/spiralStair_stereo_r.jpg" alt="Right print: a cast-iron spiral stair to the upper levels, upside down" /></div>
+      </div>
+    </div>
+    </div>
+<div class="gm-note cf-note">
+      <p>Each time an investigator looks, the photograph has moved on, <strong>as if the camera were flying</strong> around the library: past the balconies, up into the dome, along its skylights. (<span class="roll-inline">Spot</span>: The label down the side never changes). It lingers a moment on the skylights (<span class="roll-inline">Insight</span>: it changed its mind). At last it settles, and stays, on one of the spiral staircases that go to the upper levels. But the right print is upside down.</p>
+    </div>
+<svg width="174mm" height="152mm" viewBox="0 0 174 152">
+<defs><marker id="cf-arrow" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6 z" fill="#003153"/></marker></defs>
+<path d="M56.5 16.2 C 60.0 3.0, 86.0 16.0, 86.4 31.9" fill="none" stroke="#fff" stroke-width="0.9"/>
+<path d="M56.5 16.2 C 60.0 3.0, 86.0 16.0, 86.4 31.9" fill="none" stroke="#003153" stroke-width="0.35" stroke-dasharray="1.4 0.9" marker-end="url(#cf-arrow)"/>
+<path d="M163.0 53.4 C 180.0 62.0, 176.0 88.0, 158.0 92.5" fill="none" stroke="#fff" stroke-width="0.9"/>
+<path d="M163.0 53.4 C 180.0 62.0, 176.0 88.0, 158.0 92.5" fill="none" stroke="#003153" stroke-width="0.35" stroke-dasharray="1.4 0.9" marker-end="url(#cf-arrow)"/>
+<circle cx="86.5" cy="36.4" r="3.8" fill="none" stroke="#fff" stroke-width="0.9"/>
+<circle cx="86.5" cy="36.4" r="3.8" fill="none" stroke="#003153" stroke-width="0.4"/>
+<circle cx="159.1" cy="51.4" r="3.8" fill="none" stroke="#fff" stroke-width="0.9"/>
+<circle cx="159.1" cy="51.4" r="3.8" fill="none" stroke="#003153" stroke-width="0.4"/>
+<circle cx="55.4" cy="20.4" r="3.8" fill="none" stroke="#fff" stroke-width="0.9"/>
+<circle cx="55.4" cy="20.4" r="3.8" fill="none" stroke="#003153" stroke-width="0.4"/>
+</svg>
+  </div>
+
+
+  <div class="folio"><span class="folio-head">The Chief Shusher&rsquo;s Card</span><span class="folio-sep">·</span>11</div>
+</div><!-- /.page -->
+
+</body>
+</html>

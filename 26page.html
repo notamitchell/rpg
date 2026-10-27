@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+.page { color: #f2ece4; }
+.horror-bg .cross { opacity: .03; }
+h3.subsection-heading { color: #fff; margin: 0.22cm 0 0.08cm; }
+.two-column-col > h3.subsection-heading:first-child { margin-top: 0; }
+.page .out-cols { margin-bottom: 0; }
+.page .out-cols p { line-height: 1.33; margin-bottom: 0.12cm; text-align: left; }
+.page .out-cols .gm-note { margin: 0.05cm 0 0.12cm; padding: 0.12cm 0.35cm; }
+.page .climb-step { position: relative; padding-left: 0.6cm; }
+.page .climb-step .mk { position: absolute; left: 0; top: 0.05em; }
+
+.mk { display: inline-flex; align-items: center; justify-content: center; width: 4.6mm; height: 4.6mm; border-radius: 50%;
+  background: #c8202c; color: #fff; font-family: 'Cinzel', Georgia, serif; font-weight: 600; font-size: var(--fs-caption); line-height: 1;
+  box-shadow: 0 0 0 0.35mm #f8f3e6; }
+html body .page.dark .mk { color: #fff !important; z-index: 5; }
+.page .scaffold-credit { margin: 0 0 0.2cm; }
+
+.page .climb-step { padding-left: 0; }
+html body .page.dark .climb-step .mk { position: static; display: inline; width: auto; height: auto; border-radius: 0;
+  background: none; box-shadow: none; color: inherit !important; font: inherit; font-weight: 600; margin-right: 0.12cm; }
+.page .climb-step .mk::after { content: '.'; }
+.page .out-cols p { line-height: 1.26; }
+.page .climb-check { margin: 0.1cm 0 0.25cm; }
+
+.page .out-cols { grid-template-columns: 1fr 1.45fr; }
+.page .out-cols::before { left: calc((100% - 0.7cm) / 2.45 + 0.35cm); }   
+
+.go-fig { margin: 0 -18mm 0.15cm 0; --go-tint: linear-gradient(135deg, rgba(216,32,46,.42), rgba(50,15,70,.5) 60%, rgba(0,25,50,.5)); }
+.go-fig .tint-wrap img { width: 100%; height: 100%; max-height: none; object-fit: cover; object-position: left top; }
+.go-fig svg, .go-fig .go-tile, .go-fig .sr-chip { z-index: 3; }
+.go-fig .sr-chip { white-space: nowrap; letter-spacing: 0.02em; }
+.go-tile { background-size: cover; }
+.go-tile.go-rect { border-radius: 0; }
+.page .go-fig .go-note { margin: 0; }
+</style>
+</head>
+<body>
+
+<!-- shared drawing: the cyclorama rings and the Eureka flag star. The same defs are repeated in each of pages 21 to 28; the rings echo the ones drawn by script on 09page.html -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="cyc-rings" fill="none" stroke="currentColor">
+      <circle r="32" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="64" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="96" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="128" stroke-width="1.3"/>
+      <circle r="160" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="192" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="224" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="256" stroke-width="1.3"/>
+    </g>
+    <polygon id="star8" points="50,0 58.5,31.5 90,10 68.5,41.5 100,50 68.5,58.5 90,90 58.5,68.5 50,100 41.5,68.5 10,90 31.5,58.5 0,50 31.5,41.5 10,10 41.5,31.5"/>
+  </defs>
+</svg>
+
+<div class="page wash dark">
+
+  <div class="horror-bg" aria-hidden="true">
+    <svg class="rings"><use href="#cyc-rings"/></svg>
+    <svg class="cross" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+      <g fill="#fff">
+        <rect x="46.5" y="10" width="7" height="80"/>
+        <rect x="10" y="46.5" width="80" height="7"/>
+      </g>
+      <use href="#star8" fill="#fff" transform="translate(50 12) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(50 88) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(12 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(88 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(50 50) scale(.16) translate(-50 -50)"/>
+    </svg>
+  </div>
+
+
+
+
+  
+  <h2 class="section-heading">Getting Out</h2>
+
+  <div class="two-column out-cols">
+    <div class="two-column-col">
+      <p class="way-up"><strong>The way out is up.</strong> The painters&rsquo; carriages reach the beams, and the beams reach the skylights. <span class="roll-inline">Spot</span>: through the grimy glass, the dim basement storeroom, seen from the canvas itself. A way out of this strange place!</p>
+
+      <div class="gm-note climb-check"><p class="gm-title">Before anyone climbs</p>
+        <p>Who has Charlie&rsquo;s pouch, or the dagger from the table? Who took the dagger or the three teeth from Charlie&rsquo;s body? Who picked up a sword or other weapon inside that does not belong to them? Players often miss these!</p></div>
+
+      <h3 class="subsection-heading">The Climb</h3>
+      <p class="climb-step"><span class="mk">1</span><strong>The carriage ladder.</strong> No roll: three rounds to the top (two levels per round), one climber per ladder. Pulling the ladder up behind you takes an action and costs pursuers two rounds.</p>
+      <p class="climb-step"><span class="mk">2</span><strong>The horseman.</strong> Once the first climber is halfway up, the horseman whose dagger killed Charlie hitches his stuffed horse to the carriage and drags it round the rail in an effort to make investigators fall. He wants the visits to stop and assumes every climber will be back just like Charlie, unless something convinces him otherwise (Gamemaster&rsquo;s call). On a moving carriage, each round of climbing needs <span class="roll-inline">Climb</span> (fail: no progress; fumble: fall, 1D6 per 10 feet / 3&nbsp;m).</p>
+      <p class="climb-step"><span class="mk">3</span><strong>The beams.</strong> From a moving carriage, they whizz past a beam every round: <span class="roll-inline">Jump</span> (miss: back on the deck, 1D3; fumble: over the side, a fall as in step 2). Bring down the horse, unseat the rider or cut the traces, and the carriage slows after 1 round. Getting to the beams needs no roll from a stationary carriage. Bringing up a ladder might help injured investigators make the final exit.</p>
+      <p class="climb-step"><span class="mk">4</span><strong>The skylight.</strong> Along the beam and up through the glass. The climber comes out of the canvas in the basement storeroom (all paint left behind), beside the table, as Charlie did.</p>
+    </div>
+    <div class="two-column-col">
+      <h3 class="subsection-heading">The Party Outside</h3>
+      <p>Investigators outside the canvas, because they were elsewhere when it was touched or climbed out first, can potentially help by finding every stolen item, the pouch, both daggers and Charlie&rsquo;s pocket, and throwing each one at the canvas.</p>
+      <p>They can see events unfold in the canvas. Perhaps Mr Roe, a familiar face on a painted horse. They can also hear what&rsquo;s going on inside the Cyclorama.</p>
+      <div class="gm-note"><p>Smart parties might try a strategic reset: entering the canvas snaps moving dummies back to their places, preventing the next fatal blow! But anyone in the storeroom when the canvas is touched goes back in too!</p></div><div class="sr-fig go-fig" style="width:116.8mm;height:177.5mm">
+<div class="tint-wrap" style="left:0;top:45.769090909090906mm;width:116.8mm;height:90.77720207253886mm"><img src="images/scientific-american_b.jpg" alt="https://www.scientificamerican.com/issue/sa/1886/11-06/" /></div>
+<svg width="116.8mm" height="177.5mm" viewBox="0 0 116.8 177.5" style="z-index:3">
+<line x1="52.36" y1="130.40" x2="64.85" y2="143.22" fill="none" stroke="#fff" stroke-width="0.9"/>
+<line x1="52.36" y1="130.40" x2="64.85" y2="143.22" fill="none" stroke="#003153" stroke-width="0.35"/>
+<circle cx="50.68" cy="128.68" r="2.4" fill="none" stroke="#fff" stroke-width="0.9"/>
+<circle cx="50.68" cy="128.68" r="2.4" fill="none" stroke="#003153" stroke-width="0.35"/>
+<rect x="32.38" y="104.02" width="31.77" height="19.67" fill="none" stroke="#fff" stroke-width="0.9"/>
+<rect x="32.38" y="104.02" width="31.77" height="19.67" fill="none" stroke="#003153" stroke-width="0.35"/>
+<line x1="32.38" y1="123.69" x2="0.00" y2="140.55" fill="none" stroke="#fff" stroke-width="0.9"/>
+<line x1="32.38" y1="123.69" x2="0.00" y2="140.55" fill="none" stroke="#003153" stroke-width="0.35"/>
+<line x1="64.15" y1="123.69" x2="55.00" y2="140.55" fill="none" stroke="#fff" stroke-width="0.9"/>
+<line x1="64.15" y1="123.69" x2="55.00" y2="140.55" fill="none" stroke="#003153" stroke-width="0.35"/>
+<rect x="35.10" y="46.07" width="39.94" height="24.66" fill="none" stroke="#fff" stroke-width="0.9"/>
+<rect x="35.10" y="46.07" width="39.94" height="24.66" fill="none" stroke="#003153" stroke-width="0.35"/>
+<line x1="35.10" y1="46.07" x2="28.72" y2="43.77" fill="none" stroke="#fff" stroke-width="0.9"/>
+<line x1="35.10" y1="46.07" x2="28.72" y2="43.77" fill="none" stroke="#003153" stroke-width="0.35"/>
+<line x1="75.04" y1="46.07" x2="98.80" y2="43.77" fill="none" stroke="#fff" stroke-width="0.9"/>
+<line x1="75.04" y1="46.07" x2="98.80" y2="43.77" fill="none" stroke="#003153" stroke-width="0.35"/>
+</svg>
+<div class="sr-tile go-tile go-rect" style="left:0.00mm;top:140.55mm;width:55.00mm;height:34.00mm;background-image:var(--go-tint),url(images/scientific-american_b_ladderR.jpg)"></div>
+<div class="sr-label sr-chip" style="left:4.50mm;width:46mm;top:170.05mm">1 &middot; The carriage ladder</div>
+<div class="sr-tile go-tile go-rect" style="left:28.72mm;top:0.50mm;width:70.08mm;height:43.27mm;background-image:var(--go-tint),url(images/scientific-american_b_beamsR.jpg)"></div>
+<div class="sr-label sr-chip" style="left:30.72mm;width:46mm;top:1.30mm">3 &middot; The beams &nbsp;&middot;&nbsp; 4 &middot; The skylight</div>
+<div class="sr-tile go-tile" style="left:58.80mm;top:137.55mm;width:40.0mm;height:40.0mm;background-image:var(--go-tint),url(images/scientific-american_b_rail.jpg)"></div>
+<div class="sr-label sr-chip" style="left:61.80mm;width:34mm;top:173.05mm">2 &middot; The horseman&rsquo;s rail</div>
+</div>
+      <p class="image-caption scaffold-credit">Cropped image of curved canvas and railway track: <em>Scientific American</em>, 6&nbsp;November 1886.</p>
+
+      
+    </div>
+  </div>
+
+  <div class="folio folio--light"><span class="folio-head">Inside the Cyclorama</span><span class="folio-sep">·</span>26</div>
+</div>
+
+</body>
+</html>

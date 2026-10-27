@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+.eb-grid { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "lf lb" "cover back" "s1 s1";
+  grid-template-rows: auto auto 1fr; column-gap: 0.5cm; row-gap: 0.4cm; margin: 0.2cm 0 0; align-items: start; }
+.eb-grid .cyb-closed { grid-area: cover; height: 112mm; }   
+
+.eb-grid .cyb-back { grid-area: back; transform: scaleX(-1); }
+
+.eb-page .cyb-flag .ek-flag-blue { fill: #2b2418; }
+.eb-page .cyb-flag { box-shadow: 0 0 0 0.25mm #2b2418; }
+
+.eb-grid .eb-label { margin: 0 0 -0.2cm; font-family: 'Crimson Text', Georgia, serif; font-size: var(--fs-caption); font-weight: 600;
+  font-variant-caps: all-small-caps; letter-spacing: .2em; text-align: center; color: var(--text-muted); }
+.eb-grid .eb-label--f { grid-area: lf; padding-right: calc(var(--T, 2.4mm) + 0.4mm); }
+.eb-grid .eb-label--b { grid-area: lb; padding-left: calc(var(--T, 2.4mm) + 0.4mm); }
+.eb-ad { transform: scaleX(-1); position: relative; z-index: 1; flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 3mm 4.2mm 2.6mm; box-sizing: border-box; text-align: center; }
+.cyb .eb-ad p { line-height: 1.05; text-align: center; }
+.cyb .eb-ad .ad-lead { font-family: 'Oswald', sans-serif; font-weight: 400; font-size: 10pt; letter-spacing: .06em; }
+.cyb .eb-ad .ad-spaced { font-size: 8.5pt; letter-spacing: .12em; text-transform: uppercase; }
+.cyb .eb-ad .ad-grot { font-family: 'Oswald', sans-serif; font-weight: 500; text-transform: uppercase; }
+.cyb .eb-ad .ad-s { font-size: 8pt; font-weight: 400; letter-spacing: .03em; }
+.cyb .eb-ad .ad-xl { font-size: 12.5pt; letter-spacing: .01em; }
+.cyb .eb-ad .ad-xxxl { font-size: 18.5pt; letter-spacing: .01em; }
+.cyb .eb-ad .ad-roman { font-family: 'Old Standard TT', serif; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.cyb .eb-ad .ad-xxl { font-size: 18.5pt; }
+.cyb .eb-ad .ad-l { font-size: 13pt; }
+.cyb .eb-ad .ad-m { font-size: 10pt; }
+.cyb .eb-ad p.ad-right { text-align: right; padding-right: 1mm; }
+.cyb .eb-ad .ad-rule { border-top: 0.6mm double var(--c-ink); padding-top: 1.2mm; }
+.cyb .eb-ad .ad-from { display: flex; align-items: center; gap: 1.6mm; font-family: 'Oswald', sans-serif; font-size: 7pt; letter-spacing: .1em; text-transform: uppercase; }
+.eb-ad .ad-from::before, .eb-ad .ad-from::after { content: ''; flex: 1; border-top: 0.2mm solid var(--c-ink); }
+.eb-ad .ad-wave { height: 1.6mm; width: 55%; margin: 0 auto;
+  background: radial-gradient(circle at 50% 0, transparent 0.5mm, var(--c-ink) 0.55mm 0.75mm, transparent 0.8mm) 0 0 / 1.4mm 1.6mm repeat-x; }
+.cyb .eb-ad .ad-italic { font-family: 'Old Standard TT', serif; font-style: italic; font-size: 8.5pt; line-height: 1.2; }
+.cyb .eb-ad .ad-foot { font-size: 8.5pt; line-height: 1.2; letter-spacing: .03em; border-top: 0.25mm solid var(--c-ink); padding-top: 1.2mm; width: 70%; margin: 0 auto; }
+
+.eb-note { position: absolute; z-index: 3; right: 6mm; bottom: 10mm; width: 74mm; box-sizing: border-box;
+  box-shadow: 0.8mm 1mm 0 rgba(40,30,18,.25); }
+.eb-note p:not([class]) { color: var(--text); }
+.eb-note p.pamphlet-footnote { color: var(--text); opacity: .7; }
+.eb-note p { hyphens: manual; }
+.eb-grid .cyb-open { grid-area: s1; }
+.eb-page .eb-context { margin: 0; padding: 0.3cm 0.45cm; }
+.eb-page .eb-context .box-title { margin-bottom: 0.15cm; }
+.eb-page .eb-context p { line-height: 1.4; margin: 0 0 0.18cm; text-align: left; }
+.eb-page .eb-context .pamphlet-footnote { margin-top: 0.1cm; }
+.eb-grid33 { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 0.5cm; row-gap: 0.3cm; margin: 0.2cm 0 0; }
+.eb-grid33 > .cyb-open { grid-column: 1 / -1; }   
+.eb-page .cyb-body > p.cyb-sec:first-child { margin-top: 2.2mm; }   
+.eb-page { flex: none; }   
+
+.eb-page .cyb-open .cyb-leaf { height: 112mm; }
+.eb-page .cyb-open .cyb-body { flex: 1; min-height: 0; overflow: hidden; }
+.eb-page .cyb-body p.cyb-cont { text-indent: 0; font-family: 'Old Standard TT', 'Times New Roman', serif; font-size: var(--fs-small);
+  line-height: 1.3; text-align: justify; hyphens: auto; color: #2b2418; letter-spacing: -0.012em; word-spacing: -0.04em; margin: 0; }
+.cyb-leaf--l.cyb-read-3 { box-shadow: -0.4mm 0.35mm 0 var(--c-leaf), -0.45mm 0.4mm 0 var(--c-edge), -0.85mm 0.75mm 0 var(--c-leaf), -0.9mm 0.8mm 0 var(--c-edge), -1.3mm 1.15mm 0 var(--c-leaf), -1.35mm 1.2mm 0 var(--c-edge); }
+.cyb-leaf--r.cyb-left-1 { box-shadow: 0.4mm 0.35mm 0 var(--c-leaf), 0.45mm 0.4mm 0 var(--c-edge); }
+
+.eb-page .cyb-body p:not([class]), .eb-page .cyb-body p.cyb-cont { font-size: 9pt; line-height: 1.27; }
+.eb-page .cyb-body p.cyb-verse { font-size: 9pt; }
+
+.cyb-blur { color: transparent; font-size: 0.86em; }
+.cyb-blur .w { border-radius: 0.5em; background: linear-gradient(transparent 30%, rgba(60,48,32,.32) 28% 80%, transparent 78%);
+  filter: blur(1px) opacity(.999); }
+.eb-page .cyb-body p:has(> .cyb-blur:only-child), .eb-page .cyb-body p.cyb-cont:has(> .cyb-blur:only-child) { line-height: 1.15; }
+</style>
+</head>
+<body>
+
+<div class="page eb-page">
+<h2 class="section-heading handout-title"><span class="handout-label">Handout <span class="handout-letter">E</span></span> Eureka Cyclorama <span class="handout-sheet">(sheet 1 of 2)</span></h2>
+<div class="eb-grid">
+<p class="eb-label eb-label--f">Front</p>
+<p class="eb-label eb-label--b">Back</p>
+<div class="cyb cyb--eureka cyb-closed">
+      <div class="cyb-top"></div><div class="cyb-edge"></div>
+      <div class="cyb-face">
+        <svg class="cyb-star cyb-star--tl" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="50"></circle><circle cx="50" cy="24" r="17"></circle><circle cx="76" cy="50" r="17"></circle><circle cx="50" cy="76" r="17"></circle><circle cx="24" cy="50" r="17"></circle><circle class="eye" cx="50" cy="50" r="9"></circle></svg>
+        <svg class="cyb-star cyb-star--tr" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="50"></circle><circle cx="50" cy="24" r="17"></circle><circle cx="76" cy="50" r="17"></circle><circle cx="50" cy="76" r="17"></circle><circle cx="24" cy="50" r="17"></circle><circle class="eye" cx="50" cy="50" r="9"></circle></svg>
+        <svg class="cyb-star cyb-star--bl" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="50"></circle><circle cx="50" cy="24" r="17"></circle><circle cx="76" cy="50" r="17"></circle><circle cx="50" cy="76" r="17"></circle><circle cx="24" cy="50" r="17"></circle><circle class="eye" cx="50" cy="50" r="9"></circle></svg>
+        <svg class="cyb-star cyb-star--br" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="50"></circle><circle cx="50" cy="24" r="17"></circle><circle cx="76" cy="50" r="17"></circle><circle cx="50" cy="76" r="17"></circle><circle cx="24" cy="50" r="17"></circle><circle class="eye" cx="50" cy="50" r="9"></circle></svg>
+        <p class="cyb-eyebrow">A Short History of</p>
+        <p class="cyb-title cyb-title--big">The Eureka Stockade</p>
+        <p class="cyb-sub">Ballarat, 1854</p>
+        <div class="cyb-orn"><svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,0 58.5,31.5 90,10 68.5,41.5 100,50 68.5,58.5 90,90 58.5,68.5 50,100 41.5,68.5 10,90 31.5,58.5 0,50 31.5,41.5 10,10 41.5,31.5"></polygon></svg></div>
+        <div class="cyb-plate"><img src="images/FL17355043.jpg" alt="https://handle.slv.vic.gov.au/10381/246351"></div>
+        <p class="cyb-line">Compiled by R. P. Whitworth<br>for the</p>
+        <div class="cyb-imprint"><svg class="cyb-device" viewBox="-12 -12 24 24" aria-hidden="true"><circle r="11.4" stroke-width="1.1"></circle><circle r="8.6" stroke-width="0.7" stroke-dasharray="0.6 1.6"></circle><circle r="5.8" stroke-width="0.7"></circle><circle class="dot" r="2.4"></circle></svg><span>Melbourne Cyclorama<br>Company Limited</span></div>
+      </div>
+    </div>
+<div class="cyb cyb--eureka cyb-closed cyb-back">
+      <div class="cyb-top"></div><div class="cyb-edge"></div>
+      <div class="cyb-face">
+        <svg class="cyb-star cyb-star--tl" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="50"></circle><circle cx="50" cy="24" r="17"></circle><circle cx="76" cy="50" r="17"></circle><circle cx="50" cy="76" r="17"></circle><circle cx="24" cy="50" r="17"></circle><circle class="eye" cx="50" cy="50" r="9"></circle></svg>
+        <svg class="cyb-star cyb-star--tr" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="50"></circle><circle cx="50" cy="24" r="17"></circle><circle cx="76" cy="50" r="17"></circle><circle cx="50" cy="76" r="17"></circle><circle cx="24" cy="50" r="17"></circle><circle class="eye" cx="50" cy="50" r="9"></circle></svg>
+        <svg class="cyb-star cyb-star--bl" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="50"></circle><circle cx="50" cy="24" r="17"></circle><circle cx="76" cy="50" r="17"></circle><circle cx="50" cy="76" r="17"></circle><circle cx="24" cy="50" r="17"></circle><circle class="eye" cx="50" cy="50" r="9"></circle></svg>
+        <svg class="cyb-star cyb-star--br" viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="50"></circle><circle cx="50" cy="24" r="17"></circle><circle cx="76" cy="50" r="17"></circle><circle cx="50" cy="76" r="17"></circle><circle cx="24" cy="50" r="17"></circle><circle class="eye" cx="50" cy="50" r="9"></circle></svg>
+        <div class="eb-ad">
+          <p class="ad-lead">Purchase Your</p>
+          <p class="ad-grot ad-xl">Carpets, Curtains, Blinds,</p>
+          <p class="ad-grot ad-s">Floorcloths and Mattings,</p>
+          <p class="ad-roman ad-xxl">Furniture,</p>
+          <p class="ad-lead ad-spaced">Bedsteads, Bedding,</p>
+          <p class="ad-from"><span>from</span></p>
+          <p class="ad-grot ad-xxxl">Cullis Hill &amp; Co.,</p>
+          <p class="ad-roman ad-l ad-rule">Elizabeth St.,</p>
+          <p class="ad-roman ad-m ad-right">Melbourne.</p>
+          <p class="ad-wave"></p>
+          <p class="ad-italic">Every Line for Furnishing throughout<br>at most Moderate Prices.</p>
+          <p class="ad-lead ad-foot">Eight Large Show Rooms full of<br>Beautiful Goods to Select From.</p>
+        </div>
+      </div>
+    </div>
+<div class="cyb cyb--eureka cyb-open">
+<div class="cyb-wrap"></div>
+<div class="cyb-leaf cyb-leaf--l cyb-read-1">
+<p class="cyb-head"><span>The Eureka Stockade</span></p>
+<div class="cyb-body"><svg class="cyb-flag" viewBox="0 0 1000 650" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Eureka Flag">
+          <style>
+          .ek-flag-blue{fill:#213f77}.ek-flag-white{fill:#fff}
+          </style>
+          <path class="ek-flag-blue" d="M0 0h1000v650H0z"></path>
+          <path class="ek-flag-blue" d="M450.9 93.7h97.5v462.5h-97.5z"></path>
+          <path class="ek-flag-blue" d="M118.5 275H881v100H118.5z"></path>
+          <path class="ek-flag-white" d="M454.6 93.7h90v462.5h-90z"></path>
+          <path class="ek-flag-white" d="M124.7 278.7h750v92.5h-750z"></path>
+          <path class="ek-flag-blue" d="m499.7 232.4 17.7 49.8 47.7-22.7-22.7 47.7 49.8 17.7-49.8 17.7 22.7 47.8-47.7-22.7-17.7 49.7-17.7-49.7-47.7 22.7 22.6-47.8-49.7-17.7 49.7-17.7-22.6-47.7 47.7 22.7 17.7-49.8M124.6 239.3l16.4 46.1 44.2-21-21 44.2 46.1 16.3-46.1 16.4 21 44.2-44.2-21-16.4 46.1-16.3-46.1-44.2 21 21-44.2L39 324.9l46.1-16.3-21-44.2 44.2 21 16.3-46.1M874.6 239.3l16.4 46.1 44.1-21-21 44.2 46.1 16.3-46.1 16.4 21 44.2-44.1-21-16.4 46.1-16.4-46.1-44.2 21 21-44.2-46.1-16.4 46.1-16.3-21-44.2 44.2 21 16.4-46.1M499.7 8.1l16.4 46.1 44.1-21-21 44.2 46.1 16.3-46.1 16.4 21 44.2-44.1-21-16.4 46.1-16.4-46.1-44.2 21 21-44.2-46-16.4 46-16.3-21-44.2 44.2 21 16.4-46.1M499.7 470.6l16.4 46 44.1-21-21 44.2 46.1 16.4-46.1 16.4 21 44.1-44.1-21-16.4 46.1-16.4-46.1-44.2 21 21-44.1-46-16.4 46-16.4-21-44.2 44.2 21 16.4-46"></path>
+          <path class="ek-flag-white" d="m499.7 243.7 15.5 43.7 41.9-19.9-19.9 41.9 43.7 15.5-43.7 15.6 19.9 41.9-41.9-19.9-15.5 43.7-15.6-43.7-41.9 19.9 19.9-41.9-43.7-15.6 43.7-15.5-19.9-41.9 41.9 19.9 15.6-43.7M124.6 249.9l14.4 40.4 38.7-18.4-18.4 38.7 40.3 14.3-40.3 14.4 18.4 38.7-38.7-18.4-14.4 40.3-14.3-40.3L71.6 378 90 339.3l-40.4-14.4L90 310.6l-18.4-38.7 38.7 18.4 14.3-40.4M874.6 249.9l14.4 40.4 38.7-18.4-18.4 38.7 40.3 14.3-40.3 14.4 18.4 38.7-38.7-18.4-14.4 40.3-14.3-40.3-38.7 18.4 18.4-38.7-40.4-14.4 40.4-14.3-18.4-38.7 38.7 18.4 14.3-40.4M499.7 18.7 514 59.1l38.7-18.4-18.4 38.7 40.4 14.3-40.4 14.4 18.4 38.7-38.7-18.4-14.3 40.3-14.4-40.3-38.7 18.4 18.4-38.7-40.3-14.4L465 79.4l-18.4-38.7 38.7 18.4 14.4-40.4M499.7 481.2l14.3 40.3 38.7-18.4-18.4 38.7 40.4 14.4-40.4 14.3 18.4 38.7-38.7-18.4-14.3 40.4-14.4-40.4-38.7 18.4 18.4-38.7-40.3-14.3 40.3-14.4-18.4-38.7 38.7 18.4 14.4-40.3"></path>
+          </svg><p class="cyb-sec">Preliminary</p><p><span class="cyb-blur"><span class="w">Lorem</span> <span class="w">ipsum</span> <span class="w">dolor</span> <span class="w">sit</span> <span class="w">amet</span> <span class="w">consectetur</span> <span class="w">adipiscing</span> <span class="w">elit</span> <span class="w">sed</span> <span class="w">do</span> <span class="w">eiusmod</span> <span class="w">tempor.</span></span></p><p>… by far the most important event in connection with the history of this vast island continent is what is known as the Ballarat Rebellion, culminating in the disastrous fight between the diggers and the authorities on the morning of Sunday, the 3rd December, 1854.</p><p><span class="cyb-blur"><span class="w">Ut</span> <span class="w">enim</span> <span class="w">ad</span> <span class="w">minim</span> <span class="w">veniam</span> <span class="w">quis</span> <span class="w">nostrud</span> <span class="w">exercitation</span> <span class="w">ullamco</span> <span class="w">laboris</span> <span class="w">nisi</span> <span class="w">ut</span> <span class="w">aliquip</span> <span class="w">ex</span> <span class="w">ea</span> <span class="w">commodo</span> <span class="w">consequat</span> <span class="w">duis</span> <span class="w">aute</span> <span class="w">irure</span> <span class="w">dolor</span> <span class="w">in.</span></span></p><p>… there is no doubt the diggers suffered under many and grievous disabilities, and that the Government, which was somewhat of the quarter-deck order, was administered in an unnecessarily harsh, ostentatious, and essentially irritating manner by the police, a body of young and inexperienced assistant gold commissioners …</p><p><span class="cyb-blur"><span class="w">Eu</span> <span class="w">fugiat</span> <span class="w">nulla</span> <span class="w">pariatur</span> <span class="w">excepteur</span> <span class="w">sint</span> <span class="w">occaecat</span> <span class="w">cupidatat</span> <span class="w">non</span> <span class="w">proident</span> <span class="w">sunt</span> <span class="w">in</span> <span class="w">culpa</span> <span class="w">qui</span> <span class="w">officia</span> <span class="w">deserunt</span> <span class="w">mollit</span> <span class="w">anim</span> <span class="w">id</span> <span class="w">est</span> <span class="w">laborum</span> <span class="w">curabitur</span> <span class="w">pretium</span> <span class="w">tincidunt</span> <span class="w">lacus</span> <span class="w">nulla</span> <span class="w">gravida</span> <span class="w">orci</span> <span class="w">a</span> <span class="w">odio.</span> <span class="w">Eros</span> <span class="w">bibendum</span> <span class="w">elit</span> <span class="w">nec</span> <span class="w">luctus</span> <span class="w">magna</span> <span class="w">felis</span> <span class="w">sollicitudin</span> <span class="w">mauris</span> <span class="w">integer</span> <span class="w">in</span></span></p></div>
+</div>
+<div class="cyb-leaf cyb-leaf--r cyb-left-3">
+<p class="cyb-head"><span>Ballarat, 1854</span></p>
+<div class="cyb-body"><p><span class="cyb-blur"><span class="w">Ex</span> <span class="w">ea</span> <span class="w">commodo</span> <span class="w">consequat</span> <span class="w">duis</span> <span class="w">aute</span> <span class="w">irure</span> <span class="w">dolor</span> <span class="w">in</span> <span class="w">reprehenderit</span> <span class="w">in</span> <span class="w">voluptate</span> <span class="w">velit</span> <span class="w">esse.</span></span></p><p class="cyb-sec">Antecedent to the Fight</p><p>… the monstrous tax of thirty shillings per month became unbearable when aggravated by the exasperating manner in which it was collected.</p><p>On this subject Lalor writes:—“The diggers were subjected to the most unheard-of insults and cruelties in the collection of this tax, being in many instances chained to logs if they could not produce their licenses. I have often known men asked for their licenses four or five times in the course of a day.”</p><p><span class="cyb-blur"><span class="w">Sint</span> <span class="w">occaecat</span> <span class="w">cupidatat</span> <span class="w">non</span> <span class="w">proident</span> <span class="w">sunt</span> <span class="w">in</span> <span class="w">culpa</span> <span class="w">qui</span> <span class="w">officia</span> <span class="w">deserunt</span> <span class="w">mollit</span> <span class="w">anim</span> <span class="w">id</span> <span class="w">est</span> <span class="w">laborum</span> <span class="w">curabitur</span> <span class="w">pretium</span> <span class="w">tincidunt</span> <span class="w">lacus.</span></span></p><p>“I heard a noise … I saw the gully was surrounded with troopers. One came up and demanded to see our licenses … We were dragged off like criminals.”</p><p><span class="cyb-blur"><span class="w">Turpis</span> <span class="w">et</span> <span class="w">commodo</span> <span class="w">pharetra</span> <span class="w">est</span> <span class="w">eros</span> <span class="w">bibendum</span> <span class="w">elit</span> <span class="w">nec</span> <span class="w">luctus</span> <span class="w">magna</span> <span class="w">felis</span> <span class="w">sollicitudin</span> <span class="w">mauris</span> <span class="w">integer</span> <span class="w">in</span> <span class="w">mauris</span> <span class="w">eu</span> <span class="w">nibh</span> <span class="w">euismod</span> <span class="w">gravida</span> <span class="w">duis</span> <span class="w">ac</span> <span class="w">tellus</span> <span class="w">et</span> <span class="w">risus</span> <span class="w">vulputate</span> <span class="w">vehicula</span> <span class="w">donec</span> <span class="w">lobortis.</span> <span class="w">Dolor</span> <span class="w">sit</span> <span class="w">amet</span> <span class="w">consectetur</span> <span class="w">adipiscing</span> <span class="w">elit</span> <span class="w">sed</span> <span class="w">do</span> <span class="w">eiusmod</span> <span class="w">tempor</span> <span class="w">incididunt</span> <span class="w">ut</span> <span class="w">labore</span> <span class="w">et</span> <span class="w">dolore</span> <span class="w">magna</span> <span class="w">aliqua</span> <span class="w">ut</span> <span class="w">enim</span> <span class="w">ad</span> <span class="w">minim</span> <span class="w">veniam</span> <span class="w">quis</span> <span class="w">nostrud</span> <span class="w">exercitation</span> <span class="w">ullamco</span> <span class="w">laboris</span> <span class="w">nisi</span> <span class="w">ut</span> <span class="w">aliquip.</span> <span class="w">Dolor</span> <span class="w">in</span> <span class="w">reprehenderit</span> <span class="w">in</span> <span class="w">voluptate</span> <span class="w">velit</span> <span class="w">esse</span> <span class="w">cillum</span> <span class="w">dolore</span> <span class="w">eu</span> <span class="w">fugiat</span></span></p></div>
+</div>
+</div>
+</div>
+</div>
+
+</body>
+</html>

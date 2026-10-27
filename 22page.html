@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+@media print {
+  .page {
+    height: 297mm;
+    overflow: hidden;
+  }
+}
+
+
+
+.page { contain: strict;  }
+
+.horror-bg {
+  position: absolute;
+  top: 74%;    
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 250mm;
+  aspect-ratio: 1 / 1;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(216,32,46,.62), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(11,77,124,.6) 0%, rgba(0,49,83,.6) 55%, rgba(0,16,29,.62) 100%);
+}
+.horror-bg .rings { color: rgba(205,228,255,.30); }
+.horror-bg .cross { opacity: .14; }
+
+
+
+.clue-find .box-title { margin-bottom: 0.12cm; }
+.clue-find p { margin-bottom: 0.15cm; }
+.clue-find p:last-child { margin-bottom: 0; }
+
+
+.roll-rows { margin: 0.1cm 0 0; }
+.roll-row {
+  display: grid;
+  grid-template-columns: 2.7cm 1fr;
+  gap: 0 0.25cm;
+  padding: 0.14cm 0;
+  border-top: 1px solid rgba(0,49,83,.18);
+}
+.roll-row:first-child { border-top: none; padding-top: 0; }
+.roll-row .roll {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  line-height: 1.3;
+  color: var(--ink);
+  padding-top: 0.05cm;
+}
+.roll-row .roll small {
+  font-size: var(--fs-caption);
+  display: block;
+  font-family: 'Crimson Text', serif;
+  font-weight: normal;
+  font-style: italic;
+  letter-spacing: 0;
+  color: var(--text-muted);
+}
+.page .roll-row p { margin: 0 0 0.08cm; }
+.page .roll-row p:last-child { margin-bottom: 0; }
+
+
+.page .two-column { margin-bottom: 0; }
+
+
+.page .two-column.clue-cols { margin-top: 0; margin-bottom: 0; }
+.page .roll-row { padding: 0.09cm 0; }
+
+
+.page .on-paper.slip-strip { margin: 0 -0.3cm 0.25cm; padding: 0.25cm 0.3cm 0.35cm; }
+.slip-strip .roll-sub-inline {
+  font-family: 'Crimson Text', Georgia, serif; font-size: var(--fs-body); font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em; font-weight: 400; color: var(--text-muted); margin-left: 0.2cm;
+}
+.slip-side-label {
+  font-family: 'Crimson Text', Georgia, serif; font-size: var(--fs-body); font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em; color: var(--text-muted); margin: 0 0 0.08cm;
+}
+.dy-slip {
+  background: #f3e7c9;
+  border: 1px solid rgba(107,98,85,.55);
+  padding: 0.2cm 0.35cm 0.25cm;
+}
+.dy-slip.front { transform: rotate(-1.5deg); }
+.dy-slip.back  { transform: rotate(1.2deg); }
+.dy-slip .slip-head {
+  font-family: 'Cinzel', Georgia, serif; font-size: var(--fs-caption); font-weight: 600;
+  letter-spacing: 0.5px; color: var(--ink); text-align: center; white-space: nowrap;
+  border-bottom: 1px solid var(--ink-faint); padding-bottom: 0.05cm; margin: 0 0 0.04cm;
+}
+.dy-slip .slip-fields {
+  font-family: 'Crimson Text', serif; font-size: var(--fs-caption); color: var(--text-muted);
+  display: flex; justify-content: space-between; margin: 0 0 0.06cm;
+}
+.dy-slip .pencil-hand, .dy-slip .pencil-hand p {
+  font-family: 'Caveat', cursive; color: #4a4a4f; 
+  font-size: var(--fs-subhead); line-height: 18px; text-align: left; margin: 0;
+}
+.dy-slip .loot { display: grid; grid-template-columns: 1fr auto; gap: 0 0.5em; align-items: center; }
+.dy-slip .loot s { text-decoration-thickness: 1.5px; }
+.ticks { display: inline-flex; flex-wrap: nowrap; gap: 1px 2px; }
+.ticks { gap: 1px 4px; }
+.ticks svg { height: 11px; }
+.ticks svg:nth-child(even) { transform: rotate(4deg); }
+.slip-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7cm; padding: 0.15cm 0.3cm 0; align-items: stretch; }
+.slip-pair > div { display: flex; flex-direction: column; }
+.slip-pair > div > .dy-slip { flex: 1; }
+
+
+.page .describe.clue-find {
+  background: var(--paper-light);
+  padding: 0.28cm 0.4cm 0.28cm 0.4cm;
+  margin: 0 0 0.25cm;
+}
+.page .roll-row .roll {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-weight: 600;
+  font-size: var(--fs-body);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  color: var(--ink);
+}
+.page .roll-row .roll:not(.roll--none)::before { content: '\25C6\00a0'; font-size: 0.8em; }
+.page .roll-row .roll--none { color: var(--text-muted); font-weight: 400; }
+
+
+.page .clue-panel { margin: 0 -0.3cm; padding: 0.3cm 0.3cm 0.2cm; }
+.page .clue-panel .describe.clue-find { background: none; padding-right: 0; }
+
+.page .describe.clue-find::before { content: none; display: none; }
+
+.roll-row { grid-template-columns: 2.25cm 1fr; }
+.page .roll-row p, .page .touch-panel p { line-height: 1.35; }
+.page .touch-panel { margin: 0.1cm -0.3cm 0; padding: 0.15cm 0.3cm 0.2cm; }
+.page .touch-panel .subsection-heading { margin: 0 0 0.1cm; }
+.page .touch-panel .describe { margin: 0.12cm 0 0.15cm; }
+.page .touch-panel p { margin-bottom: 0.12cm; }
+.page .touch-panel .gm-note { margin: 0.1cm 0 0; }
+.page .touch-panel { background: none; margin-top: 0; }
+.page .clue-panel { padding-bottom: 0.1cm; }
+.page .describe.clue-find { margin-bottom: 0.15cm; }
+.page .on-paper.slip-strip { margin-bottom: 0; padding-top: 0.15cm; padding-bottom: 0.2cm; }
+.page .slip-strip .subsection-heading { margin: 0 0 0.05cm; }
+.page h2.section-heading { margin-bottom: 0.15cm; }
+.page .clue-panel { padding-top: 0.15cm; }
+.page .clue-panel .describe.clue-find { padding-top: 0.1cm; padding-bottom: 0.1cm; }
+.page .clue-panel .box-title { margin-top: 0.1cm; }
+.page .roll-row { padding: 0.07cm 0; }
+.page .roll-row p, .page .touch-panel p { line-height: 1.28; }
+.dy-slip .pencil-hand, .dy-slip .pencil-hand p { line-height: 16.5px; }
+.slip-pair { padding-top: 0.05cm; }
+
+.slip-pair { gap: 0.45cm; }
+.page { padding-top: 1.1cm; }
+.dy-slip .pencil-hand, .dy-slip .pencil-hand p { line-height: 15.5px; }
+
+.page .touch-panel p { line-height: 1.24; }
+</style>
+</head>
+<body>
+
+<!-- shared drawing: the cyclorama rings and the Eureka flag star. The same defs are repeated in each of pages 21 to 28; the rings echo the ones drawn by script on 09page.html -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="cyc-rings" fill="none" stroke="currentColor">
+      <circle r="32" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="64" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="96" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="128" stroke-width="1.3"/>
+      <circle r="160" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="192" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="224" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="256" stroke-width="1.3"/>
+    </g>
+    <polygon id="star8" points="50,0 58.5,31.5 90,10 68.5,41.5 100,50 68.5,58.5 90,90 58.5,68.5 50,100 41.5,68.5 10,90 31.5,58.5 0,50 31.5,41.5 10,10 41.5,31.5"/>
+  </defs>
+</svg>
+
+<div class="page wash">
+
+  <h2 class="section-heading">A Dead Body</h2>
+
+
+
+  <div class="horror-bg" aria-hidden="true">
+    <svg class="rings"><use href="#cyc-rings"/></svg>
+    <svg class="cross" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+      <g fill="#fff">
+        <rect x="46.5" y="10" width="7" height="80"/>
+        <rect x="10" y="46.5" width="80" height="7"/>
+      </g>
+      <use href="#star8" fill="#fff" transform="translate(50 12) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(50 88) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(12 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(88 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(50 50) scale(.16) translate(-50 -50)"/>
+    </svg>
+  </div>
+
+  <div class="two-column clue-cols on-paper clue-panel">
+    <div class="two-column-col">
+
+      <div class="describe clue-find">
+        
+        <div class="roll-rows">
+
+          <div class="roll-row">
+            <div class="roll roll--none">No roll</div>
+            <div>
+              <p>Dental forceps in the right pocket. Three gold teeth in the left pocket, roots and all. A New Zealand Alpine Club card. Staff ID: Charlie.</p>
+            </div>
+          </div>
+
+          <div class="roll-row">
+            <div class="roll">Medicine</div>
+            <div>
+              <p>Dead within minutes: bled out from the dagger still in their stomach. It went in upwards, from below (Gamemaster: Charlie was climbing, and the horseman reached up).</p>
+            </div>
+          </div>
+
+          <div class="roll-row">
+            <div class="roll">Appraise/<br>Knowledge (History)</div>
+            <div>
+              <p>That’s not a new dagger. It’s an old dagger from the gold-digging days, the exact twin of the one on the table, down to the nicks in the blade.</p>
+            </div>
+          </div>
+
+          <div class="roll-row">
+            <div class="roll">Medicine or Appraise</div>
+            <div>
+              <p>Gold-foil fillings: 1850s dentistry. Each is <strong>exactly the same</strong> as nine teeth in the pouch: same filling, same chip, same wear. The forceps scratches differ.</p>
+            </div>
+          </div>
+          <div class="roll-row">
+            <div class="roll">Science (Geology)</div>
+            <div>
+              <p>Boots caked in Ballarat clay with chips of quartz, likely from the Eureka lead.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="describe clue-find">
+        <p class="box-title">Stereographs on the Body</p>
+        <div class="roll-rows">
+          <div class="roll-row">
+            <div class="roll roll--none">No roll</div>
+            <div>
+              <p>A bundle of stereograph cards, every one painted over.</p>
+            </div>
+          </div>
+          <div class="roll-row">
+            <div class="roll">Research</div>
+            <div>
+              <p>Library stamps on the back: these are all cards missing from the stereograph boxes. All relate to Eureka, gold mining, Ballarat or the Cyclorama.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="two-column-col">
+
+      <div class="describe clue-find">
+        <p class="box-title">The Canvas</p>
+        <div class="roll-rows">
+          <div class="roll-row">
+            <div class="roll">Research</div>
+            <div>
+              <p>
+                Paperwork indicates the archivist Charlie has been working with the canvas a lot. </p>
+            </div>
+          </div>
+          <div class="roll-row">
+            <div class="roll">Spot</div>
+            <div>
+              <p>A bloody handprint on the canvas edge, still wet. It looks like the hand has gripped the painting somehow.</p>
+            </div>
+          </div>
+          <div class="roll-row">
+            <div class="roll">Idea or Knowledge (Occult)</div>
+            <div>
+              <p>The canvas isn’t haunted, it’s a prison. Whatever is bound to it only wakes when someone crosses in.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="on-paper touch-panel">
+        <h3 class="subsection-heading">Touching the Canvas</h3>
+        <div class="gm-note"><p>Anyone whose skin touches the painted surface crosses in, and takes everyone else in the storeroom with them. 
+          The painting slowly changes in response to activity within the pocket universe. It won&rsquo;t burn: the paint never dries. Only returning what was stolen rests the dead.</p></div>
+        <div class="describe">
+          <p>The paint is warm, and gives like skin. Then the table is gone, and the basement, and the flickering bulb. Wind. You are standing on a wooden platform, high up, in the middle of a battlefield?</p>
+        </div>
+        <p><strong>Turn to p.&nbsp;23.</strong></p>
+        <div class="gm-note">
+          <p>Each new arrival resets the scene inside (p.&nbsp;24). Investigators who were elsewhere, or who climb out first, are not out of the game: see <em>The Party Outside</em> (p.&nbsp;26).</p>
+          <p>If the party is reluctant, Mr Roe may arrive and touch it in front of them, taking them all in (p.&nbsp;20).</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="on-paper slip-strip">
+    <h3 class="subsection-heading">The Call Slip <span class="roll-sub-inline">(in Charlie’s pocket)</span></h3>
+    <div class="slip-pair">
+      <div>
+        <p class="slip-side-label">Front (pencil marks faded):</p>
+        <div class="dy-slip front">
+          <p class="slip-head">PUBLIC LIBRARY OF VICTORIA &middot; CALL SLIP</p>
+          <p class="slip-fields"><span>Author ..........</span><span>Title ..........</span><span>Press mark ......</span></p>
+          <div class="pencil-hand">
+            <p>What a medium for a last will &amp; testament!</p> 
+            <p>They’ll say Charlie died how they lived: under a hoop skirt!</p>
+            <p>Tell the Trustees the dome is lovely. Tell them what they paid me. Fuckers. Ummm.</p>
+            <p>Love. Just love. I have nothing else to leave you all. I hope someone finds this somehow.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="slip-side-label">Back (pencil marks less faded):</p>
+        <div class="dy-slip back">
+          <div class="pencil-hand">
+            <div class="loot">
+            <span>Dagger</span><span class="ticks"><svg class="gate" viewBox="0 0 8 18" style="width:5.0px" aria-hidden="true"><path d="M4.3 1.6 L4.4 16.3" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+            <span><s>Start mining?</s> <s>Panning?</s> Sift ashes?</span><span></span>
+            <span>Trooper by wagon, upper right molar</span><span class="ticks"><svg class="gate" viewBox="0 0 30 18" style="width:18.6px" aria-hidden="true"><path d="M4.3 1.6 L4.4 16.3" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M9.6 2.3 L9.7 15.6" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M16.2 2.5 L15.5 16.2" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M21.7 1.8 L22.2 15.7" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M1 14 L26 4" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/></svg><svg class="gate" viewBox="0 0 30 18" style="width:18.6px" aria-hidden="true"><path d="M4.3 1.6 L4.4 16.3" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M9.6 2.3 L9.7 15.6" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M16.2 2.5 L15.5 16.2" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M21.7 1.8 L22.2 15.7" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M1 14 L26 4" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+            <span>Fleeing digger, lower left molar</span><span class="ticks"><svg class="gate" viewBox="0 0 30 18" style="width:18.6px" aria-hidden="true"><path d="M4.3 1.6 L4.4 16.3" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M9.6 2.3 L9.7 15.6" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M16.2 2.5 L15.5 16.2" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M21.7 1.8 L22.2 15.7" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M1 14 L26 4" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/></svg><svg class="gate" viewBox="0 0 30 18" style="width:18.6px" aria-hidden="true"><path d="M4.3 1.6 L4.4 16.3" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M9.6 2.3 L9.7 15.6" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M16.2 2.5 L15.5 16.2" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M21.7 1.8 L22.2 15.7" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M1 14 L26 4" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+            <span>Redcoat officer, upper left eye-tooth</span><span class="ticks"><svg class="gate" viewBox="0 0 30 18" style="width:18.6px" aria-hidden="true"><path d="M4.3 1.6 L4.4 16.3" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M9.6 2.3 L9.7 15.6" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M16.2 2.5 L15.5 16.2" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M21.7 1.8 L22.2 15.7" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M1 14 L26 4" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/></svg><svg class="gate" viewBox="0 0 30 18" style="width:18.6px" aria-hidden="true"><path d="M4.3 1.6 L4.4 16.3" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M9.6 2.3 L9.7 15.6" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M16.2 2.5 L15.5 16.2" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M21.7 1.8 L22.2 15.7" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/><path d="M1 14 L26 4" stroke="#4a4a4f" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+            <span><s>Pile?</s>  Swallowed valuables?</span><span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--light"><span class="folio-head">The Basement</span><span class="folio-sep">·</span>22</div>
+</div>
+
+</body>
+</html>

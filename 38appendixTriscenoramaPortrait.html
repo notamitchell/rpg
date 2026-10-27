@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+@page { size: A4 landscape; margin: 0; }
+.tri-sheet { flex: 1; display: flex; flex-direction: column; }
+.tri-sheet .section-heading { margin: 0 0 0.25cm; }
+
+.tri-art { margin: 0; line-height: 0; }
+.tri-art img { display: block; width: 100%; height: auto; border: 1px solid var(--ink-faint); }
+
+
+.tri-sheet .tri-plaque { width: 100%; margin: 0.3cm 0 0; padding: 0.32cm 1.1cm 0.34cm; }
+.tri-plaque .plaque-line:first-child { margin: 0 auto 0.18cm; width: fit-content; padding: 0 0.6cm 0.1cm; }
+.tri-views {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 0.6cm;
+  text-align: right; text-transform: none; letter-spacing: normal;
+}
+.tri-views .dir {
+  display: block; font-family: 'Cinzel', Georgia, serif; font-size: var(--fs-caption); font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.03cm;
+}
+.tri-plaque p { margin: 0; color: inherit; font-family: 'Crimson Text', Georgia, serif; font-weight: 600;
+  font-size: var(--fs-small); line-height: 1.3; text-align: right; text-transform: none; letter-spacing: 0.01em; }
+.tri-plaque p.tri-more { margin-top: 0.08cm; font-weight: 400; }
+.tri-plaque .tri-note { text-align: center; margin: 0.2cm auto 0; padding-top: 0.12cm; width: fit-content;
+  border-top: 0.3mm solid rgba(42,30,12,.6); font-weight: 400; letter-spacing: 0.02em; }
+
+.tri-sheet .image-caption { margin: auto 0 0; font-size: var(--fs-caption); line-height: 1.35; }
+</style>
+</head>
+<body>
+
+<div class="page landscape tri-page">
+  <div class="tri-sheet">
+
+    <h2 class="section-heading handout-title"><span class="handout-label">Appendix</span> Triscenorama Portrait</h2>
+
+    <figure class="tri-art">
+      <img src="images/triscenorama-lalor.png" alt="https://handle.slv.vic.gov.au/10381/92964 https://handle.slv.vic.gov.au/10381/40195 https://handle.slv.vic.gov.au/10381/109903" />
+    </figure>
+
+    <div class="plaque tri-plaque">
+      <span class="plaque-line">Peter Lalor, 1827&ndash;1889</span>
+      <div class="tri-views">
+        <div><span class="dir">From the left</span><p>Administering the oath under the Southern Cross, Eureka Stockade, 1854</p><p class="tri-more">At Eureka, 30 November 1854, hundreds knelt bareheaded beneath the Southern Cross and swore to defend their rights and liberties.</p></div>
+        <div><span class="dir">From the front</span><p>After the fight: wounded, hunted, a price of &pound;200 on his head</p><p class="tri-more">Shot at dawn on 3 December, he lay an hour beneath a pile of slabs as police passed within feet; next day the arm came off.</p></div>
+        <div><span class="dir">From the right</span><p>The Hon. Peter Lalor, Speaker of the Legislative Assembly, 1880&ndash;1887</p><p class="tri-more">His comrades, tried for high treason before Judge Barry, were acquitted; the fugitive went to Parliament for Ballarat.</p></div>
+      </div>
+      <p class="tri-note">A bold modern take on three existing portraits, united in a single Triscenorama.</p>
+    </div>
+
+    <p class="image-caption">Composite of three portraits of Peter Lalor, by F. A. Sleap, Ludwig Becker and Annie C. H. Thunder.</p>
+
+  </div>
+  <div class="folio"><span class="folio-head">Appendix: Triscenorama Portrait</span><span class="folio-sep">·</span>38</div>
+</div>
+
+</body>
+</html>

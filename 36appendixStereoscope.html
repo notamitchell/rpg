@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.steps { padding-left: 0.6cm; margin-bottom: 0.25cm; }
+.steps li { margin-bottom: 0.04cm; }
+.parts li { margin-bottom: 0; }
+.page .group + .group { margin-top: -0.15cm; }
+.parts { list-style: none; padding: 0; margin: 0 0 0.25cm; font-size: var(--fs-small); line-height: 1.45; }
+.parts b { color: var(--ink); font-family: 'Cinzel', Georgia, serif; margin-right: 0.15cm; }
+
+
+.practice-card { margin: 0 0 0; text-align: center; }
+
+.practice-card img { width: 150mm; border: none; }
+.practice-card .image-caption { text-align: center; margin-top: 0.1cm; }
+
+.cut { display: inline-block; position: relative; padding: 1.2mm; border: 0.5mm dashed var(--ink); line-height: 0; }
+.cut img { display: block; }
+.cut::before { content: "\2702"; position: absolute; top: -4.3mm; left: -10mm; font-size: 8mm; line-height: 1;
+  color: var(--ink); font-family: 'DejaVu Sans', 'Segoe UI Symbol', sans-serif; }
+.practice-card + .practice-card { margin-top: 4mm; }
+.link-cards--stack { flex-direction: column; gap: 0.25cm; margin-top: 0; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <h2 class="section-heading handout-title"><span class="handout-label">Appendix</span> Make your own Stereoscope</h2>
+
+  <p>Sam&rsquo;s parcel holds three stereographs and a stereoscope. Your players can have them all to play with! Build a viewer from reading glasses and cardboard, and hand it round when the photograph of the bust turns up. Print this page at 100% and cut out the two cards below, the small stereographs from the research boxes on pp.&nbsp;9&ndash;10; those on pp.&nbsp;5, 12 and 16 print at the same 150&nbsp;mm width. You can even take your own stereographs: photograph a still scene, step 6.5&nbsp;cm to the right, photograph it again, then crop the two to the same size and set them side by side.</p>
+
+  <div class="link-cards">
+    <div class="link-card"><a class="qr qr--mono" href="https://invention.si.edu/activities/hands-on-activities/diy-victorian-virtual-reality" title="D.I.Y. Virtual Reality"></a><span><b>D.I.Y. Virtual Reality</b>The Smithsonian&rsquo;s Lemelson Center for the Study of Invention and Innovation has free instructions for making your own viewer.</span></div>
+    <div class="link-card"><a class="qr qr--mono" href="https://slvlab-prod.coolify.slv.vic.gov.au/articles/restore-vintage-stereographs" title="SLV LAB: restore depth to vintage stereographs"></a><span><b>SLV LAB stereoscope viewer</b>State Library Victoria&rsquo;s lab hosts a viewer that simulates the 3D effect on screen, and turns its stereographs into red&ndash;blue pictures for 3D glasses.</span></div>
+  </div>
+
+  
+
+  <div class="spacer"></div>
+
+  <!-- PRINT SIZE, DO NOT CHANGE: this stereograph is fixed at 150 mm wide in the page's style block so it works in a stereoscope (see p. 36). Fix layout by moving text, not by resizing it. -->
+  <figure class="practice-card">
+    <span class="cut"><img src="images/FL15681165.jpg" alt="https://handle.slv.vic.gov.au/10381/309626"></span>
+  </figure>
+
+  <!-- PRINT SIZE, DO NOT CHANGE: this stereograph is fixed at 150 mm wide in the page's style block so it works in a stereoscope (see p. 36). Fix layout by moving text, not by resizing it. -->
+  <figure class="practice-card">
+    <span class="cut"><img src="images/FL15960677.jpg" alt="https://handle.slv.vic.gov.au/10381/92969"></span>
+  </figure>
+
+  <div class="folio"><span class="folio-head">Appendix: Stereoscope</span><span class="folio-sep">·</span>36</div>
+</div>
+
+<script src="js/qrcode.js"></script>
+<script src="js/qr.js"></script>
+</body>
+</html>

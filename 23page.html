@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.page { color: #f2ece4; }
+.page .gm-note { text-align: left; }
+h3.subsection-heading { color: #fff; margin-top: 0; }
+.page .two-column-col > p { margin-bottom: 0.2cm; }
+.horror-bg .cross { opacity: .03; }
+.page .folio--light { z-index: 30; }
+
+.xsec { position: relative; flex: 0 0 auto; height: 50mm; margin: 0.1cm -18mm 0; overflow: hidden; }
+.xsec img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; }
+.page .xsec-credit { text-align: right; margin: 0.1cm 0 0.15cm; }
+.page h2.section-heading { margin-bottom: 0.15cm; }
+.page .describe { margin: 0.15cm 0 0.25cm; }
+.page .describe p { margin-bottom: 0.15cm; line-height: 1.34; }
+.page .two-column-col > p, .page .see-list li { line-height: 1.34; }
+.see-list { margin: 0 0 0.2cm; padding-left: 0.45cm; }
+.see-list li { margin-bottom: 0.12cm; text-align: left; }
+.page .two-column { margin-bottom: 0; }
+</style>
+</head>
+<body>
+<!-- the Eureka flag star and the dry-brush filter for the act-opener band -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <path id="fstar-b" fill="#213f77" d="m499.7 232.4 17.7 49.8 47.7-22.7-22.7 47.7 49.8 17.7-49.8 17.7 22.7 47.8-47.7-22.7-17.7 49.7-17.7-49.7-47.7 22.7 22.6-47.8-49.7-17.7 49.7-17.7-22.6-47.7 47.7 22.7 17.7-49.8z"/>
+    <path id="fstar-w" fill="#fff" d="m499.7 243.7 15.5 43.7 41.9-19.9-19.9 41.9 43.7 15.5-43.7 15.6 19.9 41.9-41.9-19.9-15.5 43.7-15.6-43.7-41.9 19.9 19.9-41.9-43.7-15.6 43.7-15.5-19.9-41.9 41.9 19.9 15.6-43.7z"/>
+    <filter id="brush-h" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.2" numOctaves="3" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="12" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.45" numOctaves="2" seed="7" result="s"/>
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="sa"/>
+      <feComposite in="d" in2="sa" operator="in"/>
+    </filter>
+      <filter id="brush-band" x="-10%" y="-25%" width="120%" height="150%" color-interpolation-filters="sRGB"> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.45" numOctaves="2" seed="7" result="s"/> 
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="aMask"/> 
+      <feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%2010%27%20preserveAspectRatio%3D%27none%27%3E%3ClinearGradient%20id%3D%27a%27%3E%3Cstop%20offset%3D%270.1%27%20stop-color%3D%27%23000%27/%3E%3Cstop%20offset%3D%270.27%27%20stop-color%3D%27%23fff%27/%3E%3Cstop%20offset%3D%270.73%27%20stop-color%3D%27%23fff%27/%3E%3Cstop%20offset%3D%270.9%27%20stop-color%3D%27%23000%27/%3E%3C/linearGradient%3E%3Crect%20width%3D%27100%27%20height%3D%2710%27%20fill%3D%27url%28%23a%29%27/%3E%3C/svg%3E" preserveAspectRatio="none" result="g"/> 
+      <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="gA"/> 
+      <feComposite in="aMask" in2="gA" operator="arithmetic" k2="1" k3="1.2" result="mask"/> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.015 0.12" numOctaves="3" seed="3" result="n"/> 
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="d"/> 
+      <feComposite in="d" in2="mask" operator="in" result="p"/><feTurbulence type="fractalNoise" baseFrequency="0.006 0.9" numOctaves="2" seed="13" result="t"/> 
+      <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  2.6 0 0 0 -1.35" result="hl"/> 
+      <feComposite in="hl" in2="p" operator="in" result="hlIn"/> 
+      <feColorMatrix in="hlIn" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.35 0" result="hlA"/> 
+      <feMerge><feMergeNode in="p"/><feMergeNode in="hlA"/></feMerge></filter>
+  </defs>
+</svg>
+
+<!-- shared drawing: the cyclorama rings and the Eureka flag star. The same defs are repeated in each of pages 21 to 28; the rings echo the ones drawn by script on 09page.html -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="cyc-rings" fill="none" stroke="currentColor">
+      <circle r="32" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="64" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="96" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="128" stroke-width="1.3"/>
+      <circle r="160" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="192" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="224" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="256" stroke-width="1.3"/>
+    </g>
+    <polygon id="star8" points="50,0 58.5,31.5 90,10 68.5,41.5 100,50 68.5,58.5 90,90 58.5,68.5 50,100 41.5,68.5 10,90 31.5,58.5 0,50 31.5,41.5 10,10 41.5,31.5"/>
+  </defs>
+</svg>
+
+<div class="page wash dark">
+
+  <div class="horror-bg" aria-hidden="true">
+    <svg class="rings"><use href="#cyc-rings"/></svg>
+    <svg class="cross" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+      <g fill="#fff">
+        <rect x="46.5" y="10" width="7" height="80"/>
+        <rect x="10" y="46.5" width="80" height="7"/>
+      </g>
+      <use href="#star8" fill="#fff" transform="translate(50 12) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(50 88) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(12 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(88 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(50 50) scale(.16) translate(-50 -50)"/>
+    </svg>
+  </div>
+  <div class="act-band act-band--on-dark"><div class="act-cross"><span class="arm arm--l"><span class="paint"></span><svg class="tip tip--start" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><span class="act-part">Part V</span></span><svg class="cstar" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><span class="arm arm--r"><span class="paint"></span><span class="act-title">Cyclorama</span><svg class="tip tip--end" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg></span></div><p class="act-rooms">Arrival &middot; The Exhibit Comes Alive &middot; The Battle &middot; Getting Out</p></div>
+
+  <div class="xsec tint-wrap"><img src="images/scientific-american_c.jpg" alt="https://www.scientificamerican.com/issue/sa/1886/11-06/" /></div>
+  <p class="image-caption xsec-credit">Cropped image of a full cross-section of a Cyclorama building, including viewing platform: <em>Scientific American</em>, 6 November 1886.</p>
+
+  <h2 class="section-heading">Inside the Cyclorama of Yesteryear</h2>
+
+  <div class="two-column">
+    <div class="two-column-col">
+      <p><strong>Arrival.</strong> Investigators arrive atop the viewing platform, in the middle of the Cyclorama exhibit as it once stood: half-painted and empty of visitors.</p>
+      <div class="describe">
+        <p>A colossal canvas borders the room. The canvas stretches perhaps fifty feet (15&nbsp;m) high and a staggering four hundred feet (120&nbsp;m) around the perimeter. It attaches to the ceiling by a complex rigging reminiscent of the sails of a massive galleon. It&rsquo;s taut, yet not rigidly cylindrical. Instead, it curves with a sinuous grace, cinched towards its centre at the very base and flaring outwards towards the top like a colossal trumpet.</p>
+        <p>Between you and the paint, below the viewing platform, is fifty feet (15&nbsp;m) of real ground: rocks, bushes, fake turf, pools of water. Wax and straw men posed frozen among them, mid-charge, mid-flight and mid-blow. A trooper sits a stuffed horse. Others lie dead and wounded beside broken weapons. A real wagon with a broken wheel, its wax fruit spilled in the fake mud. Then the ground becomes paint, and the eye cannot find the join.</p>
+        <p>Above, a huge painted canopy, an umbrella of sky, with a few faint seagulls in its furls. Beyond its edge, 
+          grimy skylights let in the only real light in this place. (<span class="roll-inline">Spot</span>: the light flickers, just like the bulb in the basement.)</p>
+      </div>
+    </div>
+    <div class="two-column-col">
+      <h3 class="subsection-heading">Points of interest</h3>
+      <ul class="see-list">
+        <li><strong>The platform.</strong> An outer railing rings its edge. An inner railing guards a spiral staircase down through the pillar that holds it up. The platform is unfinished: from the stairs near ground level, investigators can jump down onto the faux terrain.</li>
+        <li><strong>The tunnel.</strong> Down the spiral stairs (see p.&nbsp;25).</li>
+        <li><strong>The unfinished half.</strong> In places the paint simply gives out: raw canvas, pencil underdrawing, soldiers who are nothing but outlines, a stretch of sky where the painter ran out of blue. The finished half is mostly the painting from the basement, extended further round the stockade.</li>
+        <li><strong>The railway.</strong> A narrow track runs close to the canvas, carrying staging carriages of different heights. Every level is cluttered with paint pots and brushes. The tallest reaches almost to the beams beneath the skylights (p.&nbsp;26).</li>
+      </ul>
+      <div class="gm-note">
+        <p class="gm-title">The Calm Before</p>
+        <p>When the last person is in, the scene holds its breath. Before long the bugle sounds and the battle begins (p.&nbsp;24). Each new arrival, or the end of a battle, resets the scene, and the calm begins again.</p>
+        <p>There is time to look around.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio folio--light"><span class="folio-head">Inside the Cyclorama</span><span class="folio-sep">·</span>23</div>
+</div>
+
+</body>
+</html>

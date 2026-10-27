@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.page .eliza .character-description p,
+.page .eliza-research p { margin-bottom: 0.15cm; }
+.page .eliza .character-skills { margin-bottom: 0.2cm; }
+.page .eliza-research { margin: 0; }
+
+
+.page .two-column { margin: 0.2cm 0 0; }
+.bleed-photo {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 4;
+  overflow: hidden;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.bleed-photo img { width: 100%; height: auto; display: block; border: 0; }
+.bleed-cap {
+  position: absolute; left: 18mm; bottom: 14mm; margin: 0;
+  font-size: var(--fs-caption); font-style: italic; color: #fff;
+  text-shadow: 0 0.6px 0 rgba(0,0,0,.45), 0 -0.6px 0 rgba(0,0,0,.45), 0.6px 0 0 rgba(0,0,0,.45), -0.6px 0 0 rgba(0,0,0,.45), 0.45px 0.45px 0 rgba(0,0,0,.45), -0.45px 0.45px 0 rgba(0,0,0,.45), 0.45px -0.45px 0 rgba(0,0,0,.45), -0.45px -0.45px 0 rgba(0,0,0,.45), 0 1px 0 rgba(0,0,0,.6);   
+}
+
+.bleed-photo::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 32mm;
+  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.55));
+  pointer-events: none;
+}
+.bleed-cap { z-index: 2; }
+.page .folio--plate { z-index: 30; }
+.page .shusher-line { margin: 0 0 0.3cm; }
+
+
+.slip-anchor { height: 0; position: relative; z-index: 5; display: flex; justify-content: flex-end; align-items: flex-start; }
+.issue-slip {
+  position: relative; z-index: 5; flex: none;
+  width: 7.6cm; margin: 0.35cm 0.1cm 0 0;
+  padding: 0.2cm 0.3cm 0.25cm;
+  background: linear-gradient(170deg, #fbf6e8, #f1e8d2);
+  border: 1px solid #d6c9a8; --shadow: 0.6mm 1.4mm 2.6mm rgba(30,22,12,.35);
+  color: var(--text);
+}
+.issue-slip .slip-head { text-align: center; margin: 0 0 0.08cm;
+  font-family: 'Courier Prime', monospace; font-weight: 700; font-size: var(--fs-caption); letter-spacing: 0.1em; }
+.issue-slip .slip-sub { text-align: center; margin: 0 0 0.1cm; font-family: 'Courier Prime', monospace; font-size: var(--fs-caption); color: var(--text-muted); }
+.issue-slip table { width: 100%; border-collapse: collapse; font-size: var(--fs-caption); line-height: 1.25; }
+.issue-slip th { font-family: 'Courier Prime', monospace; font-weight: 700; text-align: left; border-top: 0.3mm solid #b8a98a; border-bottom: 0.3mm solid #b8a98a; padding: 0.03cm 0.08cm; }
+.issue-slip td { border-bottom: 0.2mm solid #d9cdb0; padding: 0.04cm 0.08cm; vertical-align: baseline; }
+.issue-slip td + td, .issue-slip th + th { border-left: 0.2mm solid #d9cdb0; }
+.issue-slip .stamp { font-family: 'Courier Prime', monospace; color: #5b3f8c; white-space: nowrap; }   
+.issue-slip .hand { font-family: 'Caveat', cursive; font-weight: 600; font-size: var(--fs-body); color: #24314f; line-height: 1; white-space: nowrap; }
+.issue-slip .ret, .issue-slip .who { width: 1%; white-space: nowrap; }
+.issue-slip .x { font-family: 'Caveat', cursive; font-weight: 700; font-size: var(--fs-body); color: #b0242c; text-align: center; line-height: 1; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <h2 class="section-heading">Public Library</h2>
+
+  <div class="two-column">
+    <div class="two-column-col">
+
+      <div class="character-block eliza">
+        <div class="character-name">Librarian Eliza Fetch</div>
+        <div class="character-meta">
+          <span>STR 11</span><span>CON 14</span><span>SIZ 13</span><span>DEX 12</span><span>INT 16</span><br>
+          <span>CHA 13</span><span>POW 16</span><span>HP 14</span><br>
+          <span>DM none</span><span>MOV 10</span><span>Dodge 24%</span>
+        </div>
+        <div class="character-skills">
+          <strong>Skills</strong> Appraise 55%, Command 30%, Knowledge (History) 75%, Persuade 40%, Research 70%, Spot 65%, Status 65%
+        </div>
+        <div class="character-description">
+          <p>Eliza looks down on everyone from the central podium (see below), in her official role as &ldquo;Chief Shusher&rdquo;. Behind the podium hangs a board of keys on hooks, each labelled. While she is busy, a key can be lifted (<span class="roll-inline">Sleight of Hand</span>).</p>
+          <p>New to Melbourne, she can’t remember where the Barry bust is: &ldquo;it was overlooking me from the 5th floor, but they temporarily moved it to one of the galleries&rdquo;.</p>
+       
+        
+        </div>
+      </div>
+
+    </div>
+    <div class="two-column-col">
+
+      <p class="shusher-line">When investigators are done with research, Eliza shows them one last stereograph, of her own podium: <em>The Chief Shusher</em> (p.&nbsp;11).</p>
+      <div class="gm-note eliza-research">
+        <div class="gm-title">Eliza: the (Optional) failsafe</div>
+        <p>Ideally, investigators find their own way to the staff door in McCoy Hall and pick its lock.</p>
+        <p>Meanwhile, Eliza follows up their questions. One name keeps turning up: <strong>Charlie</strong>, the archivist, who borrowed a Cyclorama booklet, works on a canvas in basement storage, and never returned several Eureka stereographs.</p>
+        <p>If the investigation falters, Eliza finds the investigators and shares this.</p>
+      </div>
+      <div class="slip-anchor"><div class="issue-slip">
+        <p class="slip-head">PUBLIC LIBRARY OF VICTORIA</p>
+        <p class="slip-sub">Staff issues &middot; Special Collections</p>
+        <table>
+          <tr><th>Issued</th><th>Item</th><th class="who">Borrower</th><th class="ret">Returned</th></tr>
+          <tr><td class="stamp">2 MAR 26</td><td>Cyclorama booklet (1 of 2)</td><td class="hand">Charlie</td><td class="x">&#10007;</td></tr>
+          <tr><td class="stamp">2 MAR 26</td><td>Cat. file: canvas, bsmt. store</td><td class="hand">Charlie</td><td class="x">&#10007;</td></tr>
+          <tr><td class="stamp">16 APR 26</td><td>Stereograph 3051</td><td class="hand">Charlie</td><td class="x">&#10007;</td></tr>
+          <tr><td class="stamp">7 JUN 26</td><td>Stereograph 4127</td><td class="hand">Charlie</td><td class="x">&#10007;</td></tr>
+          <tr><td class="stamp">30 AUG 26</td><td>Stereograph 2968</td><td class="hand">Charlie</td><td class="x">&#10007;</td></tr>
+          <tr class="blank"><td class="stamp">&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr class="blank"><td class="stamp">&nbsp;</td><td></td><td></td><td></td></tr>
+        </table>
+      </div></div>
+
+
+    </div>
+  </div>
+
+  <div class="bleed-photo">
+    <img src="images/FL15580455.jpg" alt="https://handle.slv.vic.gov.au/10381/273345">
+    <p class="bleed-cap">Domed Reading Room, State Library of Victoria, c. 1922.</p>
+  </div>
+  <div class="folio folio--plate"><span class="folio-head">Public Library</span><span class="folio-sep">·</span>8</div>
+</div>
+
+</body>
+</html>

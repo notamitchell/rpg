@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+@media print {
+  .page {
+    height: 297mm;
+    overflow: hidden;
+  }
+}
+
+.page { contain: strict;  }
+
+.horror-bg {
+  position: absolute;
+  top: 106%;   
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 250mm;
+  aspect-ratio: 1 / 1;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(216,32,46,.62), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(11,77,124,.6) 0%, rgba(0,49,83,.6) 55%, rgba(0,16,29,.62) 100%);
+}
+.horror-bg .rings { color: rgba(205,228,255,.30); }
+.horror-bg .cross { opacity: .14; }
+
+
+.image-caption {
+  color: var(--ink);
+  text-shadow: 0 0.6px 0 rgba(248,243,230,.6), 0 -0.6px 0 rgba(248,243,230,.6), 0.6px 0 0 rgba(248,243,230,.6), -0.6px 0 0 rgba(248,243,230,.6), 0.45px 0.45px 0 rgba(248,243,230,.6), -0.45px 0.45px 0 rgba(248,243,230,.6), 0.45px -0.45px 0 rgba(248,243,230,.6), -0.45px -0.45px 0 rgba(248,243,230,.6), 0 1px 0 rgba(248,243,230,.6);   
+}
+
+
+.page .paper-panel { margin: 0.2cm -0.4cm 0; padding: 0.35cm 0.4cm; }
+
+
+.page .paper-panel { grid-template-columns: 0.94fr 1.06fr; gap: 0.6cm; margin-top: 0.1cm; padding-top: 0.3cm; padding-bottom: 0.05cm; }
+
+.page .paper-panel::before { left: calc(0.4cm + (100% - 1.4cm) * 0.47 + 0.3cm); }
+
+.page .p18-loot { margin: 0.1cm 0 0.3cm; }
+.page .p18-loot td:first-child { color: var(--ink); font-weight: 600; }
+.page .paper-panel .subsection-heading { margin: 0.3cm 0 0.12cm; }
+.page .sr-chip { white-space: nowrap; letter-spacing: 0.02em; }
+.page .paper-panel p { line-height: 1.32; margin-bottom: 0.14cm; }
+.page .paper-panel .gm-note { margin-bottom: 0.2cm; }
+.page .sr-fig { zoom: 0.94; }
+.page .p18-loot th:nth-child(1) { width: 30%; }
+.page .p18-table-title { color: var(--ink); margin: 0.1cm 0 0; font-weight: 600; font-variant-caps: all-small-caps; letter-spacing: 0.08em; }
+.page .p18-loot th { white-space: nowrap; }
+.page .two-column-col > .subsection-heading:first-child { margin-top: 0; }
+</style>
+</head>
+<body>
+<!-- the Eureka flag star and the dry-brush filter for the act-opener band -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <path id="fstar-b" fill="#213f77" d="m499.7 232.4 17.7 49.8 47.7-22.7-22.7 47.7 49.8 17.7-49.8 17.7 22.7 47.8-47.7-22.7-17.7 49.7-17.7-49.7-47.7 22.7 22.6-47.8-49.7-17.7 49.7-17.7-22.6-47.7 47.7 22.7 17.7-49.8z"/>
+    <path id="fstar-w" fill="#fff" d="m499.7 243.7 15.5 43.7 41.9-19.9-19.9 41.9 43.7 15.5-43.7 15.6 19.9 41.9-41.9-19.9-15.5 43.7-15.6-43.7-41.9 19.9 19.9-41.9-43.7-15.6 43.7-15.5-19.9-41.9 41.9 19.9 15.6-43.7z"/>
+    <filter id="brush-h" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.2" numOctaves="3" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="12" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.45" numOctaves="2" seed="7" result="s"/>
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="sa"/>
+      <feComposite in="d" in2="sa" operator="in"/>
+    </filter>
+      <filter id="brush-band" x="-10%" y="-25%" width="120%" height="150%" color-interpolation-filters="sRGB"> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.45" numOctaves="2" seed="7" result="s"/> 
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="aMask"/> 
+      <feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%2010%27%20preserveAspectRatio%3D%27none%27%3E%3ClinearGradient%20id%3D%27a%27%3E%3Cstop%20offset%3D%270.1%27%20stop-color%3D%27%23000%27/%3E%3Cstop%20offset%3D%270.27%27%20stop-color%3D%27%23fff%27/%3E%3Cstop%20offset%3D%270.73%27%20stop-color%3D%27%23fff%27/%3E%3Cstop%20offset%3D%270.9%27%20stop-color%3D%27%23000%27/%3E%3C/linearGradient%3E%3Crect%20width%3D%27100%27%20height%3D%2710%27%20fill%3D%27url%28%23a%29%27/%3E%3C/svg%3E" preserveAspectRatio="none" result="g"/> 
+      <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="gA"/> 
+      <feComposite in="aMask" in2="gA" operator="arithmetic" k2="1" k3="1.2" result="mask"/> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.015 0.12" numOctaves="3" seed="3" result="n"/> 
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="d"/> 
+      <feComposite in="d" in2="mask" operator="in" result="p"/><feTurbulence type="fractalNoise" baseFrequency="0.006 0.9" numOctaves="2" seed="13" result="t"/> 
+      <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  2.6 0 0 0 -1.35" result="hl"/> 
+      <feComposite in="hl" in2="p" operator="in" result="hlIn"/> 
+      <feColorMatrix in="hlIn" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.35 0" result="hlA"/> 
+      <feMerge><feMergeNode in="p"/><feMergeNode in="hlA"/></feMerge></filter>
+  </defs>
+</svg>
+
+<!-- shared drawing: the cyclorama rings and the Eureka flag star. The same defs are repeated in each of pages 21 to 28; the rings echo the ones drawn by script on 09page.html -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="cyc-rings" fill="none" stroke="currentColor">
+      <circle r="32" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="64" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="96" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="128" stroke-width="1.3"/>
+      <circle r="160" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="192" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="224" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="256" stroke-width="1.3"/>
+    </g>
+    <polygon id="star8" points="50,0 58.5,31.5 90,10 68.5,41.5 100,50 68.5,58.5 90,90 58.5,68.5 50,100 41.5,68.5 10,90 31.5,58.5 0,50 31.5,41.5 10,10 41.5,31.5"/>
+  </defs>
+</svg>
+
+<div class="page wash">
+
+
+  <div class="horror-bg" aria-hidden="true">
+    <svg class="rings"><use href="#cyc-rings"/></svg>
+    <svg class="cross" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+      <g fill="#fff">
+        <rect x="46.5" y="10" width="7" height="80"/>
+        <rect x="10" y="46.5" width="80" height="7"/>
+      </g>
+      <use href="#star8" fill="#fff" transform="translate(50 12) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(50 88) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(12 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(88 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(50 50) scale(.16) translate(-50 -50)"/>
+    </svg>
+  </div>
+  <div class="act-band"><div class="act-cross"><span class="arm arm--l"><span class="paint"></span><svg class="tip tip--start" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><span class="act-part">Part IV</span></span><svg class="cstar" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><span class="arm arm--r"><span class="paint"></span><span class="act-title">The Basement</span><svg class="tip tip--end" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg></span></div><p class="act-rooms">Storeroom &middot; A Dead Body</p></div>
+
+    <div class="sr-wrap">
+<div class="sr-fig" style="width:174mm;height:117mm">
+<img class="sr-paint" src="images/FL15987031.jpg" style="left:67.5mm;top:47.47mm;width:39mm" alt="https://handle.slv.vic.gov.au/10381/132726">
+<svg width="174mm" height="117mm" viewBox="0 0 174 117">
+<path d="M73.51,60.66 Q54.34,43.76 56.37,18.28" fill="none" stroke="#fff" stroke-width="0.8"/>
+<path d="M73.51,60.66 Q54.34,43.76 56.37,18.28" fill="none" stroke="#003153" stroke-width="0.3"/>
+<path d="M72.27,62.34 Q50.48,48.98 26.73,58.39" fill="none" stroke="#fff" stroke-width="0.8"/>
+<path d="M72.27,62.34 Q50.48,48.98 26.73,58.39" fill="none" stroke="#003153" stroke-width="0.3"/>
+<circle cx="72.38" cy="61.12" r="1.22" fill="none" stroke="#fff" stroke-width="0.7"/>
+<circle cx="72.38" cy="61.12" r="1.22" fill="none" stroke="#003153" stroke-width="0.3"/>
+<path d="M82.24,61.00 Q55.90,71.23 30.65,58.53" fill="none" stroke="#fff" stroke-width="0.8"/>
+<path d="M82.24,61.00 Q55.90,71.23 30.65,58.53" fill="none" stroke="#003153" stroke-width="0.3"/>
+<path d="M83.26,63.13 Q58.81,77.29 52.92,104.93" fill="none" stroke="#fff" stroke-width="0.8"/>
+<path d="M83.26,63.13 Q58.81,77.29 52.92,104.93" fill="none" stroke="#003153" stroke-width="0.3"/>
+<circle cx="82.17" cy="62.34" r="1.34" fill="none" stroke="#fff" stroke-width="0.7"/>
+<circle cx="82.17" cy="62.34" r="1.34" fill="none" stroke="#003153" stroke-width="0.3"/>
+<path d="M92.39,60.14 Q91.86,42.63 106.93,33.68" fill="none" stroke="#fff" stroke-width="0.8"/>
+<path d="M92.39,60.14 Q91.86,42.63 106.93,33.68" fill="none" stroke="#003153" stroke-width="0.3"/>
+<path d="M90.77,60.34 Q87.07,43.21 70.29,38.16" fill="none" stroke="#fff" stroke-width="0.8"/>
+<path d="M90.77,60.34 Q87.07,43.21 70.29,38.16" fill="none" stroke="#003153" stroke-width="0.3"/>
+<circle cx="91.51" cy="59.66" r="1.00" fill="none" stroke="#fff" stroke-width="0.7"/>
+<circle cx="91.51" cy="59.66" r="1.00" fill="none" stroke="#003153" stroke-width="0.3"/>
+<path d="M86.57,63.19 Q85.16,77.03 71.27,77.85" fill="none" stroke="#fff" stroke-width="0.8"/>
+<path d="M86.57,63.19 Q85.16,77.03 71.27,77.85" fill="none" stroke="#003153" stroke-width="0.3"/>
+<path d="M88.43,63.22 Q89.39,77.10 103.25,78.36" fill="none" stroke="#fff" stroke-width="0.8"/>
+<path d="M88.43,63.22 Q89.39,77.10 103.25,78.36" fill="none" stroke="#003153" stroke-width="0.3"/>
+<circle cx="87.48" cy="64.14" r="1.32" fill="none" stroke="#fff" stroke-width="0.7"/>
+<circle cx="87.48" cy="64.14" r="1.32" fill="none" stroke="#003153" stroke-width="0.3"/>
+<path d="M99.21,59.41 Q122.05,47.58 145.33,58.49" fill="none" stroke="#fff" stroke-width="0.8"/>
+<path d="M99.21,59.41 Q122.05,47.58 145.33,58.49" fill="none" stroke="#003153" stroke-width="0.3"/>
+<path d="M98.20,57.83 Q118.56,42.12 118.48,16.40" fill="none" stroke="#fff" stroke-width="0.8"/>
+<path d="M98.20,57.83 Q118.56,42.12 118.48,16.40" fill="none" stroke="#003153" stroke-width="0.3"/>
+<circle cx="99.19" cy="58.32" r="1.10" fill="none" stroke="#fff" stroke-width="0.7"/>
+<circle cx="99.19" cy="58.32" r="1.10" fill="none" stroke="#003153" stroke-width="0.3"/>
+<path d="M96.76,65.69 Q118.05,78.39 119.86,103.12" fill="none" stroke="#fff" stroke-width="0.8"/>
+<path d="M96.76,65.69 Q118.05,78.39 119.86,103.12" fill="none" stroke="#003153" stroke-width="0.3"/>
+<path d="M97.70,63.75 Q120.86,72.59 141.39,58.69" fill="none" stroke="#fff" stroke-width="0.8"/>
+<path d="M97.70,63.75 Q120.86,72.59 141.39,58.69" fill="none" stroke="#003153" stroke-width="0.3"/>
+<circle cx="97.84" cy="65.02" r="1.28" fill="none" stroke="#fff" stroke-width="0.7"/>
+<circle cx="97.84" cy="65.02" r="1.28" fill="none" stroke="#003153" stroke-width="0.3"/>
+</svg>
+<div class="sr-tile" style="left:0mm;top:0mm;width:58.5mm;height:58.5mm;background-image:url(images/FL15987031_scrum.jpg)"></div>
+<div class="sr-label sr-chip" style="left:9.25mm;width:40mm;top:54mm">Stockade breached</div>
+<div class="sr-tile" style="left:0mm;top:58.5mm;width:58.5mm;height:58.5mm;background-image:url(images/FL15987031_pike.jpg)"></div>
+<div class="sr-label sr-chip" style="left:9.25mm;width:40mm;top:112.5mm">Pikemen advance</div>
+<div class="sr-tile" style="left:64.26mm;top:0mm;width:45.47mm;height:45.47mm;background-image:url(images/FL15987031_fire.jpg)"></div>
+<div class="sr-label sr-chip" style="left:67.26mm;width:39.47mm;top:40.97mm">Diamond&rsquo;s store</div>
+<div class="sr-tile" style="left:64.26mm;top:71.53mm;width:45.47mm;height:45.47mm;background-image:url(images/FL15987031_cart2.jpg)"></div>
+<div class="sr-label sr-chip" style="left:67.26mm;width:39.47mm;top:112.5mm">A rain of bullets</div>
+<div class="sr-tile" style="left:115.5mm;top:0mm;width:58.5mm;height:58.5mm;background-image:url(images/FL15987031_horses.jpg)"></div>
+<div class="sr-label sr-chip" style="left:124.75mm;width:40mm;top:54mm">Mounted police</div>
+<div class="sr-tile" style="left:115.5mm;top:58.5mm;width:58.5mm;height:58.5mm;background-image:url(images/FL15987031_soldier.jpg)"></div>
+<div class="sr-label sr-chip" style="left:124.75mm;width:40mm;top:112.5mm">A Redcoat officer</div>
+</div>
+    </div>
+
+  <div class="two-column on-paper paper-panel">
+    <div class="two-column-col">
+
+  <p>The stairs end in a storeroom, shelved to the ceiling with crates. A single electric bulb flickers overhead. Under it, a very large canvas lies flat on a table, a battle in oils. Beside the table, half-propped against its leg, is a body with a dagger in the stomach. The blood beneath it is still wet.</p>
+  <div class="gm-note"><p>This is Charlie, the archivist.</p></div>
+
+      <h3 class="subsection-heading">Eureka Stockade Canvas</h3>
+
+<p>Provide <span class="handout-ref"><span class="handout-label">Handout <span class="handout-letter">G</span></span> Eureka Painting</span>.</p>
+
+      <p>On the table, beside the canvas, is a second dagger and a pouch with a belt loop. It holds twenty-seven gold teeth, roots and all.</p>
+<p><span class="roll-inline">Appraise</span> dagger: the dagger is the twin of the one in Charlie.</p>
+<p><span class="roll-inline">Appraise</span> teeth: three sets of nine, each set identical.</p>
+
+<p>If players have not already found the booklet, <span class="handout-ref"><span class="handout-label">Handout <span class="handout-letter">E</span></span> Eureka Cyclorama</span> is amongst the artwork&rsquo;s paperwork. Its section <em>The Picture</em> describes the painting.</p>
+
+    </div>
+
+    <div class="two-column-col">
+
+      <p class="p18-table-title">What Was Taken, and From Whom</p>
+      <table class="rules-table p18-loot">
+        <tr><th>Item</th><th>Where it is now</th><th>Owner</th></tr>
+        <tr><td>Dagger</td><td>On the table</td><td>The horseman</td></tr>
+        <tr><td>Dagger</td><td>In Charlie&rsquo;s stomach</td><td>The same horseman</td></tr>
+        <tr><td>Ten upper right molars</td><td>Nine in the pouch, one in Charlie&rsquo;s pocket</td><td>A trooper by the wagon</td></tr>
+        <tr><td>Ten lower left molars</td><td>Nine in the pouch, one in Charlie&rsquo;s pocket</td><td>A digger fleeing</td></tr>
+        <tr><td>Ten upper left eye-teeth</td><td>Nine in the pouch, one in Charlie&rsquo;s pocket</td><td>A redcoat officer</td></tr>
+      </table>
+
+  <div class="gm-note">
+  <p>Everything comes in multiples because the scene resets on each visit: 
+    whatever Charlie took materialised back anew, and Charlie took it again. 
+    The pouch is Charlie&rsquo;s own, but anything in it or on this table carried into the canvas still counts as stolen from the spirits&rsquo; perspective.</p>
+  </div>
+
+
+
+      </div>
+    </div>
+
+  <div class="folio folio--light"><span class="folio-head">The Basement</span><span class="folio-sep">·</span>21</div>
+</div>
+
+</body>
+</html>

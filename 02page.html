@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+.page .section-heading { margin-bottom: 0.12cm; }
+
+.page .gm-note.truth { margin: 0 0 0.25cm; padding: 0.18cm 0.45cm 0.16cm; }
+.page .truth p:not(.gm-title) { margin: 0; font-size: var(--fs-body); line-height: 1.45; }
+
+
+
+.page .box.brief { padding: 0 0.45cm; margin: 0; }
+.brief section { padding: 0.14cm 0 0.16cm; border-top: 1px solid var(--ink-faint); }
+.brief section:first-child { border-top: none; }
+.page .brief .box-title { margin-bottom: 0.08cm; font-size: var(--fs-subhead); }
+.page .brief p,
+.page .brief li { font-size: var(--fs-body); line-height: 1.33; margin: 0 0 0.1cm; text-align: left; hyphens: manual; }
+.page .brief p:last-child,
+.page .brief li:last-child { margin-bottom: 0; }
+.page .brief strong { color: var(--ink); }
+
+.brief .rules { column-count: 2; column-gap: 0.6cm; }
+.brief .rules li { break-inside: avoid; }
+.page .brief .rules li { margin: 0 0 0.1cm; }
+.page .brief .rules li:nth-child(2),
+.page .brief .rules li:last-child { margin-bottom: 0; }
+
+
+.rules { list-style: none; margin: 0; padding: 0; }
+.rules li { position: relative; padding-left: 0.38cm; }
+.rules li::before {
+  content: '\2736'; position: absolute; left: 0; top: 0.02cm;
+  font-size: var(--fs-caption); color: var(--ink);
+}
+
+
+.story { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+.story li { counter-increment: s; display: grid; grid-template-columns: 0.45cm 1fr; }
+.story li::before {
+  content: counter(s) "."; font-family: 'Crimson Text', Georgia, serif;
+  font-weight: 600; font-size: var(--fs-body); color: var(--ink);
+}
+
+
+
+.acts { margin: 0; padding: 0; list-style: none; }
+.acts li {
+  display: grid; grid-template-columns: 2.3cm 1fr auto; gap: 0 0.3cm;
+  padding: 0.04cm 0; border-top: 1px solid rgba(0,49,83,.18);
+}
+.acts li:first-child { border-top: none; padding-top: 0; }
+.acts .act {
+  font-family: 'Crimson Text', Georgia, serif; font-weight: 600; font-size: var(--fs-body);
+  font-variant-caps: all-small-caps; letter-spacing: 0.08em; line-height: 1.35; color: var(--ink);
+}
+.acts .pp { font-style: italic; color: var(--text-muted); white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <h2 class="section-heading">Gamemaster’s Background</h2>
+
+  <div class="gm-note truth">
+    <p class="gm-title">Gamemaster’s eyes only: the secret in brief</p>
+    <p>
+
+Over the last six months, underpaid archivist Charlie has found a dark side hustle: 
+stepping into a canvas to rob the dead. Each visit resets the scene, supernaturally replacing stolen items, 
+but forcing the spirits to fight and die all over again. Desperate to stop the loop, the captive spirits attempt to alert the living world. 
+Even using the stolen items as a conduit, they are unable to fully reach physical reality. They can only inhabit illusions — mediums similar enough to the Cyclorama they are forced to possess.
+
+
+
+      </p>
+  </div>
+
+  <div class="box brief">
+    <section>
+      <div class="box-title">The canvas and its rules</div>
+      <p>The 1891 Eureka Cyclorama is long gone, but in storage beneath the Museum is a surviving portion.</p>
+      <ul class="rules">
+          <li><strong>Touch it</strong> and you enter a <strong>pocket universe</strong>: the whole Cyclorama exhibit as it once stood, half-painted and empty of visitors.</li>
+          <li><strong>Soon after</strong> the last arrival, the battle is forcefully <strong>re-enacted</strong>, as spirits are summoned into dummies and painted figures.</li>
+          <li>Each new arrival <strong>resets</strong> the scene, and so does the end of each battle while anyone living is inside. Blood unspills. Fire unburns. 
+            Missing items form from thin air.</li>
+          <li><strong>The way out is up</strong>, via the painters’ scaffolding to the skylights and to reality.</li>
+        </ul>
+    </section>
+    <section>
+      <div class="box-title">How we got here</div>
+      <ol class="story">
+      <li><span><strong>Six months ago</strong> Charlie touched the canvas, hid during the fight and then climbed out.</span></li>
+      <li><span>Unfortunately, Charlie still held a horseman’s dagger, grabbed in self-defence. When Charlie went back in, it was whole in the horseman’s belt again! The same things could be stolen endlessly. Every fortnight or so Charlie returned with dental forceps for the gold teeth, pouching them to sell later. A keen climber, Charlie always got away, until they didn’t.</span></li>
+      <li><span>Charlie steals and hoards dozens of haunted stereographs, hiding the spirits’ cries for help.</span></li>
+      <li><span><strong>Today</strong> Charlie slipped on the climb out. The horseman, sick of being made to die endlessly for a thief, found a home for his dagger. Charlie still reached the skylight, and bled to death beside the canvas while the investigators were upstairs.</span></li>
+    </ol>
+    </section>
+    <section>
+      <div class="box-title">Running the session</div>
+      <ol class="acts">
+      <li><span class="act">Arrival</span><span>A CSIR courier delivers a haunted stereograph that Charlie missed, with a request to investigate and potentially commercialise the phenomenon.</span><span class="pp">pp. 4&ndash;6</span></li>
+      <li><span class="act">Library, Museum and Galleries</span>
+        
+        <span>Librarian <strong>Eliza Fetch</strong> helps with research, providing boxes of stereographs, some haunted. 
+        The bust and other statues prove mundane, though they foreshadow the Final Act’s horror. A 3-way portrait is haunted. In the Museum hall, Mr Roe, the CSIR&rsquo;s commercial liaison, wants an investigation update. The ghost’s activities 
+        coalesce on the topics of Eureka and Cycloramas. It all points to the Eureka Cyclorama canvas in the basement!</span><span class="pp">pp. 7&ndash;20</span></li>
+         <li><span class="act">Basement</span><span>The canvas, a pouch of gold teeth, a dagger and Charlie’s body. Touching the canvas takes everyone in the storeroom <em>To the Cyclorama</em>!</span><span class="pp">pp. 21&ndash;22</span></li>
+      <li><span class="act">Inside</span><span>The battle begins. Mr Roe blunders in after them, resetting the scene. </span><span class="pp">pp. 23&ndash;27</span></li>
+    </ol>
+    </section>
+    <section>
+      
+      <p><strong>Win:</strong> Escape and make sure no one enters it again. Returning stolen items lets the dead rest. <br>
+        <strong>Lose:</strong> The hauntings spread through connections to the real world.</p>
+    </section>
+  </div>
+
+  <div class="folio"><span class="folio-head">Gamemaster’s Background</span><span class="folio-sep">·</span>2</div>
+</div><!-- /.page -->
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+.sheet { padding: 0.3cm 0.4cm; margin: 0; flex: 1; display: flex; flex-direction: column; gap: 0.22cm; }
+.sheet .form-head { font-size: var(--fs-subhead); margin-bottom: 0; }
+.sheet .label { font-variant-caps: all-small-caps; letter-spacing: 0.5px; color: var(--ink); font-weight: 600; }
+.sheet .panel-title { font-family: 'Cinzel', Georgia, serif; font-weight: 600; font-size: var(--fs-small); letter-spacing: 1px; color: var(--ink); border-bottom: 1.5px solid var(--ink); padding-bottom: 0.05cm; margin-bottom: 0.12cm; }
+.ident { display: grid; grid-template-columns: 1.4fr 1fr 0.5fr; column-gap: 0.4cm; row-gap: 0.12cm; }
+.ident div { display: flex; align-items: flex-end; gap: 0.15cm; }
+.ident .field { flex: 1; min-width: 0; height: 1.1em; }
+.ident .wide { grid-column: 1 / -1; }
+
+.vitals { display: grid; grid-template-columns: 1.05fr 0.95fr 1.1fr; column-gap: 0.45cm; }
+.char-table { width: 100%; border-collapse: collapse; font-size: var(--fs-small); }
+.char-table th { text-align: left; color: var(--ink); font-weight: 600; width: 1.1cm; padding: 0.02cm 0; }
+.char-table td { padding: 0.02cm 0.1cm 0.02cm 0; }
+.char-table td.val { width: 1.1cm; }
+.char-table td.val::after, .derived .box-in::after { content: ''; display: block; height: 0.42cm; border: 1px solid var(--ink-faint); background: white; }
+.char-table td.roll { color: var(--text-muted); font-size: var(--fs-caption); text-align: right; padding-right: 0.15cm; }
+.char-table td.roll::after { content: ' ×5'; }
+.char-table td.roll:empty::after { content: ''; }
+.char-table td.none { width: 1.1cm; }
+
+.derived { display: grid; grid-template-columns: 1fr 1fr; column-gap: 0.25cm; row-gap: 0.12cm; font-size: var(--fs-small); margin-bottom: 0.18cm; }
+.derived .box-in { font-size: var(--fs-caption); }
+.track { display: grid; gap: 0; font-size: var(--fs-caption); font-variant-numeric: tabular-nums; color: var(--text-muted); text-align: center; line-height: 1.55; border-top: 1px solid var(--ink-faint); border-left: 1px solid var(--ink-faint); background: white; }
+.track span { border-right: 1px solid var(--ink-faint); border-bottom: 1px solid var(--ink-faint); }
+.track--hp { grid-template-columns: repeat(10, 1fr); }
+.photo-col { display: flex; flex-direction: column; }
+.photo { flex: 1; margin: 0 auto; width: 3.6cm; border: 1px dashed var(--ink-faint); background: white; display: flex; align-items: center; justify-content: center; text-align: center; font-size: var(--fs-caption); color: var(--text-muted); font-style: italic; }
+.note { font-size: var(--fs-caption); color: var(--text-muted); margin: 0.08cm 0 0; line-height: 1.3; }
+
+.skills { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 0.45cm; }
+.skill-col { list-style: none; margin: 0; padding: 0; }
+.skill-col li { display: grid; grid-template-columns: 0.3cm 1fr auto 0.9cm; align-items: end; column-gap: 0.12cm; font-size: var(--fs-small); line-height: 1.3; padding-top: 0.06cm; margin: 0; border-bottom: 1px dotted var(--ink-faint); }
+.skill-col .xp { width: 0.24cm; height: 0.24cm; border: 1px solid var(--ink-soft); background: white; align-self: center; }
+.skill-col .sk { white-space: nowrap; overflow: hidden; }
+.skill-col .base { font-size: var(--fs-caption); color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.skill-col .pct { height: 1em; border-bottom: 1px solid var(--ink-soft); align-self: end; }
+.skill-col .blank { display: inline-block; width: 0.9cm; }
+.skill-col .blank--wide { width: 3cm; }
+
+.weapons { width: 100%; border-collapse: collapse; font-size: var(--fs-small); }
+.weapons th { text-align: left; font-variant-caps: all-small-caps; letter-spacing: 0.5px; color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--ink); padding: 0 0.15cm 0.03cm 0; }
+.weapons td { height: 0.48cm; border-bottom: 1px dotted var(--ink-faint); padding: 0 0.15cm 0 0; vertical-align: bottom; }
+.weapons td:first-child { width: 34%; }
+
+.lower { display: grid; grid-template-columns: 1fr 1fr; column-gap: 0.45cm; flex: 1; }
+.ruled { display: flex; flex-direction: column; }
+.ruled span { flex: 1; min-height: 0.5cm; border-bottom: 1px dotted var(--ink-faint); }
+.lower > div { display: flex; flex-direction: column; }
+.lower .ruled { flex: 1; }
+
+
+.sheet { gap: 0.14cm; }
+.skill-col li { line-height: 1.17; padding-top: 0.035cm; }
+.weapons td { height: 0.42cm; }
+.ruled span { min-height: 0.44cm; }
+.char-table td.val::after, .derived .box-in::after { height: 0.38cm; }
+
+
+.terms-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 0.45cm; row-gap: 0.06cm; font-size: var(--fs-small); line-height: 1.35; }
+.terms-grid .wide { grid-column: 1 / -1; display: flex; align-items: flex-end; gap: 0.15cm; }
+.terms-grid .field { flex: 1; min-width: 0; height: 1.1em; }
+.terms .ticked { color: var(--ink); font-weight: 600; }
+.sheet .panel-title .note { font-family: 'Crimson Text', serif; letter-spacing: 0; font-weight: 400; }
+
+.pen { font-family: 'Caveat', cursive; font-weight: 600; font-size: var(--fs-body); line-height: 1; color: #3b3a52; }
+.ident .field .pen, .terms-grid .field .pen { padding-left: 0.1cm; }
+.char-table td.val { position: relative; }
+.char-table td.val .pen, .derived .box-in .pen { position: absolute; left: 0.15cm; bottom: 0.02cm; z-index: 1; }
+.char-table td.val { vertical-align: bottom; }
+.derived .box-in { position: relative; }
+.derived .box-in .pen { left: 0.2cm; bottom: 0; }
+.skill-col .pct { position: relative; text-align: center; }
+.skill-col .pct .pen { position: absolute; left: 0; right: 0; bottom: -0.02cm; font-size: var(--fs-small); }
+.skill-col .sk .pen { font-size: var(--fs-caption); }
+.ident .field, .terms-grid .field { white-space: nowrap; overflow: hidden; }
+.terms-grid > div { white-space: nowrap; }
+.track span.off { background: repeating-linear-gradient(135deg, transparent 0 2px, rgba(43,33,22,.28) 2px 3px); color: transparent; }
+.ruled span { position: relative; }
+.ruled span .pen { position: absolute; left: 0.05cm; bottom: 0.02cm; font-size: var(--fs-small); white-space: nowrap; }
+.weapons td .pen { font-size: var(--fs-small); }
+
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="form-slip sheet">
+    <div class="form-head">C.S.I.R. Form 3: Particulars of Investigator
+      <small>Amendments to be filed in triplicate.</small>
+    </div>
+
+    <div class="ident">
+      <div><span class="label">Name</span><span class="field"><span class="pen">Kit Ashby</span></span></div>
+      <div><span class="label">Profession</span><span class="field"><span class="pen">Journalist</span></span></div>
+      <div><span class="label">Age</span><span class="field"><span class="pen">31</span></span></div>
+      <div class="wide"><span class="label">Player</span><span class="field"></span></div>
+      <div class="wide"><span class="label">Engaged by the CSIR because</span><span class="field"><span class="pen">
+        Writing skills</span></span></div>
+      <div class="wide"><span class="label">Description and distinctive features</span><span class="field"><span class="pen">
+        </span></span></div>
+    </div>
+
+    <div class="terms">
+      <div class="panel-title">Terms of engagement <span class="note">&nbsp;Completed in advance by the Council, for your convenience.</span></div>
+      <div class="terms-grid">
+        <div><span class="label">Engaged as</span> &#9744; Permanent &nbsp;&#9744; Temporary &nbsp;<span class="ticked">&#9746;</span> Casual</div>
+        <div><span class="label">Paid</span> &#9744; Salary &nbsp;&#9744; Wages &nbsp;<span class="ticked">&#9746;</span> By the job, if satisfactory</div>
+        <div><span class="label">Tools and travel paid by</span> &#9744; Council &nbsp;<span class="ticked">&#9746;</span> Investigator</div>
+        <div><span class="label">If injured, the Council accepts</span> <span class="ticked">&#9746;</span> No responsibility</div>
+        <div class="wide"><span class="label">Other present employment (all of it)</span><span class="field"><span class="pen">
+          Table Talk magazine, society notes, paid by the column inch</span></span></div>
+      </div>
+    </div>
+
+    <div class="vitals">
+      <div>
+        <div class="panel-title">Characteristics</div>
+        <table class="char-table"><tr><th>STR</th><td class="val"><span class="pen">10</span></td><td class="roll">Effort</td><td class="val"><span class="pen">50</span></td></tr><tr><th>CON</th><td class="val"><span class="pen">13</span></td><td class="roll">Stamina</td><td class="val"><span class="pen">65</span></td></tr><tr><th>SIZ</th><td class="val"><span class="pen">12</span></td><td class="roll"></td><td class="none"></td></tr><tr><th>INT</th><td class="val"><span class="pen">17</span></td><td class="roll">Idea</td><td class="val"><span class="pen">85</span></td></tr><tr><th>POW</th><td class="val"><span class="pen">13</span></td><td class="roll">Luck</td><td class="val"><span class="pen">65</span></td></tr><tr><th>DEX</th><td class="val"><span class="pen">14</span></td><td class="roll">Agility</td><td class="val"><span class="pen">70</span></td></tr><tr><th>CHA</th><td class="val"><span class="pen">16</span></td><td class="roll">Charm</td><td class="val"><span class="pen">80</span></td></tr></table>
+      </div>
+      <div>
+        <div class="panel-title">Condition</div>
+        <div class="derived">
+          <div class="box-in"><span class="label">Damage modifier</span><span class="pen">none</span></div>
+          <div class="box-in"><span class="label">MOV</span> &nbsp;10</div>
+          <div class="box-in"><span class="label">Max HP</span><span class="pen">13</span></div>
+          <div class="box-in"><span class="label">Major wound</span><span class="pen">7</span></div>
+        </div>
+        <div class="track track--hp"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span><span class="">8</span><span class="">9</span><span class="">10</span><span class="">11</span><span class="">12</span><span class="">13</span><span class="off">14</span><span class="off">15</span><span class="off">16</span><span class="off">17</span><span class="off">18</span><span class="off">19</span><span class="off">20</span><span class="off">21</span><span class="off">22</span><span class="off">23</span><span class="off">24</span><span class="off">25</span><span class="off">26</span><span class="off">27</span><span class="off">28</span><span class="off">29</span><span class="off">30</span></div>
+        <p class="note">Cross off hit points as they are lost. Unconscious at 1 or 2, dead at 0.</p>
+      </div>
+      <div class="photo-col">
+        <div class="panel-title">Photograph</div>
+        <div class="photo"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel-title">Skills <span class="note">&nbsp;Base chance in grey; a blank means the base chance. Tick the box when a skill succeeds in play.</span></div>
+      <div class="skills"><ul class="skill-col"><li><span class="xp"></span><span class="sk">Appraise</span><span class="base">15</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Art (<span class="pen">Caricature</span>)</span><span class="base">05</span><span class="pct"><span class="pen">50</span></span></li><li><span class="xp"></span><span class="sk">Bargain</span><span class="base">05</span><span class="pct"><span class="pen">25</span></span></li><li><span class="xp"></span><span class="sk">Brawl</span><span class="base">25</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Climb</span><span class="base">40</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Command</span><span class="base">05</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Craft (<span class=blank></span>)</span><span class="base">05</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Disguise</span><span class="base">01</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Dodge</span><span class="base">20</span><span class="pct"><span class="pen">30</span></span></li><li><span class="xp"></span><span class="sk">Drive (<span class=blank></span>)</span><span class="base">20</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Etiquette</span><span class="base">05</span><span class="pct"><span class="pen">30</span></span></li><li><span class="xp"></span><span class="sk">Fast Talk</span><span class="base">05</span><span class="pct"><span class="pen">75</span></span></li><li><span class="xp"></span><span class="sk">Fine Manipulation</span><span class="base">05</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Firearm (Pistol)</span><span class="base">20</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Firearm (Rifle)</span><span class="base">25</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Firearm (<span class=blank></span>)</span><span class="base">var.</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">First Aid</span><span class="base">30</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Gaming</span><span class="base">10</span><span class="pct"></span></li></ul><ul class="skill-col"><li><span class="xp"></span><span class="sk">Grapple</span><span class="base">25</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Hide</span><span class="base">10</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Insight</span><span class="base">05</span><span class="pct"><span class="pen">55</span></span></li><li><span class="xp"></span><span class="sk">Jump</span><span class="base">25</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Knowledge (History)</span><span class="base">05</span><span class="pct"><span class="pen">30</span></span></li><li><span class="xp"></span><span class="sk">Knowledge (Law)</span><span class="base">05</span><span class="pct"><span class="pen">25</span></span></li><li><span class="xp"></span><span class="sk">Knowledge (Occult)</span><span class="base">05</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Knowledge (<span class=blank></span>)</span><span class="base">05</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Language (Own)</span><span class="base">60</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Language (<span class=blank></span>)</span><span class="base">00</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Listen</span><span class="base">25</span><span class="pct"><span class="pen">50</span></span></li><li><span class="xp"></span><span class="sk">Medicine</span><span class="base">05</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Melee Weapon (<span class=blank></span>)</span><span class="base">var.</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Navigate</span><span class="base">10</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Perform (<span class=blank></span>)</span><span class="base">05</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Persuade</span><span class="base">15</span><span class="pct"><span class="pen">60</span></span></li><li><span class="xp"></span><span class="sk">Psychotherapy</span><span class="base">01</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Repair (<span class=blank></span>)</span><span class="base">15</span><span class="pct"></span></li></ul><ul class="skill-col"><li><span class="xp"></span><span class="sk">Research</span><span class="base">25</span><span class="pct"><span class="pen">75</span></span></li><li><span class="xp"></span><span class="sk">Ride (<span class=blank></span>)</span><span class="base">05</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Science (<span class=blank></span>)</span><span class="base">00</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Science (<span class=blank></span>)</span><span class="base">00</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Sense</span><span class="base">10</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Sleight of Hand</span><span class="base">05</span><span class="pct"><span class="pen">25</span></span></li><li><span class="xp"></span><span class="sk">Spot</span><span class="base">25</span><span class="pct"><span class="pen">50</span></span></li><li><span class="xp"></span><span class="sk">Status</span><span class="base">15</span><span class="pct"><span class="pen">35</span></span></li><li><span class="xp"></span><span class="sk">Stealth</span><span class="base">10</span><span class="pct"><span class="pen">30</span></span></li><li><span class="xp"></span><span class="sk">Strategy</span><span class="base">05</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Swim</span><span class="base">25</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Teach</span><span class="base">10</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Technical Skill (<span class=blank></span>)</span><span class="base">00</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Throw</span><span class="base">25</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk">Track</span><span class="base">10</span><span class="pct"></span></li><li><span class="xp"></span><span class="sk"><span class="blank blank--wide"></span></span><span class="base"></span><span class="pct"></span></li><li><span class="xp"></span><span class="sk"><span class="blank blank--wide"></span></span><span class="base"></span><span class="pct"></span></li><li><span class="xp"></span><span class="sk"><span class="blank blank--wide"></span></span><span class="base"></span><span class="pct"></span></li></ul></div>
+    </div>
+
+    <div>
+      <div class="panel-title">Weapons</div>
+      <table class="weapons">
+        <tr><th>Weapon</th><th>Skill</th><th>Damage</th><th>Range</th><th>Notes</th></tr>
+        <tr><td>Brawl</td><td><span class="pen">25%</span></td><td>1D3 + DM</td><td>touch</td><td></td></tr><tr><td>Grapple</td><td><span class="pen">25%</span></td><td>special</td><td>touch</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr>
+      </table>
+    </div>
+
+    <div class="lower">
+      <div><div class="panel-title">Belongings</div><div class="ruled"><span><span class="pen">Notebook, three pencils, a lapsed press card</span></span><span><span class="pen">Folding Kodak and two rolls of film (own expense)</span></span><span></span><span></span></div></div>
+      <div><div class="panel-title">Notes and clues</div><div class="ruled"><span><span class="pen">The Punch was swallowed by Table Talk in 1925.</span></span><span><span class="pen">Satire to society gossip: worse pay, more sting.</span></span><span><span class="pen">The CSIR is one more career pivot.</span></span><span></span></div></div>
+    </div>
+  </div>
+
+  <div class="folio"><span class="folio-head">Appendix: Kit Ashby</span><span class="folio-sep">·</span>31</div>
+</div>
+
+</body>
+</html>

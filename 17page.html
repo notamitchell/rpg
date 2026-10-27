@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+.mc-photo { position: relative; margin: 0.15cm -18mm 0; }
+.mc-photo .qr-host img { display: block; width: 210mm; height: 130mm; object-fit: cover;
+  object-position: 50% 72%; border: 0; max-width: none; }
+.mc-book { position: absolute; right: 14mm; top: 70mm; width: 84mm; z-index: 4;
+  transform: scale(0.84); transform-origin: top right; }
+.mc-book .vol { margin-top: 0; }
+.mc-book .describe.book-back { display: flex; flex-wrap: wrap; align-items: baseline;
+  justify-content: flex-end; margin: 0; }
+.mc-book .vol { flex: 0 0 auto; width: calc(100% - 0.35cm - var(--T)); }
+
+.mc-book .describe.book-back::before { order: 1; margin: 0.35cm 0 0 0; }
+.mc-book .gates { order: 2; margin-right: 7mm; }
+.mc-book .gates .gate:first-child { margin-left: 0.3cm; }
+.mc-beside { padding-right: 74mm; min-height: 31mm; }
+.mc-beside .image-caption { margin: 0.1cm 0 0.25cm; }
+
+.page .views .view-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+.page .views > .gm-note { margin-top: 0.3cm; }
+.page .views .view-label {
+  font-family: 'Crimson Text', Georgia, serif; font-size: var(--fs-body); font-weight: 600;
+  font-variant-caps: all-small-caps; letter-spacing: 0.05em; color: var(--ink); margin: 0.1cm 0 0.02cm; white-space: nowrap;
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <h2 class="section-heading">McArthur Gallery</h2>
+
+  <div class="mc-photo">
+    <span class="qr-host"><img src="images/a14131.jpg" alt="https://handle.slv.vic.gov.au/10381/290952" /></span>
+    <div class="mc-book">
+    <div class="describe book-back">
+      <div class="gates"><span class="gate">Knowledge (History)/Idea</span></div>
+      <div class="vol vol--lives" style="--v-paper:#e6e8ec; --v-ink:#1d3264; --v-cloth:#1f3a70;">
+        <div class="vol-top"></div>
+        <div class="vol-back">
+          <div class="vol-band"><span>Lives of Great Victorians</span><span class="vol-no">No.&nbsp;9</span></div>
+          <div class="vol-head">
+            <svg class="vol-emblem" viewBox="0 0 1000 650" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Eureka Flag"> <path fill="#213f77" d="M0 0h1000v650H0z"></path> <path fill="#213f77" d="M450.9 93.7h97.5v462.5h-97.5z"></path> <path fill="#213f77" d="M118.5 275H881v100H118.5z"></path> <path fill="#fff" d="M454.6 93.7h90v462.5h-90z"></path> <path fill="#fff" d="M124.7 278.7h750v92.5h-750z"></path> <path fill="#213f77" d="m499.7 232.4 17.7 49.8 47.7-22.7-22.7 47.7 49.8 17.7-49.8 17.7 22.7 47.8-47.7-22.7-17.7 49.7-17.7-49.7-47.7 22.7 22.6-47.8-49.7-17.7 49.7-17.7-22.6-47.7 47.7 22.7 17.7-49.8M124.6 239.3l16.4 46.1 44.2-21-21 44.2 46.1 16.3-46.1 16.4 21 44.2-44.2-21-16.4 46.1-16.3-46.1-44.2 21 21-44.2L39 324.9l46.1-16.3-21-44.2 44.2 21 16.3-46.1M874.6 239.3l16.4 46.1 44.1-21-21 44.2 46.1 16.3-46.1 16.4 21 44.2-44.1-21-16.4 46.1-16.4-46.1-44.2 21 21-44.2-46.1-16.4 46.1-16.3-21-44.2 44.2 21 16.4-46.1M499.7 8.1l16.4 46.1 44.1-21-21 44.2 46.1 16.3-46.1 16.4 21 44.2-44.1-21-16.4 46.1-16.4-46.1-44.2 21 21-44.2-46-16.4 46-16.3-21-44.2 44.2 21 16.4-46.1M499.7 470.6l16.4 46 44.1-21-21 44.2 46.1 16.4-46.1 16.4 21 44.1-44.1-21-16.4 46.1-16.4-46.1-44.2 21 21-44.1-46-16.4 46-16.4-21-44.2 44.2 21 16.4-46"></path> <path fill="#fff" d="m499.7 243.7 15.5 43.7 41.9-19.9-19.9 41.9 43.7 15.5-43.7 15.6 19.9 41.9-41.9-19.9-15.5 43.7-15.6-43.7-41.9 19.9 19.9-41.9-43.7-15.6 43.7-15.5-19.9-41.9 41.9 19.9 15.6-43.7M124.6 249.9l14.4 40.4 38.7-18.4-18.4 38.7 40.3 14.3-40.3 14.4 18.4 38.7-38.7-18.4-14.4 40.3-14.3-40.3L71.6 378 90 339.3l-40.4-14.4L90 310.6l-18.4-38.7 38.7 18.4 14.3-40.4M874.6 249.9l14.4 40.4 38.7-18.4-18.4 38.7 40.3 14.3-40.3 14.4 18.4 38.7-38.7-18.4-14.4 40.3-14.3-40.3-38.7 18.4 18.4-38.7-40.4-14.4 40.4-14.3-18.4-38.7 38.7 18.4 14.3-40.4M499.7 18.7 514 59.1l38.7-18.4-18.4 38.7 40.4 14.3-40.4 14.4 18.4 38.7-38.7-18.4-14.3 40.3-14.4-40.3-38.7 18.4 18.4-38.7-40.3-14.4L465 79.4l-18.4-38.7 38.7 18.4 14.4-40.4M499.7 481.2l14.3 40.3 38.7-18.4-18.4 38.7 40.4 14.4-40.4 14.3 18.4 38.7-38.7-18.4-14.3 40.4-14.4-40.4-38.7 18.4 18.4-38.7-40.3-14.3 40.3-14.4-18.4-38.7 38.7 18.4 14.4-40.3"></path> </svg>
+            <div><p class="vol-title">Peter Lalor</p>
+            <p class="vol-tag">Rebel &amp; Speaker</p></div>
+          </div>
+          <p>He led the diggers at the Eureka Stockade, where they knelt:</p>
+          <span class="oath">&ldquo;We swear by the Southern Cross to stand truly by each other and fight to defend our rights and liberties.&rdquo;</span>
+          <div class="vol-plate" style="background-image:url(images/FL16157096_lalor.jpg);"></div>
+          <p>Shot in the left arm in the dawn attack of 3 December 1854, he lost the arm to the surgeon but never fell to the troopers: the &pound;200 on his head went unclaimed. Once the rebels were acquitted, Ballarat sent him to Parliament.</p>
+          <p class="vol-foot"><span>Mitchell Press &middot; Melbourne</span><span>3/6 net</span></p>
+        </div>
+        <div class="vol-spine"><span>Lalor</span><span class="vol-spine-no">9</span></div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="mc-beside">
+    <p class="image-caption">&ldquo;McArthur Gallery, National Gallery of Victoria, Melbourne&rdquo; [ca. 1900].</p>
+
+    <p>This room has only one statue, <em>Maternal Affection</em>; the rest is paintings on the wall and rows of wooden chairs for patrons to sit and ponder the great works. One painting stands out, literally.</p>
+  </div>
+
+  <div class="views">
+    <h3 class="subsection-heading">Three Views of Peter Lalor: the Triscenorama</h3>
+    <div class="view-cols">
+          <div>
+            <p class="view-label">From the left: before the fight</p>
+            <p>Lalor administers the oath to the diggers under the Southern Cross flag, as hundreds kneel, hats in hand.</p>
+          </div>
+          <div>
+            <p class="view-label">From the front: after Eureka</p>
+            <p>Gaunt and hunted, the left sleeve empty and pinned. A fugitive with a price on his head. Shot in the dawn attack, he hid under a pile of slabs. The arm came off next day.</p>
+          </div>
+          <div>
+            <p class="view-label">From the right: much later</p>
+            <p>The Honourable Peter Lalor, grey-bearded Speaker of the people’s Legislative Assembly, in the Speaker’s robes and wig.</p>
+          </div>
+    </div>
+    <div class="gm-note">
+      <p>Please see <span class="handout-ref"><span class="handout-label">Appendix</span> Triscenorama</span> (p.&nbsp;37) for a full explanation of the mechanics of the Triscenorama illusion. The front view is the one whose eyes go missing when it is out of sight!</p>
+      <p>If investigators see the Barry bust first, a scared NPC fleeing this gallery can give them reason to visit.</p>
+    </div>
+  </div>
+
+  <div class="folio"><span class="folio-head">McArthur Gallery</span><span class="folio-sep">·</span>17</div>
+</div><!-- /.page -->
+
+</body>
+</html>

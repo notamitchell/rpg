@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+
+.horror-bg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-86%, -93.5%);
+  width: 190mm;
+  aspect-ratio: 1 / 1;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 74%, rgba(216,32,46,.42), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(11,77,124,.38) 0%, rgba(0,49,83,.38) 55%, rgba(0,16,29,.4) 100%);
+}
+.horror-bg .cross { opacity: .09; }
+
+.page .newspaper-clip { margin-top: 0.2cm; }
+.two-column { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }  
+
+
+.cyc-view { position: relative; margin: auto auto 0.25cm; flex-shrink: 0; }
+.cyc-view > * { position: absolute; margin: 0; }
+.cv-thumb { left: 0; top: 0; border: 1px solid var(--ink-faint); filter: sepia(14%) contrast(1.03); }
+.cyc-view svg { left: 0; top: 0; overflow: visible; pointer-events: none; z-index: 2; }
+.cv-loupe { border-radius: 50%; background: #ddd center / cover no-repeat; border: 0.8mm solid var(--paper-warm); outline: 0.35mm solid var(--ink); filter: sepia(14%) contrast(1.04); z-index: 1; }
+</style>
+</head>
+<body>
+
+<!-- shared drawing: the cyclorama rings and the Eureka flag star. The same defs are repeated in each of pages 21 to 28; the rings echo the ones drawn by script on 09page.html -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="cyc-rings" fill="none" stroke="currentColor">
+      <circle r="32" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="64" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="96" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="128" stroke-width="1.3"/>
+      <circle r="160" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="192" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="224" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="256" stroke-width="1.3"/>
+    </g>
+    <polygon id="star8" points="50,0 58.5,31.5 90,10 68.5,41.5 100,50 68.5,58.5 90,90 58.5,68.5 50,100 41.5,68.5 10,90 31.5,58.5 0,50 31.5,41.5 10,10 41.5,31.5"/>
+  </defs>
+</svg>
+
+<div class="page wash">
+
+
+  <div class="horror-bg" aria-hidden="true">
+    <svg class="rings"><use href="#cyc-rings"/></svg>
+    <svg class="cross" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+      <g fill="#fff">
+        <rect x="46.5" y="10" width="7" height="80"/>
+        <rect x="10" y="46.5" width="80" height="7"/>
+      </g>
+      <use href="#star8" fill="#fff" transform="translate(50 12) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(50 88) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(12 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(88 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(50 50) scale(.16) translate(-50 -50)"/>
+    </svg>
+  </div>
+
+  <h2 class="section-heading">Historical Epilogue</h2>
+
+  <div class="two-column">
+    <div class="two-column-col">
+    <p>The year before the investigation:</p>
+
+<div class="newspaper-clip">
+  <div class="newspaper-clip-header">
+    <div class="newspaper-clip-masthead">The Argus</div>
+    <div class="newspaper-clip-source">Melbourne, November, 1925</div>
+    <div class="newspaper-clip-headline">Success of “Opportunity Shop.”</div>
+  </div>
+  <div class="newspaper-clip-body">
+    <p>The “Opportunity Shop” organ&shy;ized by Lady Tallis at the Cyclorama in aid of the appeal opened on Thurs&shy;day very success&shy;fully. Approx&shy;imately £300 resulted from three hours’ actual selling, but prepar&shy;ations for those
+      three hours occupied nearly seven weeks, and for the success of the project it is necessary that the supply of goods should be main&shy;tained to meet the demand.
+</p>
+  </div>
+</div>
+
+<p>An “Opportunity Shop” or “Opp Shop”? Yes, this was the invention of the Opp Shop! If you’re interested in the origins of the Opp Shop and former showgirl, Lady Millie Tallis, see: Annear, R. (2019). <em>Nothing New: A History of Second-Hand</em>.</p>
+<p><strong>The hoop skirt:</strong> Charlie’s hiding place is a nod to Elizabeth Wilson, who by family account hid a miner beneath her hooped petticoat during the battle. See Wickham, D. (2008). <a href="https://search.informit.org/doi/10.3316/informit.443663399652031">&ldquo;Blood, Sweat and Tears&rdquo;: Women at Eureka</a>. <em>Journal of Australian Colonial History</em>, 10(1), 99&ndash;114 (link on page 48).</p>
+<p><strong>The CSIR and the busker’s ballads:</strong> see Currie, G., &amp; Graham, J. (1966). <em>The origins of CSIRO: Science and the Commonwealth Government 1901&ndash;1926</em>. CSIRO Publishing. As its blurb puts it, &ldquo;In those days there were vivid contrasts in the views of scientists, politicians and men of affairs as to how science could most effectively influence the nation’s future.&rdquo;</p>
+
+
+
+    </div>
+    <div class="two-column-col">
+
+
+
+
+    <p>One year after the investigation:</p>
+
+ <div class="newspaper-clip">
+  <div class="newspaper-clip-header">
+    <div class="newspaper-clip-masthead">The Argus</div>
+    <div class="newspaper-clip-source">Melbourne, Tuesday, November 15, 1927</div>
+    <div class="newspaper-clip-headline">The Last of the Cyclorama</div>
+  </div>
+  <div class="newspaper-clip-body">
+<p>The work of razing the old Cyclorama in Victoria parade, Fitzroy, is now almost complete. This 50 ft. wall, 2ft. in thick&shy;ness, was under&shy;mined yesterday and wreathed with ropes, to which horses were attached. The photo&shy;graph shows one of the last sections of the wall falling.</p>
+  </div>
+</div>
+
+
+<p><strong>Artistic licence:</strong> The real Eureka Stockade cyclorama was much smaller than its famous siblings &mdash; about 1000 square feet of canvas, displayed in the foyer rather than filling a rotunda of its own. This adaptation scales it up to a full 360-degree canvas. Likewise, the &ldquo;surviving portion&rdquo; in the basement is really a photograph of one portion of the painting, printed and painted over by an artist in 1900.</p>
+
+<p>Part of the Little Collins Street Cyclorama building survives to today and is heritage listed.</p>
+
+
+
+<p>If you’re interested in the topic of Cycloramas, you might also want to read <em>Canvas Documentaries: Panoramic Entertainments in Nineteenth-Century Australia and New Zealand</em> by Mimi Colligan.</p>
+
+  <div class="cyc-view" style="width:72.0mm;height:28.0mm">
+    <img class="cv-thumb" src="images/FL15661473.jpg" style="width:40.0mm" alt="https://handle.slv.vic.gov.au/10381/244751">
+    <svg width="72.0mm" height="28.0mm" viewBox="0 0 72.0 28.0">
+<line x1="22.05" y1="2.78" x2="50.77" y2="25.99" stroke="#fff" stroke-width="0.8"/>
+<line x1="22.05" y1="2.78" x2="50.77" y2="25.99" stroke="#003153" stroke-width="0.3"/>
+<line x1="22.82" y1="-0.00" x2="58.00" y2="0.00" stroke="#fff" stroke-width="0.8"/>
+<line x1="22.82" y1="-0.00" x2="58.00" y2="0.00" stroke="#003153" stroke-width="0.3"/>
+<circle cx="22.82" cy="1.50" r="1.50" fill="none" stroke="#fff" stroke-width="0.7"/>
+<circle cx="22.82" cy="1.50" r="1.50" fill="none" stroke="#003153" stroke-width="0.3"/>
+    </svg>
+    <div class="cv-loupe" style="left:44.0mm;top:0;width:28.0mm;height:28.0mm;background-image:url(images/FL15661473_cyclorama.jpg)"></div>
+  </div>
+<p>Players had a photo of the old Cyclorama on Victoria Parade, Fitzroy since Handout A. It&rsquo;s visible just beyond the Library dome&rsquo;s right edge: the round many-sided building  where St Vincent&rsquo;s Hospital is now!</p>
+
+    </div>
+  </div>
+
+  <div class="folio"><span class="folio-head">Historical Epilogue</span><span class="folio-sep">·</span>29</div>
+</div>
+
+
+</body>
+</html>

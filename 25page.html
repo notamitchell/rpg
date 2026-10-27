@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+
+.page { color: #f2ece4; }
+
+
+
+
+
+
+.horror-bg .cross { opacity: .03; }
+
+h3.subsection-heading { color: #fff; margin: 0.2cm 0 0.08cm; }
+.two-column-col > h3.subsection-heading:first-child { margin-top: 0; }
+.page .battle-cols p, .page .battle-cols li { line-height: 1.32; margin-bottom: 0.12cm; text-align: left; }
+.page .battle-cols .gm-note { margin: 0 0 0.15cm; padding: 0.12cm 0.35cm; }
+.page .who-box { margin: 0 0 0.25cm; }
+.page .who-box .who-lead { font-weight: 600; margin: 0 0 0.05cm; }
+.who-list { margin: 0 0 0.05cm; padding-left: 0.5cm; }
+.who-list li { margin-bottom: 0.04cm; }
+.loose-list { margin: 0 0 0.12cm; padding-left: 0.45cm; }
+.page .two-column.battle-cols { margin-bottom: 0; position: relative; z-index: 25; }
+</style>
+</head>
+<body>
+
+<!-- shared drawing: the cyclorama rings and the Eureka flag star. The same defs are repeated in each of pages 21 to 28; the rings echo the ones drawn by script on 09page.html -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="cyc-rings" fill="none" stroke="currentColor">
+      <circle r="32" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="64" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="96" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="128" stroke-width="1.3"/>
+      <circle r="160" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="192" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="224" stroke-width="0.8" stroke-dasharray="1.5 4.5"/>
+      <circle r="256" stroke-width="1.3"/>
+    </g>
+    <polygon id="star8" points="50,0 58.5,31.5 90,10 68.5,41.5 100,50 68.5,58.5 90,90 58.5,68.5 50,100 41.5,68.5 10,90 31.5,58.5 0,50 31.5,41.5 10,10 41.5,31.5"/>
+  </defs>
+</svg>
+
+<div class="page wash dark">
+
+  <div class="horror-bg" aria-hidden="true">
+    <svg class="rings"><use href="#cyc-rings"/></svg>
+    <svg class="cross" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+      <g fill="#fff">
+        <rect x="46.5" y="10" width="7" height="80"/>
+        <rect x="10" y="46.5" width="80" height="7"/>
+      </g>
+      <use href="#star8" fill="#fff" transform="translate(50 12) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(50 88) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(12 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#e0303c" transform="translate(88 50) scale(.16) translate(-50 -50)"/>
+      <use href="#star8" fill="#fff" transform="translate(50 50) scale(.16) translate(-50 -50)"/>
+    </svg>
+  </div>
+
+
+
+
+  
+  <h2 class="section-heading">The Battle</h2>
+
+  <div class="gm-note who-box">
+    <p class="gm-title">Who the Dead Come For</p>
+    <p>The dead fight each other, not the living. They turn on anyone who strikes them, or gives them a bloody good reason (e.g. Roe&rsquo;s tone-deaf talk of licences, p.&nbsp;24). Everything else is crossfire.</p>
+    <p><strong>Stolen items.</strong> The spirits are intelligent and judge intent. A sword picked up to fight with, a box moved out of the way, or teeth in a pouch, might still be left behind before exiting. A foot on a ladder shows definite intent to leave with an item. The owner breaks free of the re-enactment and comes for the climber (p.&nbsp;26). Investigator actions or words might change a spirit&rsquo;s mind about their intent. Otherwise the owner attacks to kill.</p>
+    <p><strong>Restitution.</strong> Nothing changes while anyone living is inside: the canvas settles the account once the last of them is out.</p>
+  </div>
+
+  <div class="two-column battle-cols">
+    <div class="two-column-col">
+      <h3 class="subsection-heading">Crossfire</h3>
+      <p>Each round out of cover, every investigator in the open makes a <span class="roll-inline">Luck</span> roll.</p>
+      <ul class="loose-list">
+        <li><strong>Success:</strong> the crossfire misses them.</li>
+        <li><strong>Fail:</strong> a stray attack lands. Roll it as the redcoat officer&rsquo;s volley or the fleeing digger&rsquo;s revolver (p.&nbsp;27).</li>
+      </ul>
+      <p><strong>Paint or lead.</strong> When a gunshot hits, roll 1D10:</p>
+      <ul class="loose-list">
+        <li><strong>1&ndash;7:</strong> a wet smack of paint, 1&nbsp;HP.</li>
+        <li><strong>8&ndash;10:</strong> real lead, full damage.</li>
+      </ul>
+      <p>No crossfire reaches anyone once they are past the carriage ladder (step 1 of the climb): no one fires upwards in a pitched battle!</p>
+
+
+      <h3 class="subsection-heading">Dying Inside</h3>
+      <p>Anyone who dies inside the Cyclorama joins the painting: a new face in the crowd, painted where they fell. They can be seen in the canvas in the basement, and they fight and fall with the dead every time someone crosses in (<em>Investigation Failure</em>, p.&nbsp;28).</p>
+      </div>
+    <div class="two-column-col">
+      <h3 class="subsection-heading">Hiding Places</h3>
+      <p><strong>The hoop skirt.</strong> On the viewing platform stands a wax and straw woman in a 
+        wide hoop skirt, a part of an era-appropriate dress exhibit. She is not part of the battle so 
+        does not reanimate. 
+        
+        There is room beneath for one person (<span class="roll-inline">Stealth</span>). 
+        This is where Charlie hid on the first visit. </p>
+
+        <p><strong>The tunnel.</strong> Down the spiral stairs, beneath the platform, the tunnel is outside the battle entirely. On later visits Charlie waited out the fighting here, then climbed in the calm that followed. 
+          In a real Cyclorama, the stairs lead to an underground tunnel and an exit door. This allows the canvas to be a full, unbroken 360&deg;. Here, that door is the edge of this pocket universe. Beyond it there is nothing at all: ink-black space.</p>
+    
+
+      <p><strong>Other cover.</strong> The broken wagon, a tent, a fake mineshaft: the faux terrain is full of places.</p>
+    </div>
+  </div>
+
+  <div class="folio folio--light"><span class="folio-head">Inside the Cyclorama</span><span class="folio-sep">·</span>25</div>
+</div>
+
+</body>
+</html>

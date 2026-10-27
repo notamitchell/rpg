@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+
+.page > .image-container { margin: 0 0 0.1cm; }
+.page > .image-container + .two-column { margin-top: 0.2cm; }
+.two-column-col > div > .subsection-heading { margin-top: 0.25cm; }
+.page .two-column-col > div > p { margin-bottom: 0.2cm; }   
+.page > .image-container .image-caption { margin-top: 0.1cm; }
+.getting-around .gm-note { margin-bottom: 0.2cm; }
+.page .getting-around ul { margin: 0.1cm 0 0; padding-left: 1em; }
+.page .getting-around li { margin: 0 0 0.1cm; }
+
+
+.plan { position: relative; line-height: 0; }
+.plan img { display: block; width: 100%; height: auto; }
+.plan .mk {
+  position: absolute; transform: translate(-50%, -50%);
+  width: 0.84cm; height: 0.84cm; padding: 0.07em 0 0; box-sizing: border-box; border-radius: 50%;
+  background: var(--ink); color: #fff; border: 2px solid #fff;
+  font: 700 var(--fs-subhead)/1 'Cinzel', Georgia, serif;   
+  display: flex; align-items: center; justify-content: center;
+}
+.plan .mk--entry { width: auto; height: auto; border-radius: 3px; padding: 4px 6px 3px; font-size: var(--fs-small); letter-spacing: .5px; line-height: 1.15; text-align: center; }   
+.plan .st-label {
+  position: absolute; top: 50%;
+  font: 600 var(--fs-caption)/1 'Cinzel', Georgia, serif; letter-spacing: 1.5px; color: var(--ink);
+  background: rgba(248,243,230,.92); border: 1px solid var(--ink-faint); padding: 3px 6px; white-space: nowrap;
+}
+
+.plan .st-label--w { left: 0.15cm; transform: translate(-50%, -50%) rotate(-90deg) translateY(50%); }
+.plan .st-label--e { right: 0.15cm; transform: translate(50%, -50%) rotate(90deg) translateY(50%); }
+.mk-inline {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.35em; height: 1.35em; padding: 0.07em 0 0; box-sizing: border-box; border-radius: 50%; vertical-align: 0.05em;
+  background: var(--ink); color: #fff; font: 700 var(--fs-caption)/1 'Cinzel', Georgia, serif;
+}
+
+
+.guide { position: relative; margin: 0.15cm 0.15cm 0 0.1cm; padding: 3mm 4.4mm 2.2mm;
+  background:
+    linear-gradient(to bottom, transparent calc(33.3% - 0.4mm), rgba(80,60,30,.10) 33.3%, rgba(255,255,255,.7) calc(33.3% + 0.4mm), transparent calc(33.3% + 1.2mm)),
+    linear-gradient(to bottom, transparent calc(66.6% - 0.4mm), rgba(80,60,30,.10) 66.6%, rgba(255,255,255,.7) calc(66.6% + 0.4mm), transparent calc(66.6% + 1.2mm)),
+    var(--paper-warm);
+  --shadow: 0 0 0 0.25mm rgba(51,41,28,.2), 1.2mm 1.8mm 2.8mm rgba(40,30,18,.25); }
+.guide::after { content: ''; position: absolute; inset: 1.4mm; border: 0.3mm solid var(--ink); pointer-events: none; }
+.page .guide p { text-align: center; margin: 0; color: var(--ink); }
+.page .guide .guide-inst { font-family: 'Crimson Text', Georgia, serif; font-size: var(--fs-caption); font-weight: 600; font-variant-caps: all-small-caps; letter-spacing: .14em; line-height: 1.35; }
+.page .guide .guide-title { font-family: 'Cinzel', Georgia, serif; font-size: var(--fs-subhead); font-weight: 600; letter-spacing: .06em; margin: 1.2mm 0 0.4mm; }
+.page .guide .guide-sub { font-size: var(--fs-caption); font-style: italic; padding-bottom: 1.4mm; margin-bottom: 1.6mm; border-bottom: 0.3mm solid var(--ink); }
+.guide-list { list-style: none; margin: 0; padding: 0; }
+.page .guide-list li { display: grid; grid-template-columns: 7.5mm 1fr; align-items: baseline; margin: 0 0 0.6mm; font-size: var(--fs-small); line-height: 1.3; color: var(--text); }
+.guide-list .mk-inline { justify-self: start; }
+.page .guide .guide-foot { display: flex; justify-content: space-between; margin-top: 1.4mm; padding-top: 1mm; border-top: 0.3mm solid var(--ink);
+  font-size: var(--fs-caption); font-variant-caps: all-small-caps; letter-spacing: .12em; font-weight: 600; }
+.page .two-column { grid-template-columns: 0.86fr 1.14fr; }
+.page .two-column::before { left: calc((100% - 0.7cm) * 0.43 + 0.35cm); }   
+</style>
+</head>
+<body>
+<!-- the Eureka flag star and the dry-brush filter for the act-opener band -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <path id="fstar-b" fill="#213f77" d="m499.7 232.4 17.7 49.8 47.7-22.7-22.7 47.7 49.8 17.7-49.8 17.7 22.7 47.8-47.7-22.7-17.7 49.7-17.7-49.7-47.7 22.7 22.6-47.8-49.7-17.7 49.7-17.7-22.6-47.7 47.7 22.7 17.7-49.8z"/>
+    <path id="fstar-w" fill="#fff" d="m499.7 243.7 15.5 43.7 41.9-19.9-19.9 41.9 43.7 15.5-43.7 15.6 19.9 41.9-41.9-19.9-15.5 43.7-15.6-43.7-41.9 19.9 19.9-41.9-43.7-15.6 43.7-15.5-19.9-41.9 41.9 19.9 15.6-43.7z"/>
+    <filter id="brush-h" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.2" numOctaves="3" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="12" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.45" numOctaves="2" seed="7" result="s"/>
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="sa"/>
+      <feComposite in="d" in2="sa" operator="in"/>
+    </filter>
+      <filter id="brush-band" x="-10%" y="-25%" width="120%" height="150%" color-interpolation-filters="sRGB"> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.45" numOctaves="2" seed="7" result="s"/> 
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.15" result="aMask"/> 
+      <feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%2010%27%20preserveAspectRatio%3D%27none%27%3E%3ClinearGradient%20id%3D%27a%27%3E%3Cstop%20offset%3D%270.1%27%20stop-color%3D%27%23000%27/%3E%3Cstop%20offset%3D%270.27%27%20stop-color%3D%27%23fff%27/%3E%3Cstop%20offset%3D%270.73%27%20stop-color%3D%27%23fff%27/%3E%3Cstop%20offset%3D%270.9%27%20stop-color%3D%27%23000%27/%3E%3C/linearGradient%3E%3Crect%20width%3D%27100%27%20height%3D%2710%27%20fill%3D%27url%28%23a%29%27/%3E%3C/svg%3E" preserveAspectRatio="none" result="g"/> 
+      <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="gA"/> 
+      <feComposite in="aMask" in2="gA" operator="arithmetic" k2="1" k3="1.2" result="mask"/> 
+      <feTurbulence type="fractalNoise" baseFrequency="0.015 0.12" numOctaves="3" seed="3" result="n"/> 
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G" result="d"/> 
+      <feComposite in="d" in2="mask" operator="in" result="p"/><feTurbulence type="fractalNoise" baseFrequency="0.006 0.9" numOctaves="2" seed="13" result="t"/> 
+      <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  2.6 0 0 0 -1.35" result="hl"/> 
+      <feComposite in="hl" in2="p" operator="in" result="hlIn"/> 
+      <feColorMatrix in="hlIn" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.35 0" result="hlA"/> 
+      <feMerge><feMergeNode in="p"/><feMergeNode in="hlA"/></feMerge></filter>
+  </defs>
+</svg>
+
+<div class="page">
+  <div class="act-band"><div class="act-cross"><span class="arm arm--l"><span class="paint"></span><svg class="tip tip--start" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><span class="act-part">Part II</span></span><svg class="cstar" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg><span class="arm arm--r"><span class="paint"></span><span class="act-title">The Library</span><svg class="tip tip--end" viewBox="394 226 212 212" aria-hidden="true"><use href="#fstar-b"/><use href="#fstar-w"/></svg></span></div><p class="act-rooms">Floorplans &middot; Public Library &middot; Research</p></div>
+
+  <h2 class="section-heading">State Library, Museum &amp; Gallery</h2>
+
+  <div class="image-container">
+    
+    <div class="plan">
+      <img src="images/FL15881901_6_a.jpg" alt="https://handle.slv.vic.gov.au/10381/128291" />
+      <span class="mk" style="left:27.9%;top:55.8%">1</span>
+      <span class="mk" style="left:35.4%;top:86.3%">3</span>
+      <span class="mk" style="left:41.8%;top:55.9%">2</span>
+      <span class="mk" style="left:77.9%;top:58.9%">7</span>
+      <span class="mk" style="left:65.3%;top:58.5%">4</span>
+      <span class="mk" style="left:88.2%;top:35.4%">5</span>
+      <span class="mk" style="left:88.9%;top:73.7%">6</span>
+      <span class="mk mk--entry" style="left:17.4%;top:55.6%">ENTRY<br>STEPS</span>
+      <span class="st-label st-label--w">Swanston Street</span>
+      <span class="st-label st-label--e">Russell Street</span>
+    </div>
+    <p class="image-caption">Cropped from City of Melbourne plans, Section 2, G. Mahlstedt &amp; Son.</p>
+  </div>
+
+
+
+
+  
+  <div class="two-column">
+    <div class="two-column-col">
+
+
+<div>
+      <p>In the 1920s, the State Library (then the Public Library of
+      Victoria), the National Museum and the National Gallery of Victoria
+      occupied the same complex. The above image
+      is an annotated version of <span class="handout-ref"><span class="handout-label">Handout <span class="handout-letter">C</span></span> Floorplans</span>. If your group likes maps, provide it when investigators first step inside; map-free games can skip it.</p>
+      
+      <p>The entry steps, where investigators meet the courier, are on the left (west) side of the floorplan, facing Swanston Street.</p> 
+      
+      <p>The octagonal “Public Library” in the floorplans is the dome seen in <span class="handout-ref"><span class="handout-label">Handout <span class="handout-letter">A</span></span> Melbourne</span>. </p>
+
+</div>
+
+<div>
+  <h3 class="subsection-heading">Expanding the game</h3>
+  <p>For more floorplans covering the entire Melbourne CBD, see the full link 
+    on the Credits &amp; Sources page.</p>
+</div>
+
+    </div>
+
+    <div class="two-column-col">
+
+
+
+      <div class="getting-around">
+        <h3 class="subsection-heading">Getting around</h3>
+        <p class="gm-note">Numbers follow the typical investigation route.</p>
+        <div class="guide">
+          <p class="guide-inst">Public Library, Museums<br>&amp; National Gallery of Victoria</p>
+          <p class="guide-title">Guide for Visitors</p>
+          <p class="guide-sub">Swanston Street, Melbourne &middot; Admission Free</p>
+          <ol class="guide-list">
+            <li><span class="mk-inline">1</span><span><strong>Museum wing/foyer</strong>: To Library (east), to Verdon Gallery (south).</span></li>
+            <li><span class="mk-inline">2</span><span><strong>Public Library</strong>: the octagonal reading room.</span></li>
+            <li><span class="mk-inline">3</span><span><strong>Verdon Gallery</strong>: East-west rows of viewing cabinets through to Stawell Gallery (north) or McArthur Gallery (east).</span></li>
+            <li><span class="mk-inline">4</span><span><strong>Stawell Gallery</strong>: Statues. To Latrobe Gallery (north, then east) or McCoy Hall (east).</span></li>
+            <li><span class="mk-inline">5</span><span><strong>Latrobe Gallery</strong>: Assorted.</span></li>
+            <li><span class="mk-inline">6</span><span><strong>McArthur Gallery</strong>: Featuring new portraits.</span></li>
+            <li><span class="mk-inline">7</span><span><strong>McCoy Hall</strong>: the large central Museum. Latrobe Street entrance currently closed. Staff storage access.</span></li>
+          </ol>
+          <p class="guide-foot"><span>By Order of the Trustees</span><span>Price One Penny</span></p>
+        </div>
+      </div>
+  
+
+
+
+     
+    </div>
+
+
+
+  </div>
+
+
+
+
+  <div class="folio"><span class="folio-head">The Complex</span><span class="folio-sep">·</span>7</div>
+</div>
+
+</body>
+</html>

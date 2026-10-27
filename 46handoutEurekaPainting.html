@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyclorama</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  
+  @page { size: A4 landscape; margin: 0; }
+
+  .page.painting-page {
+    position: relative;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+  }
+
+  .painting-page .painting {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 297mm;
+    height: auto;           
+    border: none;
+    display: block;
+  }
+
+  
+  .painting-page .landscape {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  
+  .painting-page .title-bar {
+    --bar-h: 11mm;
+    position: absolute;
+    top: 16mm;
+    left: 16mm;
+    height: var(--bar-h);
+    display: flex;
+    align-items: center;
+    padding: 0 7mm;
+    background: var(--paper-light);
+    --shadow: 0 0.4mm 1.6mm rgba(0, 49, 83, 0.35);
+  }
+
+
+  .painting-page .title-bar .section-heading {
+    margin: 0;
+    font-size: var(--fs-heading);
+    line-height: 1;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  
+  .painting-page .image-caption {
+    position: absolute;
+    left: 23mm;
+    top: 31mm;
+    margin: 0;
+    max-width: 90mm;
+    font-size: var(--fs-caption);
+    font-style: italic;
+    line-height: 1.3;
+    color: var(--text-muted);
+  }
+
+  
+  .painting-page .icard {
+    position: absolute;
+    top: 8mm;
+    left: 118mm;
+    width: 90mm;
+    height: 54mm;
+    box-sizing: border-box;
+    margin: 0;
+    transform: rotate(1.2deg);
+    --shadow: 0.4mm 0.9mm 2mm rgba(51,41,28,.45);   
+  }
+  
+  .painting-page .icard {
+    background:
+      linear-gradient(90deg, transparent 0.95cm, rgba(192,80,77,.55) 0.95cm 1.05cm, transparent 1.05cm),
+      radial-gradient(circle 0.14cm at 50% calc(100% - 0.23cm), transparent 0.125cm, var(--card) 0.135cm);
+  }
+  .painting-page .icard::after { background: transparent; }
+  .painting-page .icard .ic-title { margin-bottom: 0.02cm; }
+  .painting-page .icard .ic-sub { padding-left: 0.75cm; font-style: italic; margin-bottom: 0.14cm; }
+  .painting-page .icard .body p { font-size: var(--fs-small); line-height: 1.34; margin-bottom: 0.1cm; }
+</style>
+</head>
+<body>
+
+<div class="page landscape painting-page">
+
+  <img class="painting" src="images/FL15987031.jpg" alt="https://handle.slv.vic.gov.au/10381/132726">
+
+  <div class="landscape">
+    <div class="title-bar">
+      <h2 class="section-heading handout-title"><span class="handout-label">Handout <span class="handout-letter">G</span></span> Eureka Painting</h2>
+    </div>
+    <div class="icard">
+      <div class="ic-head"><span class="ic-call">STORE B. McCOY HALL</span></div>
+      <p class="ic-title">Reed &amp; Gross, cycloramists.</p>
+      <p class="ic-sub">Eureka Cyclorama. Canvas (portion), exhibited 1891.</p>
+      <div class="body">
+        <p>Ballarat East, looking north at sunrise, Sunday 3 December 1854.</p>
+        <p>Painted over eight months from photographs, dawn sketches and the accounts of many who were there.</p>
+      </div>
+    </div>
+    <p class="image-caption">&ldquo;Eureka Stockade&rdquo; by B. Ireland.</p>
+  </div>
+
+</div>
+
+</body>
+</html>
