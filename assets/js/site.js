@@ -38,7 +38,7 @@
   function show(n) {
     cur = (n + chips.length) % chips.length;
     var c = chips[cur], id = c.dataset.card;
-    imgA.src = src(id, 'a'); b.src = src(id, 'b'); imgA.alt = 'Stereograph: ' + c.title; title.textContent = c.title;
+    imgA.src = src(id, 'a'); b.src = src(id, 'b'); imgA.alt = 'Stereograph: ' + c.title; title.innerHTML = ''; var a = document.createElement('a'); a.href = c.dataset.href; a.textContent = c.dataset.cite; title.appendChild(a);
     chips.forEach(function (x) { x.setAttribute('aria-pressed', x === c ? 'true' : 'false'); });
     var nx = chips[(cur + 1) % chips.length].dataset.card; new Image().src = src(nx, 'a'); new Image().src = src(nx, 'b');
     cardT0 = performance.now();
