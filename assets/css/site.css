@@ -246,3 +246,6 @@ footer .fine { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,.12);
 .stereo-sec .two { grid-template-columns: .9fr 1.1fr; }
 @media (max-width: 820px) { .stereo-sec .two { grid-template-columns: 1fr; } }
 .desk figcaption b { margin-bottom: 0; }
+.book-pages { display: flex; gap: 22px; align-items: flex-start; }
+.book-pages .book-page { width: 200px; max-width: calc(50% - 11px); }
+.book-page.mirror { transform: rotate(1.5deg); }
