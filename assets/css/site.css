@@ -160,6 +160,8 @@ figcaption { font-size: .85rem; color: var(--muted); margin-top: 8px; font-style
 .contents figcaption b { font-family: var(--display); font-size: .78rem; letter-spacing: .08em; display: block; color: var(--navy); }
 .checklist { columns: 2 260px; column-gap: 40px; margin: 28px 0 0; padding: 0; list-style: none; }
 .checklist li { break-inside: avoid; padding: 6px 0 6px 26px; position: relative; border-bottom: 1px solid var(--rule); }
+.screen-link { margin-top: 28px; text-align: center; font-family: var(--display); letter-spacing: .06em; font-size: 1.05rem; }
+.screen-link a { color: var(--red); text-underline-offset: 4px; }
 .checklist li::before { content: "☞"; position: absolute; left: 0; color: var(--red); }
 
 /* Big CTA */

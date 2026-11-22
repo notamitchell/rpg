@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ken Burns · To the Cyclorama!</title>
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/fonts.css">
+<!-- Livestream panel, not a printed page: render_book.py and number_pages.py
+     skip it because its name does not start with a number.
+
+     Shows one of the book's archival photographs at a time and loops a
+     hand-made run of zooms and pans over it, for as long as it is left.
+     Pictures: images/kenburns/ (web-sized copies of the SLV scans, the
+     stereographs cropped to their left-hand view; thumbnails in thumbs/).
+     The handouts are the book's handout sheets rendered as images
+     (images/kenburns/handout-*.jpg), so they can be read on the stream.
+     The stereograph button in the bottom corner (or H) opens the list of
+     photographs and handouts, grouped by the book's parts and pages. -->
+<style>
+:root {
+    /* the book's own colours (css/style.css) */
+    --paper: #efe6d2; --paper-light: #f8f3e6; --ink: #003153; --ink-soft: #2f4a63;
+    --text: #33291c; --text-muted: #6b6255; --fill-tan: #e7cea2; --fill-tan-soft: #f2e6d0;
+    --hazard: #8a3324; --band: #213f77; --card-edge: #d9cbab;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden;
+    font-family: 'Crimson Text', Georgia, serif; }
+
+/* ---------- the picture: always the whole window ---------- */
+#stage { position: fixed; inset: 0; background: #000; overflow: hidden; }
+#view { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* the warning before a wiggle starts: a card from the book, with a countdown */
+#strobe { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center;
+    background: var(--paper); color: var(--text); border: 1px solid var(--card-edge); border-top: 6px solid var(--hazard);
+    padding: 2.4vh 3.4vw 2.2vh; box-shadow: 0 10px 40px rgba(0,0,0,.6); opacity: 0; transition: opacity .6s ease;
+    pointer-events: none; min-width: min(30em, 80vw); }
+#strobe.on { opacity: 1; }
+#strobe .w { font-variant-caps: all-small-caps; letter-spacing: .16em; font-weight: 600; color: var(--hazard);
+    font-size: clamp(14px, 1.3vw, 22px); }
+#strobe .h { font-family: 'Cinzel', serif; font-weight: 600; color: var(--ink); font-size: clamp(22px, 2.6vw, 46px);
+    letter-spacing: .04em; margin-top: .1em; }
+#strobe .d { font-style: italic; color: var(--text-muted); font-size: clamp(14px, 1.3vw, 22px); margin-top: .2em; }
+#strobe .n { font-family: 'Cinzel', serif; font-weight: 600; color: var(--hazard); font-size: clamp(40px, 6vw, 110px);
+    line-height: 1; margin-top: .25em; font-variant-numeric: tabular-nums; }
+
+/* the Triscenorama: the three-way portrait as a folded card in 3D (after the
+   Triscenorama page): slices of the middle picture face us, and between them
+   fronds stand out at right angles carrying the left and right pictures */
+#tris { position: absolute; inset: 0; background: #000; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 11vh; padding-bottom: 12vh; opacity: 0; pointer-events: none; transition: opacity 2s ease; }
+#tris.on { opacity: 1; pointer-events: auto; }
+.tris-view { flex: none; }
+.tris-model { position: relative; display: flex; width: 100%; height: 100%; transform-style: preserve-3d;
+    transition: transform 3.2s cubic-bezier(.45, 0, .25, 1); }
+.tris-model.instant { transition: none; }
+.tris-model .slice { position: relative; height: 100%; transform-style: preserve-3d; }
+.tris-model .pane { position: absolute; top: 0; height: 100%; background-repeat: no-repeat; backface-visibility: hidden;
+    background-color: #000; filter: sepia(.18) brightness(.88) contrast(1.06); }
+.tris-model .pane-left { transform-origin: left; }
+.tris-model .pane-right { transform-origin: right; }
+.tris-model .pane-side { filter: sepia(.18) brightness(.8) contrast(1.06); }
+.tris-buttons { display: flex; gap: 10px; position: relative; z-index: 2; }
+.tris-controls { display: flex; flex-direction: column; align-items: center; gap: 1.6vh; }
+#tris-angle { width: min(420px, 60vw); accent-color: var(--fill-tan); position: relative; z-index: 2;
+    direction: rtl; cursor: pointer; }
+.tris-buttons button { font: 600 clamp(14px, 1.2vw, 20px) 'Crimson Text', Georgia, serif; font-variant-caps: all-small-caps;
+    letter-spacing: .08em; color: var(--ink); background: var(--paper); border: 1px solid var(--card-edge);
+    border-radius: 3px; padding: .3em 1em .4em; cursor: pointer; }
+.tris-buttons button:hover { background: var(--fill-tan); }
+.tris-buttons button.on { background: var(--ink); color: var(--paper-light); border-color: var(--ink); }
+.tris-buttons button:focus-visible { outline: 2px solid var(--fill-tan); outline-offset: 2px; }
+#vignette { position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at 50% 45%, transparent 40%, rgba(0,0,0,.35) 75%, rgba(0,0,0,.72) 100%); }
+/* a little darker and warmer than the scans, for mood */
+#view { filter: sepia(.18) brightness(.88) contrast(1.06); }
+#loading { position: absolute; inset: 0; display: grid; place-items: center; color: #a89c85;
+    font-style: italic; pointer-events: none; }
+
+/* caption: the picture's attribution, as in the book's image credits  */
+#caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 60px 4vw 3.2vh;
+    background: linear-gradient(transparent, rgba(0,0,0,.72)); pointer-events: none;
+    color: var(--paper-light); opacity: 0; transition: opacity 3s ease; }
+#caption.on { opacity: 1; }
+#caption .t { font-family: 'Cinzel', serif; font-weight: 600; font-size: clamp(18px, 2.5vw, 44px);
+    letter-spacing: .04em; text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+#caption .c { font-style: italic; color: #e6dcc4; font-size: clamp(13px, 1.35vw, 24px); max-width: 62em;
+    text-shadow: 0 1px 6px rgba(0,0,0,.7); }
+#caption .c em { font-style: normal; }
+#caption .u { font-family: 'Courier Prime', monospace; color: var(--fill-tan); font-size: clamp(12px, 1.1vw, 20px);
+    margin-top: .3em; letter-spacing: .02em; text-shadow: 0 1px 6px rgba(0,0,0,.7); }
+#caption .where { font-variant-caps: all-small-caps; letter-spacing: .08em; font-weight: 600;
+    color: var(--fill-tan); font-size: clamp(13px, 1.3vw, 23px); margin-top: .25em; }
+
+/* ---------- the stereograph button ---------- */
+#toggle { position: fixed; right: 14px; bottom: 14px; z-index: 20; width: 50px; height: 32px; padding: 0;
+    display: grid; place-items: center; cursor: pointer; border-radius: 4px;
+    background: rgba(239,230,210,.14); border: 1px solid rgba(239,230,210,.25);
+    opacity: .6; transition: opacity .3s, background .3s, border-color .3s; }
+#toggle:hover { opacity: 1; }
+body.open #toggle { opacity: 1; background: var(--paper); border-color: var(--ink); }
+#toggle svg { width: 40px; height: 24px; display: block; }
+#toggle:focus-visible { outline: 2px solid var(--fill-tan); outline-offset: 2px; }
+
+/* ---------- the list of photographs: a sheet from the book ---------- */
+#sheet { position: fixed; top: 0; right: 0; bottom: 0; width: min(460px, 94vw); z-index: 10;
+    background: var(--paper); color: var(--text); box-shadow: -8px 0 30px rgba(0,0,0,.45);
+    display: flex; flex-direction: column; transform: translateX(105%);
+    transition: transform .45s cubic-bezier(.2,.7,.2,1); }
+body.open #sheet { transform: none; }
+#sheet header { padding: 22px 22px 12px; border-bottom: 1px solid var(--card-edge); }
+#sheet h1 { margin: 0; font-family: 'Cinzel', serif; font-weight: 600; color: var(--ink);
+    font-size: 22px; letter-spacing: .04em; line-height: 1.15; }
+#sheet header p { margin: 4px 0 0; font-size: 14px; color: var(--text-muted); font-style: italic; line-height: 1.35; }
+#list { flex: 1; overflow-y: auto; padding: 4px 0 18px; scrollbar-width: thin; }
+
+/* a part: a painted ink band, like the act bands at the head of each part */
+.part { margin: 18px 16px 4px; position: relative; padding: 7px 14px 6px; color: var(--paper-light);
+    font-family: 'Cinzel', serif; font-weight: 600; display: flex; gap: 10px; align-items: baseline; }
+.part::before { content: ''; position: absolute; inset: 0; background: var(--band);
+    border-radius: 14% 9% 11% 10% / 50%; z-index: -1; }
+.part .num { font-size: 12px; letter-spacing: 3px; opacity: .85; }
+.part .name { font-size: 16px; letter-spacing: 1.5px; }
+.part.extra::before { background: var(--text-muted); }
+.part-rooms { margin: 3px 16px 0; text-align: center; font-variant: small-caps; letter-spacing: 1.5px;
+    font-size: 12px; color: var(--ink); }
+#list { isolation: isolate; }
+
+/* a page (or handout) within the part */
+.page-head { margin: 14px 22px 4px; font-variant-caps: all-small-caps; letter-spacing: .08em;
+    font-weight: 600; color: var(--ink); font-size: 15px; display: flex; gap: 8px; align-items: baseline;
+    border-bottom: 1px solid var(--card-edge); padding-bottom: 2px; }
+.page-head .pg { color: var(--hazard); }
+
+/* a photograph */
+.photo { display: block; width: 100%;
+    padding: 0; margin: 0; border: 0; background: none;
+    text-align: left; font: inherit; color: inherit; }
+.photo:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.photo .t { display: block; font-weight: 600; font-size: 16px; line-height: 1.2; color: var(--text); }
+.photo .c { font-size: 13px; line-height: 1.3; color: var(--text-muted); font-style: italic; margin-top: 1px; }
+.photo .refs { margin-top: 3px; display: flex; flex-wrap: wrap; gap: 2px 10px; }
+.handout-label { font-variant-caps: all-small-caps; letter-spacing: .08em; font-weight: 600;
+    color: var(--ink); font-size: 14px; white-space: nowrap; }
+.handout-label::before { content: '\261E\00a0'; font-variant-caps: normal; font-weight: 400; }
+.handout-label .handout-letter::after { content: ':'; }
+.handout-label.page-ref::before { content: none; }
+.photo .t .handout-label { font-size: 15px; }
+.handout-sheet { font-size: 12px; font-weight: 400; color: var(--text-muted); white-space: nowrap; }
+.handouts-gap { height: 4px; }
+.handout-ref { font-size: 14px; font-weight: 600; color: var(--text); }
+.item.current .now { display: inline; }
+.now { display: none; font-variant-caps: all-small-caps; letter-spacing: .1em; color: var(--hazard);
+    font-weight: 600; font-size: 13px; margin-left: 6px; }
+
+.item { display: grid; grid-template-columns: 84px 1fr auto; gap: 12px; align-items: center;
+    padding: 8px 14px 8px 19px; border-left: 3px solid transparent; }
+.item.current { background: var(--fill-tan-soft); border-left-color: var(--ink); }
+.item .thumb { display: block; width: 84px; }
+.item .thumb img { width: 84px; height: auto; max-height: 130px; object-fit: contain; display: block;
+    border: 1px solid var(--card-edge); background: #000; filter: sepia(.15); }
+.item .thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.item .orig { display: block; margin-top: 3px; font-size: 12px; line-height: 1.2; color: var(--ink-soft);
+    font-variant-caps: all-small-caps; letter-spacing: .06em; font-weight: 600; text-decoration: none; }
+.item .orig:hover { text-decoration: underline; color: var(--ink); }
+.item .photo { padding: 0; }
+.item .photo:hover { background: none; }
+.modes { display: flex; flex-direction: column; gap: 4px; }
+.modes button { font: 600 13px 'Crimson Text', Georgia, serif; font-variant-caps: all-small-caps; letter-spacing: .06em;
+    color: var(--ink); background: var(--paper-light); border: 1px solid var(--ink-soft); border-radius: 3px;
+    padding: 3px 8px 4px; cursor: pointer; white-space: nowrap; text-align: center; }
+.modes button:hover { background: var(--fill-tan); }
+.modes button.on { background: var(--ink); color: var(--paper-light); }
+.modes button:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+#sheet footer { padding: 10px 22px 14px 22px; border-top: 1px solid var(--card-edge); display: flex; gap: 8px;
+    align-items: center; padding-right: 76px; }
+#sheet footer button { font: 600 14px 'Crimson Text', Georgia, serif; font-variant-caps: all-small-caps;
+    letter-spacing: .08em; color: var(--ink); background: var(--paper-light); border: 1px solid var(--ink-soft);
+    border-radius: 3px; padding: 5px 12px 6px; cursor: pointer; white-space: nowrap; }
+#sheet footer button:hover { background: var(--fill-tan-soft); }
+#sheet footer button.on { background: var(--ink); color: var(--paper-light); }
+#sheet footer .keys { font-size: 12px; color: var(--text-muted); margin-left: auto; line-height: 1.25; text-align: right; }
+</style>
+</head>
+<body>
+
+<div id="stage" aria-label="Photograph">
+    <canvas id="view"></canvas>
+    <div id="tris" aria-label="Triscenorama">
+        <div class="tris-view"><div class="tris-model"></div></div>
+        <div class="tris-controls">
+        <div class="tris-buttons" role="group" aria-label="Which side to look from">
+            <button data-view="left">Left view</button><button data-view="middle">Middle view</button><button data-view="right">Right view</button>
+        </div>
+        <input type="range" id="tris-angle" min="-80" max="80" step="0.5" value="45" aria-label="Turn the portrait">
+        </div>
+    </div>
+    <div id="vignette"></div>
+    <div id="strobe" role="alert" aria-live="assertive">
+        <div class="w">Warning</div>
+        <div class="h">Mild strobe effect</div>
+        <div class="d">This picture will flicker between its two views</div>
+        <div class="n"></div>
+    </div>
+    <div id="caption"><div class="c"></div><div class="u"></div></div>
+    <div id="loading">Loading…</div>
+</div>
+
+<aside id="sheet" aria-label="Photographs">
+    <header>
+        <h1>To the Cyclorama!</h1>
+        <p><a href="../" style="color:inherit">Back to the main page</a></p>
+    </header>
+    <div id="list"></div>
+    <footer>
+        <button id="b-pause" title="Hold the picture still (Space)">Pause</button>
+        <button id="b-fs" title="Full screen (F)">Full screen</button>
+        <span class="keys">H this list · 1 the cover · S still<br>Z zoom · K Ken Burns · W wiggle</span>
+    </footer>
+</aside>
+
+<button id="toggle" title="Photographs (H)" aria-label="Show or hide the photographs" aria-expanded="false" aria-controls="sheet">
+    <!-- a stereograph card: two arched views side by side -->
+    <svg viewBox="0 0 40 24" aria-hidden="true">
+        <rect x="0.75" y="0.75" width="38.5" height="22.5" rx="2.5" fill="#efe6d2" stroke="#003153" stroke-width="1.5"/>
+        <path d="M4.5 20V9.5a6 6 0 0 1 12 0V20Z M23.5 20V9.5a6 6 0 0 1 12 0V20Z" fill="#2f2a22"/>
+        <path d="M6 19l3.4-4.6 2.2 2.8 1.6-1.6 2.3 3.4Z M25 19l3.4-4.6 2.2 2.8 1.6-1.6 2.3 3.4Z" fill="#a89c85"/>
+        <circle cx="13" cy="8.6" r="1.3" fill="#e7cea2"/><circle cx="32" cy="8.6" r="1.3" fill="#e7cea2"/>
+    </svg>
+</button>
+
+<script>
+/* ---------- the book's structure ---------- */
+const PARTS = [
+  { num: '', name: 'Cover' },
+  { num: 'Part I', name: 'Arrival', rooms: 'Getting Started · The Barry Stereograph · The Front Steps' },
+  { num: 'Part II', name: 'The Library', rooms: 'Floorplans · Public Library · Research · The Chief Shusher’s Card' },
+  { num: 'Part III', name: 'Gallery & Museum', rooms: 'Verdon · Stawell · Latrobe · McArthur · McCoy Hall (Museum)' },
+  { num: 'Part IV', name: 'The Basement', rooms: 'Storeroom · A Dead Body' },
+  { num: 'Part V', name: 'Cyclorama', rooms: 'Arrival · The Exhibit Comes Alive · The Battle · Getting Out', red: true },
+  { num: 'Part VI', name: 'Epilogue' },
+  { num: '', name: 'Handouts', rooms: 'For the players, lettered in the order they are given out' },
+  { num: '', name: 'Appendix', rooms: 'Triscenorama · Triscenorama Portrait' },
+];
+
+/* ---------- the photographs and their loops ----------
+   part: index into PARTS. page / pageTitle: where it is in the book.
+   refs: other places it appears (handouts as [letter, title]).
+   shots: the loop, played in order and round again. Each shot moves the
+   camera from a to b over d seconds; a camera is [x, y, zoom]: the point
+   of the picture at the centre of the screen (fractions across and down)
+   and the zoom (1 = the picture just fills the screen); d is stretched by
+   PACE below, so each shot here plays for twice as long. Shots dissolve
+   into each other, so the picture never stops moving.
+   safe: [left, top, right, bottom], the part of a scan the camera may show,
+   so a mount, border or torn edge never comes into view. */
+const IMAGES = [
+  { id: 'cover', part: 0, page: 1, pageTitle: 'Cover', t: 'To the Cyclorama',
+    shots: [
+      { a: [.50, .10, 1.50], b: [.50, .12, 1.20], d: 14 },   // the title
+      { a: [.25, .47, 1.70], b: [.75, .47, 1.70], d: 16 },   // across the slices of the battle
+      { a: [.50, .62, 1.30], b: [.50, .30, 1.00], d: 15 },   // up from the light, out to the cover
+    ] },
+  { id: 'barry_full', part: 1, page: 4, pageTitle: 'Getting Started',
+    t: 'Sir Redmond Barry', c: 'Lithograph portrait, between 1840 and 1860',
+    shots: [
+      { a: [.48, .84, 1.00], b: [.45, .30, 1.00], d: 18 },   // up from the signature to his face
+      { a: [.45, .30, 1.30], b: [.45, .29, 2.10], d: 13 },   // that stare
+      { a: [.20, .66, 1.70], b: [.80, .62, 1.70], d: 15 },   // along the ermine
+      { a: [.38, .90, 1.35], b: [.52, .90, 1.35], d: 13 },   // "Very truly yours, Redmond Barry"
+      { a: [.45, .40, 1.40], b: [.50, .50, 1.00], d: 13 },   // the whole sheet
+    ] },
+  { id: 'FL16281605', part: 1, page: 5, pageTitle: 'The Barry Stereograph', safe: [.01, .02, .99, .98],
+    t: 'The Barry Stereograph', c: 'Bust of Sir Redmond Barry, stereograph by B. C. Boake',
+    shots: [
+      { a: [.23, .58, 1.70], b: [.23, .42, 1.70], d: 14 },   // up the bust to his face
+      { a: [.23, .40, 1.50], b: [.68, .40, 1.50], d: 16 },   // across to the other eye’s view
+      { a: [.95, .25, 1.80], b: [.95, .78, 1.80], d: 14 },   // down the label: Melbourne Art Gallery & Museum Series, “Sir R Barry 19”
+      { a: [.94, .60, 1.60], b: [.50, .50, 1.00], d: 13 },   // the whole card
+    ] },
+  { id: 'mp003283', part: 1, page: 6, pageTitle: 'Melbourne from the Air',
+    t: 'Melbourne from the Air', c: 'The State Library and the Exhibition Building, Airspy, c. 1927', safe: [.045, .04, .955, .94],
+    shots: [
+      { a: [.50, .50, 1.15], b: [.48, .46, 1.40], d: 12 },   // the city, settling in
+      { a: [.47, .47, 1.90], b: [.47, .45, 2.80], d: 12 },   // down onto the Library's dome
+      { a: [.47, .42, 2.40], b: [.53, .17, 2.40], d: 13 },   // up Russell Street to the Exhibition Building
+      { a: [.54, .17, 2.60], b: [.50, .42, 1.18], d: 14 },   // and back out over the city
+    ] },
+  { id: 'a14166', part: 1, page: 7, pageTitle: 'The Front Steps', refs: [['A', 'Melbourne']],
+    t: 'Joan of Arc', c: 'Outside the State Library, stereograph, 1918',
+    shots: [
+      { a: [.24, .52, 2.40], b: [.28, .52, 1.60], d: 11 },   // the lion's face
+      { a: [.47, .47, 2.10], b: [.40, .32, 2.10], d: 12 },   // up Joan and her horse to the banner
+      { a: [.48, .40, 1.70], b: [.82, .66, 2.30], d: 13 },   // across to the woman on the lawn
+      { a: [.82, .68, 2.40], b: [.50, .50, 1.05], d: 13 },   // the whole forecourt
+    ] },
+  { id: 'a14167', part: 1, page: 7, pageTitle: 'The Front Steps', refs: [['A', 'Melbourne']],
+    t: 'St George and the Dragon', c: 'Outside the State Library, stereograph, 1918',
+    shots: [
+      { a: [.43, .60, 2.20], b: [.40, .26, 2.20], d: 13 },   // up from the dragon to the rearing horse
+      { a: [.45, .34, 1.80], b: [.47, .33, 2.60], d: 10 },   // in on St George
+      { a: [.62, .25, 1.70], b: [.84, .06, 2.00], d: 12 },   // along the columns to MELBOURNE
+      { a: [.16, .86, 2.60], b: [.50, .50, 1.05], d: 14 },   // from the woman in the hat, out to the portico
+    ] },
+  { id: 'joanNew_tall', part: 1, page: 7, pageTitle: 'The Front Steps',
+    t: 'Joan of Arc', c: 'The statue outside the State Library today',
+    shots: [
+      { a: [.22, .80, 1.10], b: [.18, .45, 1.10], d: 15 },   // up the horse’s neck to its armoured head
+      { a: [.88, .78, 1.10], b: [.87, .52, 1.35], d: 14 },   // up Joan to her face
+      { a: [.70, .55, 1.20], b: [.80, .32, 1.20], d: 14 },   // up the lance towards the banner
+      { a: [.22, .42, 1.30], b: [.50, .55, 1.00], d: 14 },   // from the horse’s head, out
+    ] },
+  { id: 'FL15580455', part: 2, page: 9, pageTitle: 'Public Library',
+    t: 'The Domed Reading Room', c: 'Elevated view, State Library of Victoria, about 1922',
+    shots: [
+      { a: [.50, .30, 1.30], b: [.50, .70, 1.30], d: 16 },   // down the galleries to the desks
+      { a: [.50, .75, 1.60], b: [.48, .80, 2.40], d: 13 },   // into the central desk
+      { a: [.15, .80, 2.00], b: [.85, .78, 2.00], d: 16 },   // across the readers
+      { a: [.48, .42, 2.20], b: [.48, .36, 2.80], d: 12 },   // the clock above the doorway
+      { a: [.85, .25, 1.80], b: [.50, .50, 1.00], d: 14 },   // from the book galleries, out
+    ] },
+  { id: 'FL15681165', part: 2, page: 10, pageTitle: 'Research in the Library', refs: [['A', 'Melbourne']], safe: [.02, .04, .985, .975],
+    t: 'Russell Street, Melbourne', c: 'Stereograph, about 1900 to 1920',
+    shots: [
+      { a: [.20, .68, 1.60], b: [.30, .45, 1.60], d: 15 },   // from the man in the street, up towards the spires
+      { a: [.36, .45, 1.80], b: [.37, .41, 2.30], d: 13 },   // the half-hidden sign: SIEGE OF PARIS
+      { a: [.38, .55, 1.80], b: [.18, .55, 1.80], d: 14 },   // the tram and the cabs
+      { a: [.68, .93, 1.80], b: [.80, .93, 1.80], d: 12 },   // 647. Russell Street, Melbourne, Vic.
+      { a: [.75, .80, 1.40], b: [.50, .50, 1.00], d: 13 },   // the whole card
+    ] },
+  { id: 'FL15960677', part: 2, page: 11, pageTitle: 'Research in the Library (continued)', safe: [.005, .02, .995, .98],
+    t: 'Eureka Stockade Memorial, Ballarat', c: 'Stereograph, Rose’s Australasian Views, George Rose',
+    shots: [
+      { a: [.19, .76, 1.80], b: [.19, .64, 2.20], d: 14 },   // the man with the bicycle
+      { a: [.30, .45, 1.80], b: [.30, .20, 1.80], d: 15 },   // up the memorial to the obelisk’s tip
+      { a: [.14, .46, 2.00], b: [.44, .46, 2.00], d: 15 },   // along the cannons and the people on the steps
+      { a: [.04, .50, 1.50], b: [.50, .50, 1.00], d: 14 },   // from Rose’s Australasian Views, out
+    ] },
+  { id: 'chiefShusher_pair', part: 2, page: 12, pageTitle: 'The Chief Shusher’s Card',
+    t: 'The Chief Shusher’s Podium', c: 'Stereograph 1: her podium in the reading room',
+    shots: [
+      { a: [.14, .42, 2.20], b: [.33, .40, 2.20], d: 14 },   // along the green lamps
+      { a: [.22, .30, 2.00], b: [.22, .10, 2.00], d: 13 },   // up the carved bracket to the balconies
+      { a: [.75, .46, 1.60], b: [.75, .43, 2.20], d: 12 },   // the right print’s lamps
+      { a: [.70, .65, 1.50], b: [.50, .50, 1.00], d: 13 },   // the pair
+    ] },
+  { id: 'dome_pair', part: 2, page: 12, pageTitle: 'The Chief Shusher’s Card',
+    t: 'Up into the Dome', c: 'Stereograph 2: past the balconies, along the skylights',
+    shots: [
+      { a: [.25, .80, 1.80], b: [.25, .25, 1.80], d: 15 },   // up the balconies to the skylights
+      { a: [.40, .14, 2.00], b: [.42, .12, 2.60], d: 12 },   // the skylights
+      { a: [.64, .55, 1.80], b: [.92, .60, 1.80], d: 14 },   // across the arched windows
+      { a: [.90, .60, 1.60], b: [.50, .50, 1.00], d: 13 },   // the pair
+    ] },
+  { id: 'spiralStair_pair', part: 2, page: 12, pageTitle: 'The Chief Shusher’s Card',
+    t: 'The Spiral Stair', c: 'Stereograph 3: the right print is upside down',
+    shots: [
+      { a: [.25, .85, 1.80], b: [.25, .30, 1.80], d: 15 },   // up the stair
+      { a: [.17, .45, 2.20], b: [.20, .40, 2.70], d: 12 },   // the iron lattice
+      { a: [.70, .25, 1.80], b: [.72, .80, 1.80], d: 14 },   // down the right print, upside down
+      { a: [.72, .75, 1.60], b: [.50, .50, 1.00], d: 13 },   // the pair
+    ] },
+  { id: 'b53628', part: 3, page: 13, pageTitle: 'Verdon Gallery',
+    t: 'Ware, Verdon Gallery', c: 'Stereograph by B. C. Boake',
+    shots: [
+      { a: [.25, .45, 2.00], b: [.25, .25, 2.00], d: 11 },   // up the figure with the urn
+      { a: [.40, .35, 2.00], b: [.73, .40, 2.00], d: 12 },   // along the tall vases
+      { a: [.30, .72, 2.20], b: [.65, .92, 2.20], d: 12 },   // the shelves below
+      { a: [.65, .90, 2.00], b: [.50, .45, 1.05], d: 13 },   // the whole case
+    ] },
+  { id: 'FL15934617', part: 3, page: 14, pageTitle: 'Stawell Gallery: Circe',
+    t: 'The Stawell Gallery', c: 'National Gallery, Melbourne, with Circe at the right',
+    shots: [
+      { a: [.10, .48, 1.80], b: [.36, .48, 1.80], d: 15 },   // along the statues and the far wall
+      { a: [.85, .42, 1.60], b: [.86, .34, 2.40], d: 13 },   // Circe, arms outstretched
+      { a: [.52, .18, 1.80], b: [.28, .15, 1.80], d: 13 },   // the skylights and lamps
+      { a: [.48, .55, 2.20], b: [.50, .50, 1.00], d: 14 },   // from the bust, out
+    ] },
+  { id: 'b53624', part: 3, page: 15, pageTitle: 'Stawell Gallery: Eve & Perseus',
+    t: 'Eve', c: 'Stereograph by B. C. Boake',
+    shots: [
+      { a: [.55, .30, 1.30], b: [.55, .14, 2.20], d: 12 },   // in on her face
+      { a: [.56, .20, 1.80], b: [.66, .55, 2.00], d: 13 },   // down to the serpent on the stump
+      { a: [.36, .48, 2.30], b: [.13, .38, 2.30], d: 12 },   // left past the dark bust to the framed print
+      { a: [.14, .40, 2.10], b: [.50, .45, 1.05], d: 13 },   // the gallery
+    ] },
+  { id: 'b53623', part: 3, page: 15, pageTitle: 'Stawell Gallery: Eve & Perseus',
+    t: 'Perseus', c: 'Stereograph by B. C. Boake',
+    shots: [
+      { a: [.56, .74, 1.60], b: [.55, .38, 1.60], d: 13 },   // up the statue from the plinth
+      { a: [.54, .36, 1.90], b: [.54, .35, 2.60], d: 10 },   // the winged cap
+      { a: [.18, .65, 2.40], b: [.38, .66, 2.40], d: 11 },   // the little pictures to the dark bust
+      { a: [.78, .66, 2.40], b: [.50, .50, 1.05], d: 13 },   // from the goat statue out to the room
+    ] },
+  { id: 'b53631', part: 3, page: 16, pageTitle: 'Latrobe Gallery', refs: ['Appendix: Stereograph Cards'],
+    t: 'Melba', c: 'Her bust in the gallery, stereograph by B. C. Boake',
+    shots: [
+      { a: [.56, .32, 1.30], b: [.56, .20, 2.20], d: 12 },   // in on her face
+      { a: [.56, .22, 2.00], b: [.56, .66, 2.00], d: 13 },   // down the pedestal to MELBA
+      { a: [.62, .30, 2.00], b: [.88, .20, 2.30], d: 12 },   // across to THE STAWELL GALLERY
+      { a: [.86, .40, 2.30], b: [.50, .45, 1.05], d: 13 },   // from the statue in the doorway, out
+    ] },
+  { id: 'is010691', part: 3, page: 16, pageTitle: 'Latrobe Gallery',
+    t: 'Dame Nellie Melba', c: 'Photograph by Spencer Shier, 1924', safe: [.035, .025, .965, 1],
+    shots: [
+      { a: [.55, .72, 1.10], b: [.55, .28, 1.10], d: 14 },   // up the paisley coat to her face
+      { a: [.55, .27, 1.30], b: [.54, .26, 2.00], d: 11 },   // closer
+      { a: [.56, .18, 1.90], b: [.78, .22, 1.90], d: 11 },   // across the hat to its feathers
+      { a: [.55, .95, 1.40], b: [.50, .50, 1.10], d: 13 },   // up from her name on the mount
+    ] },
+  { id: 'mp000629', part: 3, page: 17, pageTitle: 'Latrobe Gallery (continued)',
+    t: 'Sir Redmond Barry', c: 'Marble bust by Charles Summers',
+    shots: [
+      { a: [.45, .72, 1.00], b: [.42, .22, 1.00], d: 14 },   // up the drapery to his face
+      { a: [.40, .21, 1.15], b: [.40, .19, 1.75], d: 11 },   // closer
+      { a: [.22, .62, 1.50], b: [.72, .48, 1.50], d: 13 },   // along the fold of the toga
+      { a: [.55, .60, 1.30], b: [.43, .25, 1.05], d: 12 },   // back to him
+    ] },
+  { id: 'b53632', part: 3, page: 17, pageTitle: 'Latrobe Gallery (continued)',
+    t: 'Young Bull and Herdsman', c: 'Stereograph by B. C. Boake',
+    shots: [
+      { a: [.18, .43, 2.40], b: [.32, .40, 1.70], d: 12 },   // from the bull's head
+      { a: [.38, .30, 1.80], b: [.38, .25, 2.50], d: 10 },   // in on the herdsman
+      { a: [.60, .45, 2.20], b: [.86, .47, 2.20], d: 13 },   // along the paintings on the wall
+      { a: [.86, .60, 2.00], b: [.50, .45, 1.05], d: 13 },   // from the chairs, out to the gallery
+    ] },
+  { id: 'a14131', part: 3, page: 18, pageTitle: 'McArthur Gallery',
+    t: 'The McArthur Gallery', c: 'National Gallery of Victoria, c. 1900',
+    shots: [
+      { a: [.12, .38, 2.00], b: [.38, .34, 2.00], d: 14 },   // across the great painting
+      { a: [.27, .33, 1.90], b: [.27, .29, 2.70], d: 10 },   // Moses with the tablets
+      { a: [.55, .48, 2.30], b: [.92, .47, 2.30], d: 14 },   // along the hang to the far portraits
+      { a: [.78, .84, 1.90], b: [.50, .50, 1.05], d: 13 },   // from the rows of chairs, out
+    ] },
+  { id: 'mp007077', part: 3, page: 18, pageTitle: 'McArthur Gallery',
+    t: 'Before the Fight', c: 'Administering the Oath, Eureka Stockade, 1854, engraved by F. A. Sleap',
+    shots: [
+      { a: [.30, .58, 1.80], b: [.72, .58, 1.80], d: 16 },   // across the kneeling diggers
+      { a: [.30, .44, 2.00], b: [.30, .42, 2.60], d: 12 },   // Lalor, hand raised
+      { a: [.48, .36, 1.60], b: [.47, .58, 1.60], d: 15 },   // down the flagpole to the men at its foot
+      { a: [.55, .74, 1.50], b: [.50, .50, 1.00], d: 13 },   // from the caption, out
+    ] },
+  { id: 'mp010533', part: 3, page: 18, pageTitle: 'McArthur Gallery',
+    t: 'After Eureka', c: 'Peter Lalor, by Ludwig Becker',
+    shots: [
+      { a: [.45, .40, 1.40], b: [.45, .30, 2.30], d: 15 },   // in on his face
+      { a: [.30, .82, 1.80], b: [.32, .70, 1.80], d: 13 },   // the hand gripping the cloak
+      { a: [.75, .60, 1.40], b: [.45, .35, 1.40], d: 14 },   // across the empty left sleeve, back to his face
+      { a: [.45, .40, 1.30], b: [.50, .50, 1.00], d: 13 },   // the portrait
+    ] },
+  { id: 'mp024193', part: 3, page: 18, pageTitle: 'McArthur Gallery', safe: [.02, .01, .98, .99],
+    t: 'Much Later', c: 'The Hon. Peter Lalor as Speaker',
+    shots: [
+      { a: [.50, .70, 1.00], b: [.50, .40, 1.00], d: 16 },   // up the Speaker’s robes
+      { a: [.52, .30, 1.40], b: [.52, .22, 2.20], d: 13 },   // the grey-bearded face under the wig
+      { a: [.55, .42, 2.00], b: [.55, .55, 2.00], d: 13 },   // the lace and his hand
+      { a: [.55, .50, 1.40], b: [.50, .50, 1.00], d: 13 },   // the portrait
+    ] },
+  { id: 'b53625', part: 3, page: 19, pageTitle: 'McArthur Gallery (continued)',
+    t: 'Maternal Affection', c: 'Stereograph by B. C. Boake', safe: [0, .01, 1, .99],
+    shots: [
+      { a: [.30, .62, 2.00], b: [.30, .38, 2.00], d: 15 },   // up the statue
+      { a: [.035, .85, 1.80], b: [.035, .25, 1.80], d: 14 },   // up the card’s label
+      { a: [.73, .40, 1.80], b: [.73, .55, 2.20], d: 13 },   // the right view
+      { a: [.73, .55, 1.60], b: [.50, .50, 1.00], d: 13 },   // the card
+    ] },
+  { id: 'barry_painting_pair', part: 3, page: 19, pageTitle: 'McArthur Gallery (continued)',
+    t: 'Sir Redmond Barry, in Oils', c: 'The changed stereograph: his portrait in this very room',
+    shots: [
+      { a: [.25, .60, 1.60], b: [.25, .40, 2.40], d: 15 },   // in on his face
+      { a: [.13, .93, 2.40], b: [.33, .92, 2.40], d: 12 },   // the brass plaque
+      { a: [.62, .25, 1.80], b: [.90, .30, 1.80], d: 13 },   // along the gilt frame
+      { a: [.85, .55, 1.50], b: [.50, .50, 1.00], d: 13 },   // the pair
+    ] },
+  { id: 'latrobe_pair', part: 3, page: 19, pageTitle: 'McArthur Gallery (continued)',
+    t: 'Charles Joseph La Trobe, in Oils', c: 'The changed Maternal Affection card: a painting in this room',
+    shots: [
+      { a: [.30, .50, 1.50], b: [.32, .40, 2.20], d: 15 },   // his face under the glare
+      { a: [.10, .30, 1.80], b: [.42, .18, 1.80], d: 13 },   // along the gilt frame
+      { a: [.80, .50, 1.50], b: [.80, .65, 2.00], d: 13 },   // the right view, down the uniform
+      { a: [.80, .60, 1.40], b: [.50, .50, 1.00], d: 13 },   // the pair
+    ] },
+  { id: 'a14171', part: 3, page: 20, pageTitle: 'McCoy Hall, Museum',
+    t: 'McCoy Hall', c: 'Animals and fossils in the National Museum',
+    shots: [
+      { a: [.40, .75, 2.40], b: [.42, .70, 1.70], d: 11 },   // the lion on its rock
+      { a: [.20, .30, 2.00], b: [.36, .32, 2.00], d: 12 },   // the fossils along the gallery rail
+      { a: [.24, .62, 2.00], b: [.22, .40, 2.00], d: 12 },   // up the mountain of deer
+      { a: [.62, .45, 2.30], b: [.68, .74, 2.30], d: 12 },   // from the giraffe down to the skeletons
+      { a: [.68, .74, 2.00], b: [.50, .50, 1.05], d: 13 },   // the whole hall
+    ] },
+  { id: 'b53635', part: 3, page: 20, pageTitle: 'McCoy Hall, Museum',
+    t: 'Skeletons of Mammals', c: 'Stereograph by B. C. Boake',
+    shots: [
+      { a: [.50, .72, 1.60], b: [.50, .30, 1.60], d: 14 },   // up the pyramid of bones
+      { a: [.32, .60, 2.40], b: [.55, .55, 2.00], d: 12 },   // from the skull, across the ribs
+      { a: [.65, .50, 2.00], b: [.92, .53, 2.20], d: 11 },   // right to the Ungulata sign
+      { a: [.90, .53, 2.20], b: [.50, .50, 1.05], d: 13 },   // the display
+    ] },
+  { id: 'b53636', part: 3, page: 20, pageTitle: 'McCoy Hall, Museum', refs: ['Appendix: Stereograph Cards'],
+    t: 'Carnivora', c: 'Stereograph by B. C. Boake',
+    shots: [
+      { a: [.45, .15, 2.40], b: [.45, .22, 1.70], d: 11 },   // the lion at the top
+      { a: [.50, .30, 2.00], b: [.50, .58, 2.00], d: 13 },   // down through the leopards to the tiger
+      { a: [.26, .50, 2.30], b: [.50, .57, 2.30], d: 11 },   // from one tiger to the other
+      { a: [.86, .70, 1.90], b: [.50, .50, 1.05], d: 13 },   // from the skeleton, out
+    ] },
+  { id: 'b53634', part: 3, page: 21, pageTitle: 'Mr Roe, CSIR', refs: ['Appendix: Stereograph Cards'],
+    t: 'Hoofed Mammals', c: 'Stereograph by B. C. Boake',
+    shots: [
+      { a: [.62, .18, 2.40], b: [.58, .25, 1.60], d: 12 },   // the elephant's head
+      { a: [.42, .62, 2.20], b: [.20, .55, 2.20], d: 12 },   // the rhinoceros, then the horse
+      { a: [.68, .50, 1.80], b: [.82, .62, 2.30], d: 11 },   // the zebra
+      { a: [.27, .95, 2.30], b: [.50, .50, 1.05], d: 14 },   // VISITORS ... NOT TO TOUCH, then all of it
+    ] },
+  { id: 'staffDoor', part: 3, page: 21, pageTitle: 'Mr Roe, CSIR',
+    t: 'The Staff Door', c: 'At the back of the hall, a locked door',
+    shots: [
+      { a: [.50, .10, 1.00], b: [.50, .45, 1.00], d: 15 },   // down the panels to STAFF ONLY
+      { a: [.50, .45, 1.10], b: [.50, .45, 1.60], d: 13 },   // into the brass letters
+      { a: [.90, .60, 1.60], b: [.90, .85, 1.60], d: 12 },   // the knob and the keyhole
+      { a: [.75, .70, 1.30], b: [.50, .45, 1.00], d: 13 },   // the door
+    ] },
+  { id: 'ceiling_upside', part: 3, page: 21, pageTitle: 'Mr Roe, CSIR',
+    t: 'The Ceiling, Upside Down', c: 'The skylight from Roe’s Hoofed Mammals card',
+    shots: [
+      { a: [.30, .50, 1.20], b: [.70, .50, 1.20], d: 15 },   // across the iron arches
+      { a: [.50, .85, 1.25], b: [.50, .20, 1.25], d: 15 },   // along the skylight
+      { a: [.50, .50, 1.40], b: [.50, .50, 1.00], d: 13 },   // the whole ceiling
+    ] },
+  { id: 'eureka-basement', file: 'wp003727', part: 4, page: 22, pageTitle: 'The Basement', refs: [['G', 'Eureka Painting'], 'p. 27 The Battle'],
+    t: 'Eureka Stockade', c: 'Painting by B. Ireland: the canvas on the storeroom table', safe: [.02, .05, .98, .955],
+    shots: [
+      { a: [.15, .50, 1.40], b: [.85, .50, 1.40], d: 18 },   // the length of the battle
+      { a: [.62, .58, 1.60], b: [.62, .56, 2.60], d: 12 },   // the burning tent
+      { a: [.38, .62, 2.40], b: [.78, .82, 2.40], d: 14 },   // through the fighting to the running soldier
+      { a: [.20, .82, 2.30], b: [.50, .55, 1.15], d: 14 },   // from the fallen, out to the field
+    ] },
+  { id: 'scientific_american', part: 5, page: 24, pageTitle: 'Inside the Cyclorama',
+    t: 'Scientific American', c: 'Front page, 6 November 1886: a cyclorama building, its canvas and painters',
+    shots: [
+      { a: [.20, .06, 1.60], b: [.80, .06, 1.60], d: 15 },   // along the masthead
+      { a: [.50, .30, 1.30], b: [.50, .33, 2.00], d: 14 },   // into the cross-section and the viewing platform
+      { a: [.70, .55, 1.80], b: [.80, .66, 1.80], d: 13 },   // the painters at work
+      { a: [.25, .90, 1.60], b: [.25, .72, 1.60], d: 14 },   // up the painters’ tower
+      { a: [.50, .60, 1.20], b: [.50, .45, 1.00], d: 13 },   // the page
+    ] },
+  { id: 'wp003727', part: 5, page: 27, pageTitle: 'The Battle', refs: [['G', 'Eureka Painting'], 'Cover'],
+    t: 'Eureka Stockade', c: 'Painting by B. Ireland', safe: [.02, .05, .98, .955],
+    shots: [
+      { a: [.15, .50, 1.40], b: [.85, .50, 1.40], d: 18 },   // the length of the battle
+      { a: [.62, .58, 1.60], b: [.62, .56, 2.60], d: 12 },   // the burning tent
+      { a: [.38, .62, 2.40], b: [.78, .82, 2.40], d: 14 },   // through the fighting to the running soldier
+      { a: [.20, .82, 2.30], b: [.50, .55, 1.15], d: 14 },   // from the fallen, out to the field
+    ] },
+  /* the handouts: each sheet rendered from the book at 3x (images/kenburns/handout-*.jpg),
+     so the camera can read them; handout: the sheet's letter */
+  { id: 'handout-a', part: 7, handout: 'A', t: 'Melbourne', c: 'The Library from Swanston Street, Mr Roe’s parcel and the tram',
+    shots: [
+      { a: [.12, .12, 2.40], b: [.36, .16, 2.00], d: 16 },   // the title card, then over the dome
+      { a: [.15, .47, 2.40], b: [.22, .66, 2.40], d: 14 },   // down Mr Roe’s parcel of stereographs
+      { a: [.86, .42, 2.00], b: [.86, .43, 2.80], d: 12 },   // into the tram photo
+      { a: [.42, .86, 2.40], b: [.75, .80, 2.40], d: 14 },   // the forecourt, across to the stereoscope
+      { a: [.75, .80, 2.00], b: [.50, .50, 1.00], d: 14 },   // the whole sheet
+    ] },
+  { id: 'handout-b', part: 7, handout: 'B', t: 'The Busker’s Ballad', c: 'The ballad, with someone’s notes in the margin', safe: [0, 0, 1, .95],
+    shots: [
+      { a: [.40, .07, 1.20], b: [.40, .17, 1.40], d: 14 },   // the title and the first verse
+      { a: [.40, .25, 1.60], b: [.40, .55, 1.60], d: 22 },   // reading down the verses
+      { a: [.42, .68, 1.30], b: [.42, .69, 1.90], d: 12 },   // A COUNCIL FOR SCIENTIFIC AND INDUSTRIAL RESEARCH!
+      { a: [.30, .87, 2.00], b: [.55, .88, 2.00], d: 12 },   // SERVES. IT. RIGHT!!!
+      { a: [.78, .15, 2.40], b: [.78, .66, 2.40], d: 16 },   // down the margin notes
+    ] },
+  { id: 'handout-c', part: 7, handout: 'C', t: 'Floorplans', c: 'The Library block, from the City of Melbourne plans', safe: [.06, .13, .94, .89],
+    shots: [
+      { a: [.25, .20, 2.20], b: [.75, .20, 2.20], d: 15 },   // along Latrobe Street
+      { a: [.48, .55, 1.60], b: [.48, .55, 2.40], d: 12 },   // into the domed Public Library
+      { a: [.78, .33, 2.20], b: [.78, .70, 2.20], d: 14 },   // down the galleries: McAllan, Museum, McArthur
+      { a: [.30, .77, 2.40], b: [.60, .77, 2.40], d: 13 },   // along the Verdon Gallery
+      { a: [.50, .50, 1.40], b: [.50, .50, 1.00], d: 13 },   // the whole block
+    ] },
+  { id: 'handout-d', part: 7, handout: 'D', t: 'The Cyclorama of the Siege of Paris', c: 'The 1891 booklet and its fold-out plan',
+    shots: [
+      { a: [.42, .07, 1.30], b: [.23, .25, 2.00], d: 14 },   // the title, then the booklet’s cover
+      { a: [.60, .22, 1.60], b: [.60, .36, 1.60], d: 15 },   // reading About this booklet
+      { a: [.50, .68, 1.20], b: [.50, .68, 2.40], d: 14 },   // into the plan’s KEY
+      { a: [.18, .70, 1.80], b: [.82, .70, 1.80], d: 16 },   // from the Microbe Killer across to Lincoln, Stuart & Co.
+      { a: [.50, .80, 1.40], b: [.50, .40, 1.00], d: 14 },   // the sheet
+    ] },
+  { id: 'handout-e1', part: 7, handout: 'E', sheet: 'sheet 1 of 2', t: 'Eureka Cyclorama', c: 'A Short History of the Eureka Stockade: covers and first pages',
+    shots: [
+      { a: [.40, .07, 1.30], b: [.28, .24, 1.90], d: 14 },   // the title, then the front cover
+      { a: [.28, .30, 1.90], b: [.71, .30, 1.90], d: 15 },   // across to the back cover’s advertisement
+      { a: [.30, .60, 1.60], b: [.30, .56, 2.40], d: 12 },   // the Southern Cross
+      { a: [.70, .60, 2.00], b: [.70, .74, 2.00], d: 14 },   // reading Antecedent to the Fight
+      { a: [.50, .70, 1.30], b: [.50, .35, 1.00], d: 14 },   // the sheet
+    ] },
+  { id: 'handout-e2', part: 7, handout: 'E', sheet: 'sheet 2 of 2', t: 'Eureka Cyclorama', c: 'A Short History of the Eureka Stockade: the inside pages',
+    shots: [
+      { a: [.29, .20, 2.00], b: [.29, .33, 2.00], d: 14 },   // Bakery Hill: “Brother diggers …”
+      { a: [.70, .20, 2.00], b: [.70, .35, 2.00], d: 14 },   // The Eureka Stockade
+      { a: [.29, .60, 2.00], b: [.29, .78, 2.00], d: 15 },   // The Picture, and its blot
+      { a: [.70, .68, 1.80], b: [.70, .68, 2.40], d: 12 },   // Context for this booklet
+      { a: [.50, .50, 1.20], b: [.50, .30, 1.00], d: 13 },   // the sheet
+    ] },
+  { id: 'handout-f', part: 7, handout: 'F', t: 'C.S.I.R. Form 7a', c: 'Occult Phenomena: Preliminary Commercial Assessment',
+    shots: [
+      { a: [.50, .15, 1.40], b: [.50, .17, 2.00], d: 13 },   // the letterhead
+      { a: [.25, .53, 2.40], b: [.68, .53, 2.40], d: 14 },   // Pest, Werewolf, Dropbear … Golem
+      { a: [.35, .63, 1.80], b: [.35, .75, 1.80], d: 13 },   // the National Interest and the Acts
+      { a: [.55, .89, 1.80], b: [.45, .91, 2.20], d: 12 },   // For Office Use Only: HR training
+      { a: [.50, .80, 1.20], b: [.50, .35, 1.00], d: 13 },   // the form
+    ] },
+  { id: 'handout-g', part: 7, handout: 'G', t: 'Eureka Painting', c: 'B. Ireland’s painting, with its catalogue card', refs: ['p. 27 The Battle'], safe: [0, 0, 1, .975],
+    shots: [
+      { a: [.20, .10, 2.20], b: [.55, .14, 2.20], d: 15 },   // the title, across to the card
+      { a: [.60, .15, 2.00], b: [.60, .14, 2.60], d: 12 },   // REED & GROSS, CYCLORAMISTS.
+      { a: [.20, .65, 1.80], b: [.80, .65, 1.80], d: 18 },   // the length of the battle
+      { a: [.62, .64, 1.80], b: [.62, .64, 2.80], d: 12 },   // the burning tent
+      { a: [.75, .85, 2.00], b: [.50, .50, 1.00], d: 14 },   // the sheet
+    ] },
+  { id: 'handout-h', part: 7, handout: 'H', t: 'Emergency Exit Plan', c: 'Notice to visitors during exhibition construction',
+    shots: [
+      { a: [.20, .20, 2.20], b: [.75, .20, 2.20], d: 14 },   // along EMERGENCY EXIT
+      { a: [.15, .42, 2.20], b: [.40, .50, 2.20], d: 14 },   // the cross-section, to the viewing platform
+      { a: [.71, .52, 1.60], b: [.71, .52, 2.40], d: 13 },   // into the floorplan
+      { a: [.58, .32, 2.60], b: [.60, .42, 2.20], d: 12 },   // WARNING! the staging carriage
+      { a: [.30, .72, 2.40], b: [.30, .82, 2.40], d: 13 },   // Visitors are requested …
+      { a: [.30, .75, 1.60], b: [.50, .50, 1.00], d: 13 },   // the notice
+    ] },
+  { id: 'handout-i', part: 7, handout: 'I', t: 'The Busker’s Ballad (Reprise)', c: 'The ballad again, and more notes in the margin', safe: [0, 0, 1, .95],
+    shots: [
+      { a: [.40, .07, 1.20], b: [.40, .18, 1.40], d: 14 },   // the title and the first verse
+      { a: [.40, .25, 1.60], b: [.40, .52, 1.60], d: 22 },   // reading down the verses
+      { a: [.60, .53, 2.00], b: [.75, .54, 2.40], d: 12 },   // Cy Roe = Sigh-row?
+      { a: [.25, .77, 1.80], b: [.25, .85, 2.20], d: 13 },   // C! S! I! R! O!
+      { a: [.50, .75, 1.30], b: [.50, .35, 1.00], d: 14 },   // the sheet
+    ] },
+  { id: 'triscenorama', part: 8, page: 48, pageTitle: 'Triscenorama Portrait', refs: ['p. 47 Triscenorama', 'p. 18 McArthur Gallery'],
+    t: 'Peter Lalor, Three Ways', c: 'The folded portrait: the oath on the left, Lalor in front, the Speaker on the right',
+    tris: ['tris-left', 'tris-middle', 'tris-right'], shots: [] },
+];
+
+/* the caption: each picture's attribution as it appears in the book's image credits (p. 60) */
+const CREDITS = {
+  'cover': '“Eureka Stockade” by Ireland, B., artist. Public domain.',
+  'triscenorama': 'Composite of three works. Left: “Administering the Oath, Eureka Stockade, 1854” by Sleap, F. A., engraver. Front: “Peter Lalor” by Becker, Ludwig, 1808–1861, artist. Right: “The Hon. Peter Lalor as Speaker” by Thunder, Annie C. H., active 1880–1893, artist. All public domain.',
+  'barry_full': 'Redmond Barry [between 1840 and 1860]. Public domain.',
+  'FL16281605': '[Bust of] Sir Redmond Barry, Stereograph, Boake, B. C. (Barcroft Capel), 1838–1921, photographer. Public domain.',
+  'mp003283': '“View showing the State Library (with domed glass roof) and the Exhibition Building” by Airspy, c. 1927. Public domain.',
+  'a14166': '“Statue of Joan of Arc, outside the State Library of Victoria” [1918], stereograph. Public domain.',
+  'a14167': '“Statue of St. George and the Dragon, outside the State Library of Victoria” [1918], stereograph. Public domain.',
+  'joanNew_tall': 'Photography by Eric Jong.',
+  'FL15580455': '“Elevated view of Domed Reading Room at the State Library of Victoria [ca. 1922]”. Public domain.',
+  'FL15681165': '“Russell Street, Melbourne, Victoria” [ca. 1900–ca. 1920], stereograph. Public domain.',
+  'FL15960677': '“Eureka Stockade memorial, Ballarat”, stereograph, Rose’s Australasian Views, photographed and published by George Rose. Public domain.',
+  'chiefShusher_pair': 'Photography by Eric Jong.',
+  'dome_pair': 'Photography by Eric Jong.',
+  'spiralStair_pair': 'Photography by Eric Jong.',
+  'b53628': '“Ware, Verdon Gallery” by Boake, B. C., photographer [ca. 1855–ca. 1910]. Public domain.',
+  'FL15934617': 'Circe (right), “The Stawell Gallery, National Gallery, Melbourne.” Public domain.',
+  'b53624': '“Eve” by Boake, B. C., photographer. Public domain.',
+  'b53623': '“Perseus” by Boake, B. C., photographer. Public domain.',
+  'b53631': '[Melba bust, Stawell Gallery], stereograph by Boake, B. C. (Barcroft Capel), 1838–1921, photographer [ca. 1855–ca. 1910]. Public domain.',
+  'is010691': 'Dame Nellie Melba, by Shier, Spencer, 1884–1950, photographer, 1924.',
+  'mp000629': 'Sir Redmond Barry [art original] by Charles Summers.',
+  'b53632': '“Young bull and herdsman” by Boake, B. C., photographer [ca. 1855–ca. 1910]. Public domain.',
+  'a14131': '“McArthur Gallery, National Gallery of Victoria, Melbourne” [ca. 1900]. Public domain.',
+  'mp007077': '“Administering the Oath, Eureka Stockade, 1854” by Sleap, F. A., engraver. Public domain.',
+  'mp010533': '“Peter Lalor” by Becker, Ludwig, 1808–1861, artist. Public domain.',
+  'mp024193': '“The Hon. Peter Lalor as Speaker” by Thunder, Annie C. H., active 1880–1893, artist. Public domain.',
+  'b53625': '“Maternal Affection” by Boake, B. C., photographer. Public domain.',
+  'barry_painting_pair': 'Photography by Eric Jong.',
+  'latrobe_pair': 'Photography by Eric Jong.',
+  'a14171': 'Display of animals and fossils in McCoy Hall, National Museum, Melbourne.',
+  'b53635': '“Skeletons [of] mammals” by Boake, B. C. (Barcroft Capel), 1838–1921, photographer [ca. 1855–ca. 1910]. Public domain.',
+  'b53636': '“Carnivora” by Boake, B. C. (Barcroft Capel), 1838–1921, photographer [ca. 1855–ca. 1910]. Public domain.',
+  'b53634': '“Hoofed mammals” by Boake, B. C. (Barcroft Capel), 1838–1921, photographer [ca. 1855–ca. 1910]. Public domain.',
+  'staffDoor': 'Photography by Eric Jong.',
+  'ceiling_upside': 'Photography by Eric Jong.',
+  'eureka-basement': '“Eureka Stockade” by Ireland, B., artist. Public domain.',
+  'wp003727': '“Eureka Stockade” by Ireland, B., artist. Public domain.',
+  'scientific_american': 'Front page showing a cyclorama building, its canvas and painters: <em>Scientific American</em>, 6 November 1886. Public domain.',
+};
+
+/* "Zoom in slowly": the point each picture pushes in on, [x, y, zoom] as for shots */
+const ZOOMS = {
+  'cover': [0.50, 0.47, 1.60],                  // the slices of the battle
+  'barry_full': [0.45, 0.29, 2.00],         // his face
+  'FL16281605': [0.23, 0.42, 1.90],         // the bust
+  'mp003283': [0.47, 0.45, 2.60],           // the Library's dome
+  'a14166': [0.46, 0.45, 1.90],             // Joan on her horse
+  'a14167': [0.46, 0.33, 2.20],             // St George
+  'joanNew_tall': [0.87, 0.55, 1.40],       // Joan’s face
+  'FL15580455': [0.48, 0.74, 2.00],         // the central desk
+  'FL15681165': [0.37, 0.42, 2.20],         // SIEGE OF PARIS
+  'FL15960677': [0.30, 0.38, 2.80],         // the memorial
+  'chiefShusher_pair': [0.25, 0.42, 2.00],  // the green lamps
+  'dome_pair': [0.40, 0.14, 2.20],          // the skylights
+  'spiralStair_pair': [0.18, 0.42, 2.20],   // the iron stair
+  'b53628': [0.30, 0.30, 1.80],             // the figure and the tall vases
+  'FL15934617': [0.86, 0.36, 2.20],         // Circe
+  'b53624': [0.55, 0.16, 2.00],             // Eve’s face
+  'b53623': [0.54, 0.37, 2.20],             // the winged cap
+  'b53631': [0.56, 0.22, 2.00],             // Melba’s face
+  'is010691': [0.54, 0.27, 1.80],           // her face
+  'mp000629': [0.40, 0.20, 1.60],           // his face
+  'b53632': [0.36, 0.32, 2.00],             // the herdsman and the bull
+  'a14131': [0.27, 0.31, 2.20],             // Moses with the tablets
+  'mp007077': [0.30, 0.43, 2.20],           // Lalor, hand raised
+  'mp010533': [0.45, 0.32, 2.00],           // his face
+  'mp024193': [0.52, 0.24, 2.00],           // his face under the wig
+  'b53625': [0.30, 0.40, 1.90],             // the statue
+  'barry_painting_pair': [0.25, 0.42, 2.20],// his face
+  'latrobe_pair': [0.32, 0.42, 2.00],       // his face
+  'a14171': [0.42, 0.70, 2.00],             // the lion on its rock
+  'b53635': [0.40, 0.58, 2.00],             // the skull and ribs
+  'b53636': [0.45, 0.18, 2.00],             // the lion at the top
+  'b53634': [0.60, 0.22, 2.00],             // the elephant
+  'staffDoor': [0.50, 0.45, 1.60],          // STAFF ONLY
+  'ceiling_upside': [0.50, 0.45, 1.35],     // the skylight
+  'eureka-basement': [0.62, 0.57, 2.40],    // the burning tent
+  'scientific_american': [0.50, 0.32, 1.80],// the cyclorama’s cross-section
+  'wp003727': [0.62, 0.57, 2.40],           // the burning tent
+  'handout-a': [0.86, 0.42, 2.30],          // the tram photo
+  'handout-b': [0.42, 0.69, 1.80],          // A COUNCIL FOR SCIENTIFIC AND INDUSTRIAL RESEARCH!
+  'handout-c': [0.48, 0.55, 2.20],          // the domed Public Library
+  'handout-d': [0.50, 0.68, 1.90],          // the cyclorama plan
+  'handout-e1': [0.28, 0.24, 1.90],         // the booklet’s cover
+  'handout-e2': [0.70, 0.68, 2.20],         // Context for this booklet
+  'handout-f': [0.40, 0.53, 1.80],          // the tick boxes: Pest, Werewolf, Dropbear …
+  'handout-g': [0.62, 0.64, 2.40],          // the burning tent
+  'handout-h': [0.71, 0.52, 2.00],          // the floorplan
+  'handout-i': [0.70, 0.53, 2.20],          // Cy Roe = Sigh-row?
+};
+
+/* the originals: the catalogue record for each picture, from the book's image credits */
+const LINKS = {
+  'cover': ['https://handle.slv.vic.gov.au/10381/132726', 'SLV original'],
+  'triscenorama': [['https://handle.slv.vic.gov.au/10381/92964', 'Left'], ['https://handle.slv.vic.gov.au/10381/40195', 'Middle'], ['https://handle.slv.vic.gov.au/10381/109903', 'Right']],
+  'barry_full': ['https://handle.slv.vic.gov.au/10381/274466', 'SLV original'],
+  'FL16281605': ['https://handle.slv.vic.gov.au/10381/296655', 'SLV original'],
+  'mp003283': ['https://handle.slv.vic.gov.au/10381/283064', 'SLV original'],
+  'a14166': ['https://handle.slv.vic.gov.au/10381/290914', 'SLV original'],
+  'a14167': ['https://handle.slv.vic.gov.au/10381/335456', 'SLV original'],
+  'FL15580455': ['https://handle.slv.vic.gov.au/10381/273345', 'SLV original'],
+  'FL15681165': ['https://handle.slv.vic.gov.au/10381/309626', 'SLV original'],
+  'FL15960677': ['https://handle.slv.vic.gov.au/10381/92969', 'SLV original'],
+  'b53628': ['https://handle.slv.vic.gov.au/10381/296600', 'SLV original'],
+  'FL15934617': ['https://handle.slv.vic.gov.au/10381/235338', 'SLV original'],
+  'b53624': ['https://handle.slv.vic.gov.au/10381/296646', 'SLV original'],
+  'b53623': ['https://handle.slv.vic.gov.au/10381/296738', 'SLV original'],
+  'b53631': ['https://handle.slv.vic.gov.au/10381/296582', 'SLV original'],
+  'is010691': ['https://handle.slv.vic.gov.au/10381/368721', 'SLV original'],
+  'mp000629': ['https://handle.slv.vic.gov.au/10381/170000', 'SLV original'],
+  'b53632': ['https://handle.slv.vic.gov.au/10381/208273', 'SLV original'],
+  'a14131': ['https://handle.slv.vic.gov.au/10381/290952', 'SLV original'],
+  'mp007077': ['https://handle.slv.vic.gov.au/10381/92964', 'SLV original'],
+  'mp010533': ['https://handle.slv.vic.gov.au/10381/40195', 'SLV original'],
+  'mp024193': ['https://handle.slv.vic.gov.au/10381/109903', 'SLV original'],
+  'b53625': ['https://handle.slv.vic.gov.au/10381/296613', 'SLV original'],
+  'a14171': ['https://handle.slv.vic.gov.au/10381/169995', 'SLV original'],
+  'b53635': ['https://handle.slv.vic.gov.au/10381/296679', 'SLV original'],
+  'b53636': ['https://handle.slv.vic.gov.au/10381/296658', 'SLV original'],
+  'b53634': ['https://handle.slv.vic.gov.au/10381/296729', 'SLV original'],
+  'eureka-basement': ['https://handle.slv.vic.gov.au/10381/132726', 'SLV original'],
+  'wp003727': ['https://handle.slv.vic.gov.au/10381/132726', 'SLV original'],
+  'scientific_american': ['https://www.scientificamerican.com/issue/sa/1886/11-06/', 'Sci. Am. original'],
+};
+
+/* ---------- engine ----------
+   The pictures are drawn onto one canvas the size of the window. Each picture
+   is kept as a small pyramid of copies, each half the size of the last, and
+   every frame is drawn from the copy nearest the size it is shown at: a big
+   scan squeezed onto the screen in one step shimmers and crawls as it moves,
+   which is what made the old version look juttery. */
+const FADE = 4500;                            // a long, slow dissolve between shots, ms
+const PACE = 2;                               // every shot's d is stretched by this: slow and moody
+const $ = id => document.getElementById(id);
+const stage = $('stage'), cap = $('caption'), canvas = $('view'), ctx = canvas.getContext('2d', { alpha: false });
+const layers = [{ anim: null, pic: null, on: false, t0: 0 }, { anim: null, pic: null, on: false, t0: 0 }];
+let front = 0, cur = -1, shot = 0, mode = 'kb', paused = false, lastFrame = 0, token = 0, fadeMs = FADE, clock = 0;
+const cache = {};
+const src = im => `images/kenburns/${im.file || im.id}.jpg`;
+let saved = 0;
+try { saved = Math.max(0, IMAGES.findIndex(im => im.id === localStorage.getItem('kenburns-photo'))); } catch (e) {}
+
+// the picture and its halvings, down to about 400 px across
+function pyramid(img) {
+    const levels = [{ bmp: img, k: 1 }];
+    let w = img.naturalWidth, h = img.naturalHeight, from = img, k = 1;
+    while (Math.max(w, h) > 800) {
+        w = Math.round(w / 2); h = Math.round(h / 2); k /= 2;
+        const c = document.createElement('canvas'); c.width = w; c.height = h;
+        const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(from, 0, 0, w, h);
+        levels.push({ bmp: c, k }); from = c;
+    }
+    return { w: img.naturalWidth, h: img.naturalHeight, levels };
+}
+function loadUrl(url) {
+    if (!cache[url]) cache[url] = new Promise((res, rej) => {
+        const i = new Image();
+        i.onload = () => (i.decode ? i.decode().catch(() => {}) : Promise.resolve()).then(() => res(pyramid(i)));
+        i.onerror = () => { delete cache[url]; rej(); }; i.src = url;
+    });
+    return cache[url];
+}
+const load = im => loadUrl(src(im));
+
+/* "Wiggle": the stereograph's two views shown in turn, like the wigglegram
+   maker: A, a moment of both, B, a moment of both, and round again. The two
+   views were cut from the card and lined up on its subject beforehand
+   (images/kenburns/wiggle/w-<id>-a.jpg and -b.jpg), so the subject holds
+   still and everything nearer or further rocks around it. */
+const WIGGLE = new Set(["a14166", "a14167", "b53623", "b53624", "b53628", "b53631", "b53632", "b53634", "b53635", "b53636", "FL16281605", "FL15681165", "FL15960677", "b53625", "chiefShusher_pair", "dome_pair", "barry_painting_pair", "latrobe_pair"]);
+const WIGGLE_HOLD = 300, WIGGLE_BLEND = WIGGLE_HOLD * .3;   // ms, as in the wigglegram maker
+const WIGGLE_WARN = 5000;                     // ms of warning and countdown before it starts flickering
+const WIGGLE_SECS = 15;                       // then it stops flickering: the cover, a fresh warning, and again
+const wiggleSrc = (im, ab) => `images/kenburns/wiggle/w-${im.id}-${ab}.jpg`;
+const ease = t => -(Math.cos(Math.PI * t) - 1) / 2;   // slow in, slow out
+const W = () => stage.clientWidth, H = () => stage.clientHeight;
+
+// where the picture sits for camera v = [x, y, zoom]; clamped so no edge shows
+function place(v, im, natW, natH) {
+    const [x0, y0, x1, y1] = im.safe || [0, 0, 1, 1];
+    const s = Math.max(W() / (natW * (x1 - x0)), H() / (natH * (y1 - y0))) * Math.max(1, v[2]);
+    const dw = natW * s, dh = natH * s;
+    const tx = Math.min(-x0 * dw, Math.max(W() - x1 * dw, W() / 2 - v[0] * dw));
+    const ty = Math.min(-y0 * dh, Math.max(H() - y1 * dh, H() / 2 - v[1] * dh));
+    return { s, tx, ty };
+}
+// the camera that is actually seen once clamped, so a move runs at an even pace
+// instead of stalling against an edge and then lurching off it
+function settle(v, im, pic) {
+    const g = place(v, im, pic.w, pic.h);
+    return [(W() / 2 - g.tx) / (pic.w * g.s), (H() / 2 - g.ty) / (pic.h * g.s), Math.max(1, v[2])];
+}
+function geometry(L) {
+    const a = L.anim, P = L.pic;
+    if (a.still || a.wiggle) {                 // the whole picture, still, letterboxed on black
+        const s = Math.min(W() / P.w, H() / P.h);
+        return { s, tx: (W() - P.w * s) / 2, ty: (H() - P.h * s) / 2 };
+    }
+    const t = ease(Math.min(1, a.elapsed / a.dur));
+    if (a.zoom) return zoomAt(a, P, t);
+    if (a.w !== W() || a.h !== H()) {          // (re)fit the move to the window
+        a.p = settle(a.from, a.im, P); a.q = settle(a.to, a.im, P); a.w = W(); a.h = H();
+    }
+    const p = a.p, q = a.q;
+    const v = [p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t,
+               Math.exp(Math.log(p[2]) + (Math.log(q[2]) - Math.log(p[2])) * t)];   // zoom at an even pace
+    return place(v, a.im, P.w, P.h);
+}
+
+// "Zoom in slowly": from the whole picture, letterboxed, one long push in
+// towards the picture's key detail (ZOOMS), then it holds there
+const ZOOM_SECS = 40, ZOOM_TO = 1.7;
+const ZOOM_HOLD = 4000, COVER_SECS = 12;      // then it rests a moment, shows the cover, and zooms again
+const COVER_I = IMAGES.findIndex(im => im.id === 'cover');
+async function coverInterlude(back = 'zoom') {
+    const my = ++token, im = IMAGES[COVER_I];
+    let pic; try { pic = await load(im); } catch { return show(cur, 0, { mode: back, again: true }); }
+    if (my !== token) return;
+    const lay = layers[1 - front], old = layers[front];
+    lay.pic = pic; lay.anim = { im, still: true, interlude: back, dur: COVER_SECS * 1000, elapsed: 0, handed: false };
+    fadeMs = FADE; lay.on = true; lay.t0 = clock; old.on = false; old.t0 = clock;
+    front = 1 - front;
+}
+function focusOf(im) {
+    if (ZOOMS[im.id]) return ZOOMS[im.id];
+    let best = im.shots[0].b;
+    for (const sh of im.shots) for (const v of [sh.a, sh.b]) if (v[2] > best[2]) best = v;
+    return [best[0], best[1], ZOOM_TO];
+}
+function zoomAt(a, P, t) {
+    const nw = P.w, nh = P.h, Wd = W(), Hd = H();
+    const s0 = Math.min(Wd / nw, Hd / nh), end = place(a.focus, a.im, nw, nh);
+    const s = Math.exp(Math.log(s0) + (Math.log(end.s) - Math.log(s0)) * t);
+    const ex = (Wd / 2 - end.tx) / (nw * end.s), ey = (Hd / 2 - end.ty) / (nh * end.s);   // where it ends up centred
+    const cx = .5 + (ex - .5) * t, cy = .5 + (ey - .5) * t, dw = nw * s, dh = nh * s;
+    const fit = (c, size, view) => size <= view ? (view - size) / 2 : Math.min(0, Math.max(view - size, view / 2 - c * size));
+    return { s, tx: fit(cx, dw, Wd), ty: fit(cy, dh, Hd) };
+}
+
+// paint both layers: the one fading out underneath, the one fading in on top
+function paint() {
+    const dpr = window.devicePixelRatio || 1, cw = Math.round(W() * dpr), ch = Math.round(H() * dpr);
+    if (canvas.width !== cw || canvas.height !== ch) { canvas.width = cw; canvas.height = ch; }
+    ctx.globalAlpha = 1; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, cw, ch);
+    for (const L of [layers[1 - front], layers[front]]) {
+        if (!L.anim || !L.pic) continue;
+        const f = fadeMs ? Math.min(1, (clock - L.t0) / fadeMs) : 1;
+        const alpha = L.on ? ease(f) : 1 - ease(f);
+        if (alpha <= 0.001) { if (!L.on) L.anim = null; continue; }
+        const g = geometry(L), a = L.anim;
+        if (!a.wiggle) { drawPic(L.pic, g, alpha, dpr); continue; }
+        const t = a.elapsed < WIGGLE_WARN ? 0 : (a.elapsed - WIGGLE_WARN) % (2 * (WIGGLE_HOLD + WIGGLE_BLEND));
+        const showB = t >= WIGGLE_HOLD + WIGGLE_BLEND && t < 2 * WIGGLE_HOLD + WIGGLE_BLEND;
+        const both = (t >= WIGGLE_HOLD && t < WIGGLE_HOLD + WIGGLE_BLEND) || t >= 2 * WIGGLE_HOLD + WIGGLE_BLEND;
+        drawPic(showB ? a.picB : L.pic, g, alpha, dpr);
+        if (both) drawPic(a.picB, g, alpha * .5, dpr);
+    }
+}
+function drawPic(P, g, alpha, dpr) {
+    const sd = g.s * dpr;
+    // the smallest copy that is still at least as big as it will be drawn
+    let lv = P.levels[0];
+    for (const l of P.levels) if (l.k >= sd) lv = l;
+    ctx.globalAlpha = alpha;
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(lv.bmp, g.tx * dpr, g.ty * dpr, P.w * sd, P.h * sd);
+}
+const draw = () => paint();                   // (kept for the frame-checking scripts)
+
+/* ---------- the Triscenorama ---------- */
+const TRIS_SLICES = 12;                       // slices across the portrait, with a frond between each pair
+const TRIS_TURN = 45;                         // how far it turns for the left and right views, degrees
+const trisEl = $('tris'), trisModel = trisEl.querySelector('.tris-model'), trisView = trisEl.querySelector('.tris-view');
+let trisBuilt = null, trisSide = 'left';
+function buildTris(im) {
+    // as big as fits above the buttons, at the pictures' 4:3
+    const vh = Math.min(H() * .6, W() * .6 * 3 / 4), vw = vh * 4 / 3, key = im.id + vw.toFixed(1);
+    if (trisBuilt === key) return;
+    trisBuilt = key;
+    trisView.style.width = vw + 'px'; trisView.style.height = vh + 'px';
+    trisView.style.perspective = (vw * 3.1) + 'px';
+    trisModel.innerHTML = '';
+    const sw = vw / TRIS_SLICES, depth = sw, thick = Math.max(1, vw / 480);   // fronds stand out one slice
+    const urls = im.tris.map(f => `images/kenburns/${f}.jpg`);
+    for (let i = 0; i < TRIS_SLICES; i++) {
+        const g = document.createElement('div');
+        g.className = 'slice'; g.style.width = sw + 'px';
+        urls.forEach((u, idx) => {
+            const p = document.createElement('div'), side = idx !== 1, k = side ? depth / sw : 1;
+            p.className = 'pane ' + ['pane-left pane-side', 'pane-center', 'pane-right pane-side'][idx];
+            p.style.width = (side ? depth : sw) + 'px';
+            if (idx === 0) p.style.transform = `translateX(${-thick / 2}px) rotateY(-90deg)`;
+            if (idx === 2) { p.style.left = (sw - depth) + 'px'; p.style.transform = `translateX(${thick / 2}px) rotateY(90deg)`; }
+            p.style.backgroundImage = `url(${u})`;
+            p.style.backgroundSize = `${vw * k}px ${vh}px`;
+            p.style.backgroundPosition = `${-i * sw * k}px 0px`;
+            g.appendChild(p);
+        });
+        const edge = x => {                      // the frond's paper edge, seen face on
+            const e = document.createElement('div');
+            e.className = 'pane'; e.style.width = thick + 'px'; e.style.left = x + 'px';
+            e.style.background = '#efe6d2'; e.style.filter = 'brightness(.75)';
+            e.style.transform = `translateZ(${depth}px)`; g.appendChild(e);
+        };
+        edge(-thick / 2);
+        if (i === TRIS_SLICES - 1) edge(sw - thick / 2);
+        trisModel.appendChild(g);
+    }
+}
+function trisAngle(deg, instant) {             // turn to any angle: + shows the left picture, - the right
+    trisModel.classList.toggle('instant', !!instant);
+    trisModel.style.transform = `rotateY(${deg}deg)`;
+    if (instant) void trisModel.offsetWidth;
+    trisModel.classList.remove('instant');
+    trisSlider.value = deg;
+}
+const trisSlider = $('tris-angle');
+trisSlider.oninput = () => {                    // fine control: follows the slider straight away
+    trisAngle(+trisSlider.value, true);
+    trisSide = null;
+    trisEl.querySelectorAll('.tris-buttons button').forEach(b => b.classList.remove('on'));
+};
+function trisTurn(side, instant) {
+    trisSide = side;
+    trisSlider.value = ({ left: TRIS_TURN, middle: 0, right: -TRIS_TURN })[side];
+    trisModel.classList.toggle('instant', !!instant);
+    trisModel.style.transform = `rotateY(${({ left: TRIS_TURN, middle: 0, right: -TRIS_TURN })[side]}deg)`;
+    if (instant) void trisModel.offsetWidth;
+    trisModel.classList.remove('instant');
+    trisEl.querySelectorAll('.tris-buttons button').forEach(b => b.classList.toggle('on', b.dataset.view === side));
+    document.querySelectorAll('.item').forEach(el => { const i = +el.dataset.i;
+        el.querySelectorAll('.modes button').forEach(b => b.classList.toggle('on', i === cur && mode === 'tris' && b.dataset.view === side)); });
+}
+trisEl.querySelectorAll('.tris-buttons button').forEach(b => b.onclick = () => trisTurn(b.dataset.view));
+window.addEventListener('resize', () => { if (mode === 'tris') buildTris(IMAGES[cur]); });
+
+function showTris(index, opts) {
+    const im = IMAGES[index], changed = index !== cur;
+    ++token; cur = index; mode = 'tris';
+    for (const L of layers) if (L.anim) L.anim.handed = true;   // the loop underneath stops moving on
+    buildTris(im);
+    trisTurn(opts.view || 'left', true);
+    trisEl.classList.add('on');
+    $('loading').style.display = 'none';
+    if (changed) try { localStorage.setItem('kenburns-photo', im.id); } catch (e) {}
+    caption(im, opts.cut);
+    document.querySelectorAll('.item').forEach(el => el.classList.toggle('current', +el.dataset.i === cur));
+    if (trisSide) trisTurn(trisSide, true);
+}
+
+async function show(index, n = 0, opts = {}) {
+    if (IMAGES[index].tris) return showTris(index, opts);
+    trisEl.classList.remove('on');
+    const im = IMAGES[index], my = ++token, changed = index !== cur;
+    mode = opts.mode || 'kb';
+    const still = mode === 'still';
+    cur = index; shot = n % im.shots.length;
+    if (mode === 'wiggle' && !WIGGLE.has(im.id)) mode = 'kb';
+    let pic, picB;
+    try {
+        if (mode === 'wiggle') [pic, picB] = await Promise.all([loadUrl(wiggleSrc(im, 'a')), loadUrl(wiggleSrc(im, 'b'))]);
+        else pic = await load(im);
+    } catch { $('loading').textContent = `Could not load ${mode === 'wiggle' ? wiggleSrc(im, 'a') : src(im)}`; return; }
+    if (my !== token) return;                  // another photograph was picked meanwhile
+    $('loading').style.display = 'none';
+
+    const sh = im.shots[shot], back = layers[1 - front], old = layers[front];
+    back.pic = pic;
+    back.anim = still ? { im, still: true, dur: 1, elapsed: 0, handed: true }
+              : mode === 'wiggle' ? { im, wiggle: true, picB, dur: WIGGLE_WARN + WIGGLE_SECS * 1000, elapsed: 0, handed: false }
+              : mode === 'zoom' ? { im, zoom: true, focus: focusOf(im), dur: ZOOM_SECS * 1000, elapsed: 0, handed: false }
+                      : { im, from: sh.a, to: sh.b, dur: sh.d * PACE * 1000, elapsed: 0, handed: false };
+    fadeMs = opts.cut ? 0 : FADE;
+    back.on = true; back.t0 = clock; old.on = false; old.t0 = clock;
+    if (opts.cut) old.anim = null;
+    front = 1 - front;
+    paint();
+
+    if (changed) try { localStorage.setItem('kenburns-photo', im.id); } catch (e) {}
+    if (changed || (opts.mode && !opts.again)) caption(im, opts.cut);   // each new start, not each shot of the loop
+    document.querySelectorAll('.item').forEach(el => { const i = +el.dataset.i;
+        el.querySelectorAll('.modes button').forEach(b => b.classList.toggle('on', i === cur && b.dataset.mode === mode));
+        el.classList.toggle('current', i === cur);
+    });
+}
+function caption(im, now) {
+    cap.classList.remove('on');
+    clearTimeout(cap._in); clearTimeout(cap._out);
+    if (!CREDITS[im.id]) return;               // the handouts are the book's own: no credit line
+    cap._in = setTimeout(() => {
+        cap.querySelector('.c').innerHTML = CREDITS[im.id];
+        const ln = LINKS[im.id], bare = u => u.replace(/^https?:\/\//, '');
+        cap.querySelector('.u').textContent = !ln ? '' : Array.isArray(ln[0]) ? ln.map(l => `${l[1]}: ${bare(l[0])}`).join('   ·   ') : bare(ln[0]);
+        cap.classList.add('on');
+        cap._out = setTimeout(() => cap.classList.remove('on'), 12000);
+    }, now ? 300 : FADE * .5);
+}
+const handout = r => Array.isArray(r) ? `Handout ${r[0]}: ${r[1]}` : r;
+const where = im => [im.handout ? `Handout ${im.handout}${im.sheet ? ` (${im.sheet})` : ''}` : im.page ? `p. ${im.page}  ${im.pageTitle}` : 'Not in the book', ...(im.refs || []).map(handout)];
+
+function tick(now) {
+    requestAnimationFrame(tick);
+    const dt = Math.min(100, now - (lastFrame || now));   // a hidden tab doesn't jump ahead
+    lastFrame = now; clock += dt;
+    for (const L of layers) {
+        const a = L.anim; if (!a) continue;
+        if (!paused) a.elapsed += dt;
+        // start the next shot while this one is still moving, so the picture never stops
+        if (L !== layers[front] || a.handed) continue;
+        if (a.zoom) {                              // zoomed in: rest, then the cover (unless this is the cover)
+            if (a.elapsed >= a.dur + ZOOM_HOLD) { a.handed = true; cur === COVER_I ? show(cur, 0, { mode: 'zoom', again: true }) : coverInterlude(); }
+        } else if (a.wiggle) {                     // enough flicker: rest on the cover, then warn and wiggle again
+            if (a.elapsed >= a.dur) { a.handed = true; coverInterlude('wiggle'); }
+        } else if (a.interlude) {                  // the cover has had its moment: back to the same zoom or wiggle
+            if (a.elapsed >= a.dur) { a.handed = true; show(cur, 0, { mode: a.interlude, again: true }); }
+        } else if (a.elapsed >= a.dur - FADE) { a.handed = true; show(cur, shot + 1); }
+    }
+    paint();
+    // the strobe warning and its countdown, while the wiggle waits to start
+    const fa = layers[front].anim, warn = !!(fa && fa.wiggle && fa.elapsed < WIGGLE_WARN);
+    strobe.classList.toggle('on', warn);
+    if (warn) strobe.querySelector('.n').textContent = Math.ceil((WIGGLE_WARN - fa.elapsed) / 1000);
+}
+const strobe = $('strobe');
+requestAnimationFrame(tick);
+
+/* ---------- the list ---------- */
+// Each handout is listed twice: on the page where players are first given it,
+// and again with the others in the Handouts section.
+const FIRST_GIVEN = {
+    A: [1, 4, 'Getting Started'], B: [1, 4, 'Getting Started'], C: [2, 8, 'Library, Museum & Gallery'],
+    D: [2, 10, 'Research in the Library'], E: [2, 11, 'Research in the Library (continued)'],
+    F: [3, 21, 'Mr Roe, CSIR'], G: [4, 22, 'The Basement'], H: [5, 24, 'Inside the Cyclorama'], I: [6, 29, 'Whatever the Outcome'],
+};
+const entries = IMAGES.map((im, i) => ({ im, i, part: im.part, page: im.page || 0, pageTitle: im.pageTitle, n: i, dup: 0 }));
+// and the three-way portrait sits with the Lalor portraits too, as well as in the Appendix
+const ALSO_ON = { triscenorama: [3, 18, 'McArthur Gallery'] };
+IMAGES.forEach((im, i) => {
+    const f = (im.handout && FIRST_GIVEN[im.handout]) || ALSO_ON[im.id];
+    if (f) entries.push({ im, i, part: f[0], page: f[1], pageTitle: f[2], n: i, dup: 1 });
+});
+entries.sort((x, y) => x.part - y.part || (x.part === 7 ? 0 : x.page - y.page) || x.dup - y.dup || x.n - y.n);
+
+const list = $('list');
+let lastPart = -1, lastPage;
+for (const { im, i, part, page, pageTitle, dup } of entries) {
+    if (part !== lastPart) {
+        const P = PARTS[part];
+        list.insertAdjacentHTML('beforeend',
+            `<div class="part">${P.num ? `<span class="num">${P.num}</span>` : ''}<span class="name">${P.name}</span></div>`);
+        lastPart = part; lastPage = undefined;
+    }
+    const pageKey = page + pageTitle;
+    if ((dup || !im.handout) && pageKey !== lastPage) {
+        list.insertAdjacentHTML('beforeend', page > 1
+            ? `<div class="page-head"><span class="pg">p. ${page}</span><span>${pageTitle}</span></div>` : '');
+        lastPage = pageKey;
+    }
+    const go = m => () => { setPaused(false); show(i, 0, { mode: m }); setOpen(false); };
+    const item = document.createElement('div');
+    item.className = 'item'; item.dataset.i = i;
+    const link = LINKS[im.id];
+    item.innerHTML = `<div><div class="thumb"><img src="images/kenburns/thumbs/${im.file || im.id}.jpg" alt="" loading="lazy"></div>${link
+        ? (Array.isArray(link[0]) ? link : [link]).map(l => `<a class="orig" href="${l[0]}" target="_blank" rel="noopener" title="${l[0]}">${Array.isArray(link[0]) ? 'SLV ' + l[1].toLowerCase() : l[1]} ↗</a>`).join('') : ''}</div>
+        <div class="photo"><span class="t">${im.handout ? `<span class="handout-label">Handout <span class="handout-letter">${im.handout}</span></span> ` : ''}${im.t}${im.sheet ? ` <span class="handout-sheet">(${im.sheet})</span>` : ''}</span><span class="now">now showing</span></div>
+        <div class="modes" role="group" aria-label="How to show it">${im.tris ? `
+            <button data-mode="tris" data-view="left" title="Turned to show the left picture">Left view</button>
+            <button data-mode="tris" data-view="middle" title="Face on: the middle picture">Middle view</button>
+            <button data-mode="tris" data-view="right" title="Turned to show the right picture">Right view</button>` : `
+            <button data-mode="still" title="The whole picture full screen, without moving (S)">Still</button>
+            <button data-mode="zoom" title="Starts with the whole picture and slowly zooms in, then the cover, and round again (Z)">Zoom in slowly</button>
+            <button data-mode="kb" title="Its own loop of slow zooms and pans (K)">Ken Burns</button>${WIGGLE.has(im.id) ? `
+            <button data-mode="wiggle" title="The stereograph's two views in turn, so it rocks in 3D: a warning, 15 seconds, then the cover, and round again (W)">Wiggle</button>` : ''}`}
+        </div>`;
+    item.querySelectorAll('.modes button').forEach(b => b.onclick = b.dataset.view
+        ? () => { if (cur === i && mode === 'tris') trisTurn(b.dataset.view); else show(i, 0, { view: b.dataset.view }); setOpen(false); }
+        : go(b.dataset.mode));
+    list.appendChild(item);
+}
+
+/* ---------- controls ---------- */
+function setOpen(open) {
+    document.body.classList.toggle('open', open);
+    $('toggle').setAttribute('aria-expanded', String(open));
+    if (open) document.querySelector('.item.current')?.scrollIntoView({ block: 'nearest' });
+}
+function setPaused(p) {
+    paused = p;
+    $('b-pause').textContent = p ? 'Resume' : 'Pause';
+    $('b-pause').classList.toggle('on', p);
+}
+$('toggle').onclick = () => setOpen(!document.body.classList.contains('open'));
+$('b-pause').onclick = () => setPaused(!paused);
+const fs = () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.();
+$('b-fs').onclick = fs;
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const k = e.key.toUpperCase();
+    if (k === 'H') setOpen(!document.body.classList.contains('open'));
+    else if (k === ' ') { e.preventDefault(); setPaused(!paused); }
+    else if (k === 'F') fs();
+    else if (k === '1') { setPaused(false); show(COVER_I, 0, { mode: 'still' }); }
+    else if (mode === 'tris') return;
+    else if (k === 'S') show(cur, 0, { mode: 'still' });
+    else if (k === 'Z') { setPaused(false); show(cur, 0, { mode: 'zoom' }); }
+    else if (k === 'K') { setPaused(false); show(cur, 0, { mode: 'kb' }); }
+    else if (k === 'W' && WIGGLE.has(IMAGES[cur].id)) { setPaused(false); show(cur, 0, { mode: 'wiggle' }); }
+    else if (k === 'ESCAPE') setOpen(false);
+});
+
+show(saved, 0, { cut: true });
+</script>
+</body>
+</html>
