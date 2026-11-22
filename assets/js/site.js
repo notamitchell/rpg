@@ -113,3 +113,43 @@
   slider.addEventListener('input', function () { holdUntil = Date.now() + 12000; });
   window.addEventListener('resize', build);
 })();
+
+/* Ken Burns pans: any .kb with data-shots="[[ax,ay,az,bx,by,bz,secs],...]" and data-safe="l,t,r,b" */
+(function () {
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches, GAP = 2.5;
+  [].forEach.call(document.querySelectorAll('.kb[data-shots]'), function (box) {
+    var img = box.querySelector('img');
+    if (!img || !img.animate) return;
+    var SHOTS = JSON.parse(box.dataset.shots.replace(/(^|[^\d])\./g, '$10.')), SAFE = (box.dataset.safe || '0,0,1,1').split(',').map(Number), anim = null;
+    function cam(x, y, z, W, H, iw, ih) {
+      var s = Math.max(W / ((SAFE[2] - SAFE[0]) * iw), H / ((SAFE[3] - SAFE[1]) * ih)) * z;
+      var tx = Math.min(-SAFE[0] * iw * s, Math.max(W - SAFE[2] * iw * s, W / 2 - x * iw * s));
+      var ty = Math.min(-SAFE[1] * ih * s, Math.max(H - SAFE[3] * ih * s, H / 2 - y * ih * s));
+      return 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px) scale(' + s.toFixed(4) + ')';
+    }
+    function build() {
+      var iw = img.naturalWidth, ih = img.naturalHeight, W = box.clientWidth, H = box.clientHeight;
+      if (!iw || !W) return;
+      img.style.width = iw + 'px'; img.style.height = ih + 'px';
+      var total = 0, t = 0, frames = [];
+      SHOTS.forEach(function (k) { total += k[6] + GAP; });
+      SHOTS.forEach(function (k) {
+        frames.push({ transform: cam(k[0], k[1], k[2], W, H, iw, ih), offset: t / total, easing: 'ease-in-out' });
+        t += k[6];
+        frames.push({ transform: cam(k[3], k[4], k[5], W, H, iw, ih), offset: t / total, easing: 'ease-in-out' });
+        t += GAP;
+      });
+      frames.push({ transform: frames[0].transform, offset: 1 });
+      var at = anim ? anim.currentTime : 0;
+      if (anim) anim.cancel();
+      if (still) { img.style.transform = frames[0].transform; return; }
+      anim = img.animate(frames, { duration: total * 1000, iterations: Infinity });
+      anim.currentTime = at || 0;
+    }
+    if (img.complete && img.naturalWidth) build(); else img.addEventListener('load', build);
+    window.addEventListener('resize', build);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) {
+      if (anim) { if (e[0].isIntersecting) anim.play(); else anim.pause(); }
+    }).observe(box);
+  });
+})();
