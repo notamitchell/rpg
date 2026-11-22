@@ -24,7 +24,6 @@
     <div class="rotunda" aria-hidden="true"><div class="slats" id="slats"></div></div>
     <div class="cta-row">
       <a class="btn primary" href="https://www.drivethrurpg.com/en/product/595043/to-the-cyclorama">Free on DriveThruRPG ✦</a>
-      <a class="btn ghost" href="#inside">What's inside</a>
     </div>
   </div>
 </header>
@@ -57,13 +56,11 @@
 <section class="block stereo-sec">
   <div class="wrap two">
     <div class="viewer">
-      <div class="lens" id="lens">
+      <div class="lens" id="lens" role="button" tabindex="0" aria-label="Pause or play the stereographs" title="Click to pause">
         <img class="a" id="lensA" src="assets/img/stereo/FL16281605-a.jpg" alt="Stereograph: Sir Redmond Barry">
         <img class="r" id="lensB" src="assets/img/stereo/FL16281605-b.jpg" alt="" aria-hidden="true">
-        <div class="strobe" id="strobe" role="alert"><div class="w">Mild strobe effect</div><div>The picture flickers between its two views</div><div class="n" id="strobeN"></div></div>
       </div>
       <p class="card-title" id="cardTitle" aria-live="polite">Sir Redmond Barry</p>
-      <button class="toggle" id="lensToggle" type="button">Look through the stereoscope</button>
       <div class="cards" role="group" aria-label="Choose a stereograph">
         <button type="button" data-card="FL16281605" aria-pressed="true" title="Sir Redmond Barry"><img src="assets/img/stereo/FL16281605-thumb.jpg" alt="Sir Redmond Barry" loading="lazy"></button>
         <button type="button" data-card="a14166" aria-pressed="false" title="Joan of Arc"><img src="assets/img/stereo/a14166-thumb.jpg" alt="Joan of Arc" loading="lazy"></button>
@@ -81,11 +78,11 @@
       </div>
     </div>
     <div class="prose">
-      <span class="eyebrow" style="color:var(--sepia)">Handouts you can hold</span>
-      <h2>Through the stereoscope</h2>
-      <p>A stereograph is two photographs taken side by side. Look at them through a stereoscope and they swim together into one picture with depth. Pick a card from the library's collection and press the button: the view flicks between its two halves, a &ldquo;wigglegram&rdquo;, to give you the idea.</p>
+      <span class="eyebrow" style="color:var(--sepia)">Through the stereoscope</span>
+      <h2>Handouts you can hold</h2>
+      <p>A stereograph is two photographs taken side by side. Look at them through a stereoscope and they swim together into one picture with depth.</p>
+      <p>The viewer here flicks between the two halves of each card, a &ldquo;wigglegram&rdquo;, to give you the idea, and works its way through the library's collection. Click a card to jump to it, or click the picture to pause.</p>
       <p>The book includes every stereograph card in the scenario, printable at real stereoscope size, plus instructions for building a viewer from reading glasses and cardboard so your players can look for themselves.</p>
-      <div class="describe"><div class="tag">Describe</div>Two images swim together and synchronise into one. Do you wish to keep looking?</div>
     </div>
   </div>
 </section>
@@ -112,7 +109,7 @@
       <span class="eyebrow" style="color:var(--sepia)">McArthur Gallery</span>
       <h2>A portrait that isn't flat</h2>
       <p>Among the gilt frames hangs a Triscenorama: a corrugated portrait that shows a different picture from each side. From the left, Peter Lalor swears the oath under the Southern Cross. From the front, he is hunted, his sleeve pinned. From the right, he is Speaker of the Legislative Assembly.</p>
-      <p>The book has a print-and-fold copy to hold up at the table. Turn the one here with the buttons or the slider.</p>
+      <p>The book has a print-and-fold copy to hold up at the table. The one here turns by itself. Use the buttons or the slider to hold a view.</p>
     </div>
     <div class="tris-stage">
       <div class="tris-view" id="trisView" aria-label="Three-way portrait of Peter Lalor, shown in 3D"><div class="tris-model" id="trisModel"></div></div>

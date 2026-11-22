@@ -27,35 +27,41 @@
   build();
   var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(build, 200); });
 })();
-// Wigglegram: A, a moment of both, B, a moment of both (300 ms holds, 90 ms blends), after a 3 s strobe warning.
+// Wigglegram: A, a moment of both, B, a moment of both (300 ms holds, 90 ms blends, about 1.3 flicks a second),
+// six seconds per card, then on to the next. Runs only while on screen; still for reduced-motion users.
 (function () {
-  var lens = document.getElementById('lens'), b = lens.querySelector('.r'), btn = document.getElementById('lensToggle');
-  var warn = document.getElementById('strobe'), num = document.getElementById('strobeN');
-  var HOLD = 300, BLEND = 90, WARN = 3000, raf = 0, t0 = 0, running = false;
+  var lens = document.getElementById('lens'), imgA = document.getElementById('lensA'), b = document.getElementById('lensB');
+  var title = document.getElementById('cardTitle'), chips = [].slice.call(document.querySelectorAll('.cards button'));
+  var HOLD = 300, BLEND = 90, PER_CARD = 6000, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cur = 0, raf = 0, t0 = 0, cardT0 = 0, visible = false, paused = false;
+  function src(id, ab) { return 'assets/img/stereo/' + id + '-' + ab + '.jpg'; }
+  function show(n) {
+    cur = (n + chips.length) % chips.length;
+    var c = chips[cur], id = c.dataset.card;
+    imgA.src = src(id, 'a'); b.src = src(id, 'b'); imgA.alt = 'Stereograph: ' + c.title; title.textContent = c.title;
+    chips.forEach(function (x) { x.setAttribute('aria-pressed', x === c ? 'true' : 'false'); });
+    var nx = chips[(cur + 1) % chips.length].dataset.card; new Image().src = src(nx, 'a'); new Image().src = src(nx, 'b');
+    cardT0 = performance.now();
+  }
   function frame(now) {
-    var e = now - t0;
-    if (e < WARN) { num.textContent = Math.ceil((WARN - e) / 1000); raf = requestAnimationFrame(frame); return; }
-    warn.classList.remove('on');
-    var t = (e - WARN) % (2 * (HOLD + BLEND));
+    var t = (now - t0) % (2 * (HOLD + BLEND));
     b.style.opacity = t < HOLD ? 0 : t < HOLD + BLEND ? .5 : t < 2 * HOLD + BLEND ? 1 : .5;
+    if (now - cardT0 > PER_CARD) show(cur + 1);
     raf = requestAnimationFrame(frame);
   }
-  var imgA = document.getElementById('lensA'), title = document.getElementById('cardTitle');
-  var chips = document.querySelectorAll('.cards button');
-  [].forEach.call(chips, function (c) {
-    c.addEventListener('click', function () {
-      var id = c.dataset.card, name = c.title, pre = new Image();
-      pre.src = 'assets/img/stereo/' + id + '-b.jpg';
-      imgA.src = 'assets/img/stereo/' + id + '-a.jpg'; imgA.alt = 'Stereograph: ' + name;
-      b.src = pre.src; title.textContent = name;
-      [].forEach.call(chips, function (x) { x.setAttribute('aria-pressed', x === c ? 'true' : 'false'); });
-    });
-  });
-  btn.addEventListener('click', function () {
-    running = !running;
-    if (running) { t0 = performance.now(); warn.classList.add('on'); raf = requestAnimationFrame(frame); btn.textContent = 'Hold it still'; }
-    else { cancelAnimationFrame(raf); warn.classList.remove('on'); b.style.opacity = 0; btn.textContent = 'Look through the stereoscope'; }
-  });
+  function update() {
+    cancelAnimationFrame(raf); raf = 0;
+    if (visible && !paused && !reduce) { t0 = performance.now(); cardT0 = t0; raf = requestAnimationFrame(frame); }
+    else b.style.opacity = 0;
+    lens.classList.toggle('paused', paused && !reduce);
+  }
+  chips.forEach(function (c, n) { c.addEventListener('click', function () { show(n); update(); }); });
+  function toggle() { paused = !paused; update(); }
+  lens.addEventListener('click', toggle);
+  lens.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; update(); }, { threshold: .25 }).observe(lens);
+  else { visible = true; update(); }
+  show(0);
 })();
 // Triscenorama: slices of the front picture face us; between them, fronds at right angles carry the left and right pictures.
 (function () {
@@ -96,5 +102,14 @@
   }); });
   slider.addEventListener('input', function () { turn(+slider.value, true); [].forEach.call(btns, function (x) { x.classList.remove('on'); }); });
   build(); turn(TURN, true);
+  // Turns by itself: left, front, right, front, every 3.5 s. A click or the slider holds it for 12 s.
+  var seq = ['left', 'middle', 'right', 'middle'], step = 0, holdUntil = 0;
+  function setOn(view) { [].forEach.call(btns, function (x) { x.classList.toggle('on', x.dataset.view === view); }); }
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(function () {
+    if (Date.now() < holdUntil || document.hidden) return;
+    step = (step + 1) % seq.length; turn({ left: TURN, middle: 0, right: -TURN }[seq[step]]); setOn(seq[step]);
+  }, 3500);
+  [].forEach.call(btns, function (x) { x.addEventListener('click', function () { holdUntil = Date.now() + 12000; step = seq.indexOf(x.dataset.view); }); });
+  slider.addEventListener('input', function () { holdUntil = Date.now() + 12000; });
   window.addEventListener('resize', build);
 })();
