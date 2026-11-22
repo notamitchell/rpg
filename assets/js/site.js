@@ -33,12 +33,13 @@
   var lens = document.getElementById('lens'), imgA = document.getElementById('lensA'), b = document.getElementById('lensB');
   var title = document.getElementById('cardTitle'), chips = [].slice.call(document.querySelectorAll('.cards button'));
   var HOLD = 300, BLEND = 90, PER_CARD = 6000, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var EXT = '<svg class="ext" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M4.5 2.5H2.5v7h7v-2M7 2.5h2.5V5M9.5 2.5 5.5 6.5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>';
   var cur = 0, raf = 0, t0 = 0, cardT0 = 0, visible = false, paused = false;
   function src(id, ab) { return 'assets/img/stereo/' + id + '-' + ab + '.jpg'; }
   function show(n) {
     cur = (n + chips.length) % chips.length;
     var c = chips[cur], id = c.dataset.card;
-    imgA.src = src(id, 'a'); b.src = src(id, 'b'); imgA.alt = 'Stereograph: ' + c.title; title.innerHTML = ''; var a = document.createElement('a'); a.href = c.dataset.href; a.textContent = c.dataset.cite; title.appendChild(a);
+    imgA.src = src(id, 'a'); b.src = src(id, 'b'); imgA.alt = 'Stereograph: ' + c.title; title.textContent = c.dataset.cite + ' Public domain. State Library Victoria. '; var a = document.createElement('a'); a.href = c.dataset.href; a.rel = 'external'; a.textContent = c.dataset.href; a.insertAdjacentHTML('beforeend', EXT); title.appendChild(a);
     chips.forEach(function (x) { x.setAttribute('aria-pressed', x === c ? 'true' : 'false'); });
     var nx = chips[(cur + 1) % chips.length].dataset.card; new Image().src = src(nx, 'a'); new Image().src = src(nx, 'b');
     cardT0 = performance.now();

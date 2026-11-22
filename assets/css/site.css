@@ -236,6 +236,8 @@ footer .fine { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,.12);
 .aerial + .aerial { margin-top: 28px; }
 .setting-note { margin-top: 28px; }
 figcaption.cite { font-style: italic; font-size: .9rem; color: var(--muted); margin-top: 8px; }
-figcaption.cite a, .card-title a { color: inherit; text-decoration: underline; text-decoration-color: rgba(127,127,127,.45); text-underline-offset: 3px; }
+figcaption.cite a, .card-title a { color: inherit; white-space: nowrap; text-decoration: underline; text-decoration-color: rgba(127,127,127,.45); text-underline-offset: 3px; }
 figcaption.cite a:hover, .card-title a:hover { text-decoration-color: currentColor; }
 .card-title { max-width: 32rem; text-align: center; font-family: var(--body); font-style: italic; font-size: .92rem; letter-spacing: 0; min-height: 2.8em; }
+svg.ext { display: inline-block; vertical-align: -1px; margin-left: 3px; }
+.sources .links a svg.ext { opacity: .8; }
