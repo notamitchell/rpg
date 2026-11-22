@@ -1,1 +1,198 @@
-Hello world
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>To the Cyclorama · Melbourne 1926 · a Basic Roleplaying adventure</title>
+<meta name="description" content="A haunted photograph, a library full of whispering stereographs, and a 360-degree painting of the Eureka Stockade that is about to come alive. A Basic Roleplaying horror adventure for a gamemaster and four players.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="To the Cyclorama · Melbourne 1926">
+<meta property="og:description" content="A Basic Roleplaying horror adventure set in Melbourne's Library, Museum and Gallery in 1926. For a gamemaster and four players, 3–5 hours.">
+<meta property="og:image" content="https://notamitchell.github.io/rpg/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0f1f33">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/cinzel-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <h1>To the Cyclorama</h1>
+    <div class="rule"><span>✦</span></div>
+    <div class="place">MELBOURNE · 1926</div>
+    <div class="rotunda" aria-hidden="true"><div class="slats" id="slats"></div></div>
+    <p class="pitch">A haunted photograph, a library full of whispering stereographs, and a 360-degree painting of the Eureka Stockade that is about to come alive.</p>
+    <div class="cta-row">
+      <a class="btn primary" href="https://www.drivethrurpg.com/en/product/595043/to-the-cyclorama">Get it on DriveThruRPG ✦</a>
+      <a class="btn ghost" href="#inside">What's inside</a>
+    </div>
+  </div>
+</header>
+
+<div class="ticket-band">
+  <div class="wrap">
+    <dl class="ticket" aria-label="At a glance">
+      <div><dt>System</dt><dd>Basic Roleplaying<small>Chaosium's free percentile rules</small></dd></div>
+      <div><dt>Table</dt><dd>GM + 4 players<small>Four pre-generated investigators</small></dd></div>
+      <div><dt>Running time</dt><dd>3–5 hours<small>One evening</small></dd></div>
+      <div><dt>Rating</dt><dd>M15+<small>Horror, violence, coarse language</small></dd></div>
+      <div><dt>Admission</dt><dd>62 pages<small>Full colour, with printable handouts</small></dd></div>
+    </dl>
+  </div>
+</div>
+
+<section class="block">
+  <div class="wrap two">
+    <div class="prose">
+      <span class="eyebrow">An introduction</span>
+      <h2>What is a Cyclorama?</h2>
+      <p>A Cyclorama is an enormous 360-degree oil painting, often fifty feet high and four hundred feet around, housed in a round building built just for it. Visitors climb to a central platform. Between them and the canvas lies a stretch of real ground (rocks, bushes, wax figures, a broken wagon) until the eye can no longer find where the ground ends and the paint begins.</p>
+      <p>Melbourne had several. In 1891 one of them showed the Eureka Stockade, the 1854 goldfields rebellion at Ballarat. Most of it is long gone.</p>
+      <p>Most of it.</p>
+    </div>
+    <figure class="plate">
+      <img loading="lazy" src="assets/img/scientific-american.jpg" alt="Engraving from Scientific American, 1886, showing a cyclorama building in cross-section with its viewing platform and painters on a scaffold.">
+      <figcaption>Scientific American, 6 November 1886.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="block" style="padding-top:0">
+  <div class="wrap">
+    <div class="band"><b>✦</b> The Premise <b>✦</b></div>
+    <div class="two">
+      <div class="prose">
+        <h2>Science must serve the National Interest</h2>
+        <p>The newly formed Council for Scientific and Industrial Research, forerunner of today's CSIRO, has a secret occult branch. Its first task falls to you.</p>
+        <p>Mr Cy Roe, Commercial Liaison Officer, hands over a stereograph of a marble bust of Sir Redmond Barry, the judge who tried the Eureka rebels. Through the stereoscope, the bust's marble eyes drift. Its lips move.</p>
+        <p>Your investigation takes you through the Public Library, the National Museum and the National Gallery of Victoria, all under one roof on Swanston Street. Somewhere in that building is the reason the photograph won't keep still.</p>
+      </div>
+      <div class="form" role="img" aria-label="A filled-in C.S.I.R. Form 7a">
+        <span class="stamp">Received</span>
+        <div class="hd"><small>Commonwealth of Australia</small>Council for Scientific and Industrial Research<strong>C.S.I.R. Form 7a: Occult Phenomena</strong></div>
+        <ol>
+          <li>Nature of phenomenon:<span class="answer">Photograph of judge. Moves. Shouldn't.</span></li>
+          <li>Location of specimen:<span class="answer">Public Library, Swanston St.</span></li>
+          <li>Can it be patented, bottled or licensed?<span class="answer">☐ Yes &nbsp; ☐ No &nbsp; (see over)</span></li>
+          <li>Does the utilisation of this specimen serve the National Interest?<span class="answer">☒ Very much yes</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block stereo-sec">
+  <div class="wrap two">
+    <div class="viewer">
+      <div class="lens" id="lens">
+        <img class="a" src="assets/img/barry-left.jpg" alt="Stereograph of the marble bust of Sir Redmond Barry">
+        <img class="r" src="assets/img/barry-right.jpg" alt="" aria-hidden="true">
+        <div class="strobe" id="strobe" role="alert"><div class="w">Mild strobe effect</div><div>The picture flickers between its two views</div><div class="n" id="strobeN"></div></div>
+      </div>
+      <button class="toggle" id="lensToggle" type="button">Look through the stereoscope</button>
+    </div>
+    <div class="prose">
+      <span class="eyebrow" style="color:var(--sepia)">Handouts you can hold</span>
+      <h2>Through the stereoscope</h2>
+      <p>A stereograph is two photographs taken side by side. Look at them through a stereoscope and they swim together into one picture with depth. Press the button and the view flicks between the two halves of Mr Roe's card, a &ldquo;wigglegram&rdquo;, to give you the idea.</p>
+      <p>The book includes every stereograph card in the scenario, printable at real stereoscope size, plus instructions for building a viewer from reading glasses and cardboard so your players can look for themselves.</p>
+      <div class="describe"><div class="tag">Describe</div>Two images swim together and synchronise into one. Do you wish to keep looking?</div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="band"><b>✦</b> The Setting <b>✦</b></div>
+    <div class="prose" style="max-width:44rem">
+      <h2>One block of Melbourne, 1926</h2>
+      <p>The adventure is set in the real Library, Museum and Gallery complex, built from period floorplans and photographs from the State Library Victoria collection.</p>
+    </div>
+    <div class="rooms">
+      <figure><img loading="lazy" src="assets/img/reading-room.jpg" alt="The domed reading room of the Public Library"><h3>Public Library</h3><p>The octagonal domed reading room, watched over by the Chief Shusher.</p></figure>
+      <figure><img loading="lazy" src="assets/img/stawell-gallery.jpg" alt="The Stawell Gallery with statues"><h3>Stawell Gallery</h3><p>Bronze and marble. Circe, Eve and Perseus.</p></figure>
+      <figure><img loading="lazy" src="assets/img/mcarthur-gallery.jpg" alt="The McArthur Gallery with paintings and chairs"><h3>McArthur Gallery</h3><p>New portraits, and one that isn't flat.</p></figure>
+      <figure><img loading="lazy" src="assets/img/mccoy-hall.jpg" alt="McCoy Hall museum with taxidermy"><h3>McCoy Hall</h3><p>The Museum. Mr Roe expects an update here before closing.</p></figure>
+    </div>
+  </div>
+</section>
+
+<section class="block tris-sec">
+  <div class="wrap two">
+    <div class="prose">
+      <span class="eyebrow" style="color:var(--sepia)">McArthur Gallery</span>
+      <h2>A portrait that isn't flat</h2>
+      <p>Among the gilt frames hangs a Triscenorama: a corrugated portrait that shows a different picture from each side. From the left, Peter Lalor swears the oath under the Southern Cross. From the front, he is hunted, his sleeve pinned. From the right, he is Speaker of the Legislative Assembly.</p>
+      <p>The book has a print-and-fold copy to hold up at the table. Turn the one here with the buttons or the slider.</p>
+    </div>
+    <div class="tris-stage">
+      <div class="tris-view" id="trisView" aria-label="Three-way portrait of Peter Lalor, shown in 3D"><div class="tris-model" id="trisModel"></div></div>
+      <div class="tris-buttons" role="group" aria-label="Which side to look from">
+        <button type="button" data-view="left" class="on">Left</button><button type="button" data-view="middle">Front</button><button type="button" data-view="right">Right</button>
+      </div>
+      <input type="range" id="trisAngle" min="-80" max="80" step="0.5" value="45" aria-label="Turn the portrait">
+    </div>
+  </div>
+</section>
+
+<section class="block" id="inside" style="background:var(--paper);border-block:1px solid var(--rule)">
+  <div class="wrap">
+    <div class="band"><b>✦</b> What's Inside <b>✦</b></div>
+    <div class="prose" style="max-width:44rem">
+      <h2>Everything you need for one evening</h2>
+      <p>Written for gamemasters who want to run it the same week they buy it.</p>
+    </div>
+    <div class="contents">
+      <figure><img loading="lazy" src="assets/img/page-5.jpg" alt="Gamemaster's Background page with Charlie's pinboard"><figcaption><b>The Adventure</b>Six parts, from the library steps to the Final Act.</figcaption></figure>
+      <figure><img loading="lazy" src="assets/img/page-35.jpg" alt="Pre-generated investigator sheet"><figcaption><b>Investigators</b>Four pre-gens on C.S.I.R. Form 3, plus a blank.</figcaption></figure>
+      <figure><img loading="lazy" src="assets/img/page-41.jpg" alt="Printable stereograph cards"><figcaption><b>Stereograph Cards</b>Every card, at table and stereoscope size.</figcaption></figure>
+      <figure><img loading="lazy" src="assets/img/page-50.jpg" alt="Triscenorama portrait of Peter Lalor"><figcaption><b>Triscenorama</b>A three-way portrait to print and fold.</figcaption></figure>
+      <figure><img loading="lazy" src="assets/img/page-55.jpg" alt="Eureka Cyclorama booklet handout"><figcaption><b>Handouts</b>Nine, from 1891 booklets to government forms.</figcaption></figure>
+      <figure><img loading="lazy" src="assets/img/page-59.jpg" alt="Emergency Exit Plan handout"><figcaption><b>Exit Plan</b>The rotunda, in cross-section and plan.</figcaption></figure>
+    </div>
+    <ul class="checklist">
+      <li>Basic Roleplaying quick reference, with a guide for D&amp;D players</li>
+      <li>Manifestation Table for every haunted room</li>
+      <li>Make your own stereoscope</li>
+      <li>Two optional busker's ballads about the founding of the CSIR</li>
+      <li>Historical epilogue and further reading</li>
+      <li>Links to ultra-high-resolution source images</li>
+    </ul>
+  </div>
+</section>
+
+<section class="buy">
+  <div class="wrap">
+    <span class="eyebrow" style="color:var(--sepia)">Have. You. Got. What. You. Paid. For?</span>
+    <h2>To the Cyclorama!</h2>
+    <p>Available now as a full-colour PDF.</p>
+    <a class="btn primary" href="https://www.drivethrurpg.com/en/product/595043/to-the-cyclorama">Get it on DriveThruRPG ✦</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h3>Made by</h3>
+      <p>Text by Mitchell Harrop, Eric Jong and Alex Shermon. Artwork and contemporary photography by Eric Jong.</p>
+      <p style="margin-top:10px">Supported by the City of Melbourne Arts Grants.</p>
+    </div>
+    <div>
+      <h3>Acknowledgement of Country</h3>
+      <p>We acknowledge the Wurundjeri Woi Wurrung and Bunurong peoples of the Kulin Nation, Traditional Owners of the land in Melbourne where this story is set, and the Wadawurrung people, on whose Country at Ballarat the Eureka Stockade stood. We pay our respects to their Elders past and present. Sovereignty was never ceded.</p>
+    </div>
+    <div>
+      <h3>Images</h3>
+      <p>Historical images are public domain or CC BY 4.0, courtesy of <a href="https://www.slv.vic.gov.au/">State Library Victoria</a> and <a href="https://collections.museumsvictoria.com.au/">Museums Victoria</a>. Full credits are in the book.</p>
+    </div>
+    <div class="fine">
+      <p>This product is built on the following Licensed Material: Basic Roleplaying: Universal Game Engine, copyright © 2024 Chaosium Inc., by Jason Durall and Steve Perrin. Basic Roleplaying is a trademark of Chaosium Inc.</p>
+      <p>Text © 2026 Mitchell Harrop, Eric Jong, Alex Shermon. Artwork © 2026 Eric Jong. This is a work of fiction. Real people, places and events appear in a fictional context.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>
