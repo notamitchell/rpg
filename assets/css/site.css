@@ -102,6 +102,12 @@ figcaption { font-size: .85rem; color: var(--muted); margin-top: 8px; font-style
   box-shadow: 0 0 0 10px #3a2a1c, 0 0 0 12px #7a5a3a, 0 20px 50px rgba(0,0,0,.55); background: #000; }
 .lens img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: sepia(.35) contrast(1.05); }
 .lens .r { opacity: 0; }
+.card-title { font-family: var(--display); letter-spacing: .08em; color: var(--sepia); font-size: .95rem; text-align: center; min-height: 1.4em; }
+.cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 440px; margin-top: 6px; }
+.cards button { padding: 0; border: 2px solid transparent; background: none; cursor: pointer; width: 52px; height: 52px; border-radius: 2px; opacity: .65; transition: opacity .2s, border-color .2s; }
+.cards button img { width: 100%; height: 100%; object-fit: cover; filter: sepia(.35); display: block; }
+.cards button:hover { opacity: 1; }
+.cards button[aria-pressed="true"] { border-color: var(--sepia); opacity: 1; }
 .strobe { position: absolute; inset: 0; z-index: 2; display: grid; place-content: center; text-align: center; gap: 4px;
   background: rgba(15,31,51,.82); color: var(--cream); opacity: 0; pointer-events: none; transition: opacity .4s; }
 .strobe.on { opacity: 1; }
@@ -113,7 +119,7 @@ figcaption { font-size: .85rem; color: var(--muted); margin-top: 8px; font-style
 .tris-sec h2 { color: var(--cream); }
 .tris-sec .prose p { color: #d9dee7; }
 .tris-stage { display: grid; justify-items: center; gap: 18px; }
-.tris-view { width: min(420px, 86%); aspect-ratio: 640 / 546; margin-block: 16px 28px; }
+.tris-view { width: min(440px, 86%); aspect-ratio: 4 / 3; margin-block: 16px 28px; }
 .tris-model { position: relative; display: flex; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 1.6s cubic-bezier(.45,0,.25,1); }
 .tris-model.instant { transition: none; }
 .tris-model .slice { position: relative; height: 100%; transform-style: preserve-3d; }
