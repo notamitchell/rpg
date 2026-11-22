@@ -161,11 +161,11 @@
   var img = document.getElementById('viewerImg'), title = document.getElementById('viewerTitle'), count = document.getElementById('viewerCount'), stage = document.getElementById('viewerStage');
   var sheets = [];
   [].forEach.call(document.querySelectorAll('.desk figure'), function (fig) {
-    var cap = fig.querySelector('figcaption'), name = cap.querySelector('b').textContent + ' · ' + cap.lastChild.textContent;
+
     var imgs = [].slice.call(fig.querySelectorAll('.sheet img')).sort(function (a, b) { return a.classList.contains('under') - b.classList.contains('under'); });
     var first = sheets.length;
     imgs.forEach(function (im, i) {
-      sheets.push({ src: im.getAttribute('src').replace('/handouts/', '/handouts/large/'), name: name + (imgs.length > 1 ? ' (sheet ' + (i + 1) + ' of ' + imgs.length + ')' : ''), alt: im.alt || name });
+      sheets.push({ src: im.getAttribute('src').replace('/handouts/', '/handouts/large/'), name: im.alt, alt: im.alt });
     });
     fig.querySelector('.sheet').addEventListener('click', function () { open(first); });
   });

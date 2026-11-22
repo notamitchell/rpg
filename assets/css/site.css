@@ -184,18 +184,20 @@ footer .fine { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,.12);
 .plans figcaption b { font-family: var(--display); font-size: .78rem; letter-spacing: .08em; display: block; color: var(--navy); }
 
 /* Handouts on the desk */
-.desk { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px 28px; margin-top: 36px; }
+.desk { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 34px 28px; margin-top: 36px; }
 .desk figure { margin: 0; min-width: 0; }
 .desk .sheet { position: relative; aspect-ratio: 1; background: #efe8d8; border: 1px solid var(--rule); }
 .desk .sheet img { position: absolute; inset: 0; margin: auto; max-width: 84%; max-height: 84%; width: auto; height: auto; box-shadow: 0 2px 3px rgba(0,0,0,.18), 0 12px 24px rgba(40,25,0,.22); transition: transform .4s ease; }
-.desk figure:nth-child(3n+1) .sheet img { transform: rotate(-2deg); }
-.desk figure:nth-child(3n+2) .sheet img { transform: rotate(1.2deg); }
-.desk figure:nth-child(3n) .sheet img { transform: rotate(-.6deg); }
+.desk figure:nth-child(4n+1) .sheet img { transform: rotate(-2deg); }
+.desk figure:nth-child(4n+2) .sheet img { transform: rotate(1.2deg); }
+.desk figure:nth-child(4n+3) .sheet img { transform: rotate(-.6deg); }
+.desk figure:nth-child(4n) .sheet img { transform: rotate(1.8deg); }
 .desk .stack .sheet img.under { transform: translate(9%, 4%) rotate(5deg); }
 .desk figure:hover .sheet img:not(.under) { transform: translateY(-6px) rotate(0); }
 .desk figcaption { font-style: normal; color: var(--ink); font-size: .95rem; margin-top: 10px; }
-.desk figcaption b { font-family: var(--display); font-size: .78rem; letter-spacing: .08em; display: block; color: var(--red); }
-@media (max-width: 640px) { .desk { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; } }
+.desk figcaption { font-style: italic; color: var(--muted); }
+.desk figcaption b { font-family: var(--display); font-style: normal; font-size: .82rem; letter-spacing: .06em; display: block; color: var(--navy); margin-bottom: 2px; }
+@media (max-width: 900px) { .desk { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; } }
 .also { margin-top: 44px; font-size: 1rem; letter-spacing: .1em; text-transform: uppercase; }
 
 /* Period photography */
