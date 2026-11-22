@@ -40,6 +40,17 @@
     b.style.opacity = t < HOLD ? 0 : t < HOLD + BLEND ? .5 : t < 2 * HOLD + BLEND ? 1 : .5;
     raf = requestAnimationFrame(frame);
   }
+  var imgA = document.getElementById('lensA'), title = document.getElementById('cardTitle');
+  var chips = document.querySelectorAll('.cards button');
+  [].forEach.call(chips, function (c) {
+    c.addEventListener('click', function () {
+      var id = c.dataset.card, name = c.title, pre = new Image();
+      pre.src = 'assets/img/stereo/' + id + '-b.jpg';
+      imgA.src = 'assets/img/stereo/' + id + '-a.jpg'; imgA.alt = 'Stereograph: ' + name;
+      b.src = pre.src; title.textContent = name;
+      [].forEach.call(chips, function (x) { x.setAttribute('aria-pressed', x === c ? 'true' : 'false'); });
+    });
+  });
   btn.addEventListener('click', function () {
     running = !running;
     if (running) { t0 = performance.now(); warn.classList.add('on'); raf = requestAnimationFrame(frame); btn.textContent = 'Hold it still'; }
