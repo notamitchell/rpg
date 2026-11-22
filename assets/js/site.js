@@ -113,3 +113,78 @@
   slider.addEventListener('input', function () { holdUntil = Date.now() + 12000; });
   window.addEventListener('resize', build);
 })();
+
+/* Ken Burns pans: any .kb with data-shots="[[ax,ay,az,bx,by,bz,secs],...]" and data-safe="l,t,r,b" */
+(function () {
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches, GAP = 2.5;
+  [].forEach.call(document.querySelectorAll('.kb[data-shots]'), function (box) {
+    var img = box.querySelector('img');
+    if (!img || !img.animate) return;
+    var SHOTS = JSON.parse(box.dataset.shots.replace(/(^|[^\d])\./g, '$10.')), SAFE = (box.dataset.safe || '0,0,1,1').split(',').map(Number), anim = null;
+    function cam(x, y, z, W, H, iw, ih) {
+      var s = Math.max(W / ((SAFE[2] - SAFE[0]) * iw), H / ((SAFE[3] - SAFE[1]) * ih)) * z;
+      var tx = Math.min(-SAFE[0] * iw * s, Math.max(W - SAFE[2] * iw * s, W / 2 - x * iw * s));
+      var ty = Math.min(-SAFE[1] * ih * s, Math.max(H - SAFE[3] * ih * s, H / 2 - y * ih * s));
+      return 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px) scale(' + s.toFixed(4) + ')';
+    }
+    function build() {
+      var iw = img.naturalWidth, ih = img.naturalHeight, W = box.clientWidth, H = box.clientHeight;
+      if (!iw || !W) return;
+      img.style.width = iw + 'px'; img.style.height = ih + 'px';
+      var total = 0, t = 0, frames = [];
+      SHOTS.forEach(function (k) { total += k[6] + GAP; });
+      SHOTS.forEach(function (k) {
+        frames.push({ transform: cam(k[0], k[1], k[2], W, H, iw, ih), offset: t / total, easing: 'ease-in-out' });
+        t += k[6];
+        frames.push({ transform: cam(k[3], k[4], k[5], W, H, iw, ih), offset: t / total, easing: 'ease-in-out' });
+        t += GAP;
+      });
+      frames.push({ transform: frames[0].transform, offset: 1 });
+      var at = anim ? anim.currentTime : 0;
+      if (anim) anim.cancel();
+      if (still) { img.style.transform = frames[0].transform; return; }
+      anim = img.animate(frames, { duration: total * 1000, iterations: Infinity });
+      anim.currentTime = at || 0;
+    }
+    if (img.complete && img.naturalWidth) build(); else img.addEventListener('load', build);
+    window.addEventListener('resize', build);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) {
+      if (anim) { if (e[0].isIntersecting) anim.play(); else anim.pause(); }
+    }).observe(box);
+  });
+})();
+
+/* Handout viewer */
+(function () {
+  var dlg = document.getElementById('viewer');
+  if (!dlg || !dlg.showModal) return;
+  var img = document.getElementById('viewerImg'), title = document.getElementById('viewerTitle'), count = document.getElementById('viewerCount'), stage = document.getElementById('viewerStage');
+  var sheets = [];
+  [].forEach.call(document.querySelectorAll('.desk figure'), function (fig) {
+
+    var imgs = [].slice.call(fig.querySelectorAll('.sheet img')).sort(function (a, b) { return a.classList.contains('under') - b.classList.contains('under'); });
+    var first = sheets.length;
+    imgs.forEach(function (im, i) {
+      sheets.push({ src: im.getAttribute('src').replace('/handouts/', '/handouts/large/'), name: im.alt, alt: im.alt });
+    });
+    fig.querySelector('.sheet').addEventListener('click', function () { open(first); });
+  });
+  var at = 0;
+  function show(n) {
+    at = (n + sheets.length) % sheets.length;
+    var s = sheets[at];
+    stage.classList.remove('zoom'); stage.scrollTop = 0;
+    img.src = s.src; img.alt = s.alt; title.textContent = s.name; count.textContent = (at + 1) + ' / ' + sheets.length;
+    var nxt = new Image(); nxt.src = sheets[(at + 1) % sheets.length].src;
+  }
+  function open(n) { show(n); dlg.showModal(); }
+  document.getElementById('viewerPrev').addEventListener('click', function () { show(at - 1); });
+  document.getElementById('viewerNext').addEventListener('click', function () { show(at + 1); });
+  document.getElementById('viewerClose').addEventListener('click', function () { dlg.close(); });
+  img.addEventListener('click', function (e) { e.stopPropagation(); stage.classList.toggle('zoom'); });
+  stage.addEventListener('click', function (e) { if (e.target === stage) dlg.close(); });
+  dlg.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') show(at - 1);
+    if (e.key === 'ArrowRight') show(at + 1);
+  });
+})();
