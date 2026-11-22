@@ -225,3 +225,23 @@ footer .fine { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,.12);
 .sources a, .credits section > p a { color: var(--navy); overflow-wrap: anywhere; }
 @media (max-width: 640px) { .sources li { grid-template-columns: 1fr; gap: 4px; } }
 .credits-foot .wrap { padding-block: 28px; display: block; }
+
+/* Handout viewer */
+.desk .sheet { cursor: zoom-in; padding: 0; width: 100%; display: block; font: inherit; }
+.desk .sheet:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+.viewer { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(8,14,24,.94); color: var(--cream); }
+.viewer::backdrop { background: rgba(8,14,24,.7); }
+.viewer[open] { display: grid; grid-template-rows: auto 1fr auto; }
+.viewer-bar { display: flex; align-items: center; gap: 14px; padding: 12px 18px; font-family: var(--display); letter-spacing: .08em; }
+.viewer-title { font-size: .95rem; }
+.viewer-count { font-size: .75rem; color: var(--sepia); margin-right: auto; white-space: nowrap; }
+.viewer-close, .viewer-nav { background: none; border: 1px solid rgba(201,181,143,.5); color: var(--cream); border-radius: 999px; width: 40px; height: 40px; font-size: 1.1rem; cursor: pointer; }
+.viewer-close:hover, .viewer-nav:hover { background: var(--sepia); color: var(--navy); }
+.viewer-stage { overflow: auto; display: grid; place-items: center; padding: 0 64px; min-height: 0; }
+.viewer-stage img { max-width: 100%; max-height: calc(100dvh - 120px); width: auto; height: auto; cursor: zoom-in; box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+.viewer-stage.zoom { place-items: start center; }
+.viewer-stage.zoom img { max-width: none; max-height: none; width: min(2200px, 180%); cursor: zoom-out; }
+.viewer-nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 1.6rem; line-height: 1; }
+.viewer-nav.prev { left: 12px; } .viewer-nav.next { right: 12px; }
+.viewer-hint { text-align: center; font-size: .82rem; color: #8592a5; margin: 8px 0 12px; }
+@media (max-width: 640px) { .viewer-stage { padding: 0 8px; } .viewer-nav { top: auto; bottom: 8px; transform: none; } .viewer-hint { margin-bottom: 60px; } .viewer-stage.zoom img { width: 260%; } }

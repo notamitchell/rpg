@@ -153,3 +153,38 @@
     }).observe(box);
   });
 })();
+
+/* Handout viewer */
+(function () {
+  var dlg = document.getElementById('viewer');
+  if (!dlg || !dlg.showModal) return;
+  var img = document.getElementById('viewerImg'), title = document.getElementById('viewerTitle'), count = document.getElementById('viewerCount'), stage = document.getElementById('viewerStage');
+  var sheets = [];
+  [].forEach.call(document.querySelectorAll('.desk figure'), function (fig) {
+    var cap = fig.querySelector('figcaption'), name = cap.querySelector('b').textContent + ' · ' + cap.lastChild.textContent;
+    var imgs = [].slice.call(fig.querySelectorAll('.sheet img')).sort(function (a, b) { return a.classList.contains('under') - b.classList.contains('under'); });
+    var first = sheets.length;
+    imgs.forEach(function (im, i) {
+      sheets.push({ src: im.getAttribute('src').replace('/handouts/', '/handouts/large/'), name: name + (imgs.length > 1 ? ' (sheet ' + (i + 1) + ' of ' + imgs.length + ')' : ''), alt: im.alt || name });
+    });
+    fig.querySelector('.sheet').addEventListener('click', function () { open(first); });
+  });
+  var at = 0;
+  function show(n) {
+    at = (n + sheets.length) % sheets.length;
+    var s = sheets[at];
+    stage.classList.remove('zoom'); stage.scrollTop = 0;
+    img.src = s.src; img.alt = s.alt; title.textContent = s.name; count.textContent = (at + 1) + ' / ' + sheets.length;
+    var nxt = new Image(); nxt.src = sheets[(at + 1) % sheets.length].src;
+  }
+  function open(n) { show(n); dlg.showModal(); }
+  document.getElementById('viewerPrev').addEventListener('click', function () { show(at - 1); });
+  document.getElementById('viewerNext').addEventListener('click', function () { show(at + 1); });
+  document.getElementById('viewerClose').addEventListener('click', function () { dlg.close(); });
+  img.addEventListener('click', function (e) { e.stopPropagation(); stage.classList.toggle('zoom'); });
+  stage.addEventListener('click', function (e) { if (e.target === stage) dlg.close(); });
+  dlg.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') show(at - 1);
+    if (e.key === 'ArrowRight') show(at + 1);
+  });
+})();
