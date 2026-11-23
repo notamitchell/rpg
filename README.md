@@ -1,6 +1,7 @@
 # To the Cyclorama
 
 https://notamitchell.github.io/rpg/
+pdf=1
 
 Website for *To the Cyclorama* (Melbourne, 1926), a Basic Roleplaying horror adventure by Mitchell Harrop, Eric Jong and Alex Shermon.
 
