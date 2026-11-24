@@ -161,6 +161,7 @@ body.open #sheet { transform: none; }
 .item .thumb { display: block; width: 84px; }
 .item .thumb img { width: 84px; height: auto; max-height: 130px; object-fit: contain; display: block;
     border: 1px solid var(--card-edge); background: #000; filter: sepia(.15); }
+.item .thumb img.aged { filter: grayscale(1) sepia(.85) contrast(.74) brightness(1.18) saturate(1.15); }
 .item .thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
 .item .orig { display: block; margin-top: 3px; font-size: 12px; line-height: 1.2; color: var(--ink-soft);
     font-variant-caps: all-small-caps; letter-spacing: .06em; font-weight: 600; text-decoration: none; }
@@ -567,11 +568,8 @@ const IMAGES = [
     ] },
   { id: 'handout-b', part: 7, handout: 'B', t: 'The Busker’s Ballad', c: 'The ballad, with someone’s notes in the margin', safe: [0, 0, 1, .95],
     shots: [
-      { a: [.40, .07, 1.20], b: [.40, .17, 1.40], d: 14 },   // the title and the first verse
-      { a: [.40, .25, 1.60], b: [.40, .55, 1.60], d: 22 },   // reading down the verses
-      { a: [.42, .68, 1.30], b: [.42, .69, 1.90], d: 12 },   // A COUNCIL FOR SCIENTIFIC AND INDUSTRIAL RESEARCH!
-      { a: [.30, .87, 2.00], b: [.55, .88, 2.00], d: 12 },   // SERVES. IT. RIGHT!!!
-      { a: [.78, .15, 2.40], b: [.78, .66, 2.40], d: 16 },   // down the margin notes
+      // the whole width of the sheet, poem and margin notes, read from the title down to the last line
+      { a: [.50, .00, 1.00], b: [.50, 1.00, 1.00], d: 36 },
     ] },
   { id: 'handout-c', part: 7, handout: 'C', t: 'Floorplans', c: 'The Library block, from the City of Melbourne plans', safe: [.06, .13, .94, .89],
     shots: [
@@ -632,11 +630,8 @@ const IMAGES = [
     ] },
   { id: 'handout-i', part: 7, handout: 'I', t: 'The Busker’s Ballad (Reprise)', c: 'The ballad again, and more notes in the margin', safe: [0, 0, 1, .95],
     shots: [
-      { a: [.40, .07, 1.20], b: [.40, .18, 1.40], d: 14 },   // the title and the first verse
-      { a: [.40, .25, 1.60], b: [.40, .52, 1.60], d: 22 },   // reading down the verses
-      { a: [.60, .53, 2.00], b: [.75, .54, 2.40], d: 12 },   // Cy Roe = Sigh-row?
-      { a: [.25, .77, 1.80], b: [.25, .85, 2.20], d: 13 },   // C! S! I! R! O!
-      { a: [.50, .75, 1.30], b: [.50, .35, 1.00], d: 14 },   // the sheet
+      // the whole width of the sheet, poem and margin notes, read from the title down to the last line
+      { a: [.50, .00, 1.00], b: [.50, 1.00, 1.00], d: 36 },
     ] },
   { id: 'triscenorama', part: 8, page: 48, pageTitle: 'Triscenorama Portrait', refs: ['p. 47 Triscenorama', 'p. 18 McArthur Gallery'],
     t: 'Peter Lalor, Three Ways', c: 'The folded portrait: the oath on the left, Lalor in front, the Speaker on the right',
@@ -787,10 +782,50 @@ const src = im => `images/kenburns/${im.file || im.id}.jpg`;
 let saved = 0;
 try { saved = Math.max(0, IMAGES.findIndex(im => im.id === localStorage.getItem('kenburns-photo'))); } catch (e) {}
 
+/* The modern photographs (taken for the book, not from the SLV) are aged as
+   they load so they sit among the archival scans; see age() below. */
+const AGED = new Set(["joanNew_tall", "chiefShusher_pair", "dome_pair", "spiralStair_pair", "barry_painting_pair", "latrobe_pair", "staffDoor", "ceiling_upside"]);
+/* "Aged": modern photographs printed like the 1920s scans around them.
+   Drained of colour and toned brown, the blacks lifted and the whites
+   dulled, a touch soft, with a fine grain. The grain is seeded, so the two
+   halves of a wiggle look alike and nothing crawls. */
+function grainTile() {
+    if (grainTile.c) return grainTile.c;
+    const n = 256, c = document.createElement('canvas'); c.width = c.height = n;
+    const x = c.getContext('2d'), d = x.createImageData(n, n);
+    let s = 1234567;
+    for (let i = 0; i < d.data.length; i += 4) {
+        s = (s * 1103515245 + 12345) & 0x7fffffff;
+        const v = 128 + ((s >> 8) % 96) - 48;
+        d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255;
+    }
+    x.putImageData(d, 0, 0);
+    return grainTile.c = c;
+}
+function age(img) {
+    const w = img.naturalWidth, h = img.naturalHeight;
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const x = c.getContext('2d');
+    const soft = Math.max(.4, Math.max(w, h) / 2400);
+    x.filter = `grayscale(1) sepia(.85) contrast(.74) brightness(1.18) saturate(1.15) blur(${soft.toFixed(2)}px)`;
+    x.drawImage(img, 0, 0, w, h);
+    x.filter = 'none';
+    // paper tone over the lot: lifts the blacks to a warm brown
+    x.globalCompositeOperation = 'lighten'; x.fillStyle = 'rgb(58, 44, 28)'; x.fillRect(0, 0, w, h);
+    x.globalCompositeOperation = 'multiply'; x.fillStyle = 'rgb(246, 232, 204)'; x.fillRect(0, 0, w, h);
+    // grain, a little coarser on bigger pictures
+    const k = Math.max(1, Math.round(Math.max(w, h) / 1400));
+    x.globalCompositeOperation = 'overlay'; x.globalAlpha = .22;
+    x.save(); x.scale(k, k); x.fillStyle = x.createPattern(grainTile(), 'repeat'); x.fillRect(0, 0, w / k, h / k); x.restore();
+    x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
+    return c;
+}
+
 // the picture and its halvings, down to about 400 px across
-function pyramid(img) {
-    const levels = [{ bmp: img, k: 1 }];
-    let w = img.naturalWidth, h = img.naturalHeight, from = img, k = 1;
+function pyramid(img, aged) {
+    const base = aged ? age(img) : img;
+    const levels = [{ bmp: base, k: 1 }];
+    let w = img.naturalWidth, h = img.naturalHeight, from = base, k = 1;
     while (Math.max(w, h) > 800) {
         w = Math.round(w / 2); h = Math.round(h / 2); k /= 2;
         const c = document.createElement('canvas'); c.width = w; c.height = h;
@@ -799,15 +834,15 @@ function pyramid(img) {
     }
     return { w: img.naturalWidth, h: img.naturalHeight, levels };
 }
-function loadUrl(url) {
+function loadUrl(url, aged = false) {
     if (!cache[url]) cache[url] = new Promise((res, rej) => {
         const i = new Image();
-        i.onload = () => (i.decode ? i.decode().catch(() => {}) : Promise.resolve()).then(() => res(pyramid(i)));
+        i.onload = () => (i.decode ? i.decode().catch(() => {}) : Promise.resolve()).then(() => res(pyramid(i, aged)));
         i.onerror = () => { delete cache[url]; rej(); }; i.src = url;
     });
     return cache[url];
 }
-const load = im => loadUrl(src(im));
+const load = im => loadUrl(src(im), AGED.has(im.id));
 
 /* "Wiggle": the stereograph's two views shown in turn, like the wigglegram
    maker: A, a moment of both, B, a moment of both, and round again. The two
@@ -1005,7 +1040,7 @@ async function show(index, n = 0, opts = {}) {
     if (mode === 'wiggle' && !WIGGLE.has(im.id)) mode = 'kb';
     let pic, picB;
     try {
-        if (mode === 'wiggle') [pic, picB] = await Promise.all([loadUrl(wiggleSrc(im, 'a')), loadUrl(wiggleSrc(im, 'b'))]);
+        if (mode === 'wiggle') [pic, picB] = await Promise.all([loadUrl(wiggleSrc(im, 'a'), AGED.has(im.id)), loadUrl(wiggleSrc(im, 'b'), AGED.has(im.id))]);
         else pic = await load(im);
     } catch { $('loading').textContent = `Could not load ${mode === 'wiggle' ? wiggleSrc(im, 'a') : src(im)}`; return; }
     if (my !== token) return;                  // another photograph was picked meanwhile
@@ -1107,7 +1142,7 @@ for (const { im, i, part, page, pageTitle, dup } of entries) {
     const item = document.createElement('div');
     item.className = 'item'; item.dataset.i = i;
     const link = LINKS[im.id];
-    item.innerHTML = `<div><div class="thumb"><img src="images/kenburns/thumbs/${im.file || im.id}.jpg" alt="" loading="lazy"></div>${link
+    item.innerHTML = `<div><div class="thumb"><img${AGED.has(im.id) ? ' class="aged"' : ''} src="images/kenburns/thumbs/${im.file || im.id}.jpg" alt="" loading="lazy"></div>${link
         ? (Array.isArray(link[0]) ? link : [link]).map(l => `<a class="orig" href="${l[0]}" target="_blank" rel="noopener" title="${l[0]}">${Array.isArray(link[0]) ? 'SLV ' + l[1].toLowerCase() : l[1]} ↗</a>`).join('') : ''}</div>
         <div class="photo"><span class="t">${im.handout ? `<span class="handout-label">Handout <span class="handout-letter">${im.handout}</span></span> ` : ''}${im.t}${im.sheet ? ` <span class="handout-sheet">(${im.sheet})</span>` : ''}</span><span class="now">now showing</span></div>
         <div class="modes" role="group" aria-label="How to show it">${im.tris ? `
