@@ -194,3 +194,16 @@
     if (e.key === 'ArrowRight') show(at + 1);
   });
 })();
+
+// Premise stereograph: wiggles continuously. Still for reduced-motion users.
+(function () {
+  var lens = document.getElementById('miniLens'); if (!lens || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var b = lens.querySelector('.r'), HOLD = 300, BLEND = 90, ON = 3120, OFF = 0, t0 = performance.now();
+  function frame(now) {
+    var e = (now - t0) % (ON + OFF);
+    if (e >= ON) b.style.opacity = 0;
+    else { var t = e % (2 * (HOLD + BLEND)); b.style.opacity = t < HOLD ? 0 : t < HOLD + BLEND ? .5 : t < 2 * HOLD + BLEND ? 1 : .5; }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
