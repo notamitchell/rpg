@@ -1,8 +1,3 @@
-// ?pdf=1 reveals a direct link to the PDF beside the DriveThruRPG buttons.
-(function () {
-  if (new URLSearchParams(location.search).get('pdf') !== '1') return;
-  [].forEach.call(document.querySelectorAll('.pdf-link'), function (a) { a.hidden = false; });
-})();
 // Build the slatted canvas: each slat shows its own slice of one continuous panning painting.
 (function () {
   var host = document.getElementById('slats'); if (!host) return;
