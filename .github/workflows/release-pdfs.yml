@@ -1,0 +1,24 @@
+# One-off: publishes the adventure PDFs from main's files/ as release assets.
+name: Release PDFs
+on:
+  push:
+    branches: [claude/project-thread-v1zx5d]
+    paths: [.github/workflows/release-pdfs.yml]
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v1.0 \
+            --repo "$GITHUB_REPOSITORY" \
+            --target main \
+            --title "To the Cyclorama v1.0" \
+            --notes "Colour PDF and black-and-white print PDF of To the Cyclorama." \
+            files/to-the-cyclorama-colour.pdf files/to-the-cyclorama-bw.pdf
