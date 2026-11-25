@@ -59,7 +59,6 @@ p { margin: 0; }
   padding: 14px 22px; border-radius: 2px; display: inline-flex; align-items: center; gap: 10px; }
 .btn.primary { background: var(--red); color: #fff; box-shadow: 0 2px 0 #7d151e; }
 .btn.ghost { background: transparent; color: #fff; box-shadow: inset 0 0 0 1px rgba(255,255,255,.55); }
-.btn[hidden] { display: none; }
 .buy .cta-row { margin-top: 0; }
 .btn:hover { filter: brightness(1.08); }
 
@@ -249,6 +248,7 @@ svg.ext { display: inline-block; vertical-align: -1px; margin-left: 3px; }
 .hero .tagline { margin: 18px auto 0; max-width: 34rem; font-size: clamp(1.1rem, 2.4vw, 1.35rem); font-style: italic; color: #e9e2d0; }
 .hero .rotunda { margin-top: 26px; }
 .cta-row.left { justify-content: flex-start; margin-top: 8px; }
+.cta-row.left .btn.ghost { color: var(--ink); box-shadow: inset 0 0 0 1px rgba(27,36,51,.45); }
 .premise .kicker { font-style: italic; font-weight: 600; font-size: 1.25rem; color: var(--navy); line-height: 1.45; }
 .faq .qa { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
 .faq h3 { font-size: 1.15rem; margin-bottom: 8px; color: var(--navy); }
